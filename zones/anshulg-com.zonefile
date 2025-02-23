@@ -43,6 +43,16 @@ _dmarc.anshulg.com. 300 IN TXT "v=DMARC1; p=none"
 ;; Webmail Portal
 mail.anshulg.com. 300 IN CNAME mail.fastmail.com.
 
+;; Client email auto-discovery
+_submission._tcp.anshulg.com. 300 IN SRV 0 0 0 .
+_submissions._tcp.anshulg.com. 300 IN SRV 0 1 465 smtp.fastmail.com.
+_imap._tcp.anshulg.com. 300 IN SRV 0 0 0 .
+_imaps._tcp.anshulg.com. 300 IN SRV 0 1 993 imap.fastmail.com.
+_pop3._tcp.anshulg.com. 300 IN SRV 0 0 0 .
+_pop3s._tcp.anshulg.com. 300 IN SRV 10 1 995 pop.fastmail.com.
+_jmap._tcp.anshulg.com. 300 IN SRV 0 1 443 api.fastmail.com.
+_autodiscover._tcp.anshulg.com 300 IN SRV 0 1 443 autodiscover.fastmail.com.
+
 ;; Old Protonmail Records
 ;; Will delete in a couple of months
 ; anshulg.com. 86400 IN MX 10 mail.protonmail.ch.
