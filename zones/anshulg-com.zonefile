@@ -38,7 +38,7 @@ fm3._domainkey.anshulg.com. 300 IN CNAME fm3.anshulg.com.dkim.fmhosted.com.
 anshulg.com. 300 IN TXT "v=spf1 include:spf.messagingengine.com ?all"
 
 ;; DMARC Record
-_dmarc.anshulg.com. 300 IN TXT "v=DMARC1; p=none"
+_dmarc.anshulg.com. 300 IN TXT "v=DMARC1; p=quarantine; rua=mailto:postmaster@anshulg.com"
 
 ;; Webmail Portal
 mail.anshulg.com. 300 IN CNAME mail.fastmail.com.
