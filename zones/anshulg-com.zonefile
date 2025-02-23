@@ -1,0 +1,39 @@
+; provider=gcp zone=anshulg-com
+anshulg.com. 86400 IN A 34.149.245.89
+anshulg.com. 86400 IN AAAA 2600:1901:0:9c14::
+anshulg.com. 86400 IN CAA 0 issuewild "letsencrypt.org"
+anshulg.com. 86400 IN CAA 0 issuewild "anshulg.com"
+anshulg.com. 86400 IN CAA 0 issuewild "pki.goog"
+anshulg.com. 86400 IN HTTPS 1 . alpn= h3,h2
+; anshulg.com. 86400 IN MX 10 mail.protonmail.ch.
+; anshulg.com. 86400 IN MX 20 mailsec.protonmail.ch.
+anshulg.com. 86400 IN MX 10 in1-smtp.messagingengine.com.
+anshulg.com. 86400 IN MX 20 in2-smtp.messagingengine.com.
+anshulg.com. 21600 IN NS ns-cloud-a1.googledomains.com.
+anshulg.com. 21600 IN NS ns-cloud-a2.googledomains.com.
+anshulg.com. 21600 IN NS ns-cloud-a3.googledomains.com.
+anshulg.com. 21600 IN NS ns-cloud-a4.googledomains.com.
+anshulg.com. 21600 IN SOA ns-cloud-a1.googledomains.com. cloud-dns-hostmaster.google.com. 1 21600 3600 259200 300
+; anshulg.com. 300 IN TXT "protonmail-verification=cd53fc206152e218394320d8713ada604ad4311f"
+; anshulg.com. 300 IN TXT "v=spf1 include:_spf.protonmail.ch mx ~all"
+anshulg.com. 300 IN TXT "v=spf1 include:spf.messagingengine.com ?all"
+anshulg.com. 300 IN TXT "google-site-verification=OxWxyjEtbt2V4maxap31wL4jcyo22w85wUdaDBl6b40"
+*.anshulg.com. 86400 IN A 34.149.245.89
+*.anshulg.com. 86400 IN AAAA 2600:1901:0:9c14::
+*.anshulg.com. 86400 IN HTTPS 1 . alpn= h3,h2
+; \@.anshulg.com. 300 IN TXT "keybase-site-verification=TQ7ZZleAe0z_BclKK9Jh0p2AHsr5UjoTJIVPzsEUCl0"
+_acme-challenge.anshulg.com. 300 IN CNAME 53595236-f3c8-411d-95ec-274efba6e8be.14.authorize.certificatemanager.goog.
+_atproto.anshulg.com. 300 IN TXT "did=did:plc:yurut6qakvbjy73zs55isoea"
+_dmarc.anshulg.com. 300 IN TXT "v=DMARC1; p=quarantine"
+fm1._domainkey.anshulg.com. 300 IN CNAME fm1.anshulg.com.dkim.fmhosted.com.
+fm2._domainkey.anshulg.com. 300 IN CNAME fm2.anshulg.com.dkim.fmhosted.com.
+fm3._domainkey.anshulg.com. 300 IN CNAME fm3.anshulg.com.dkim.fmhosted.com.
+; protonmail._domainkey.anshulg.com. 300 IN CNAME protonmail.domainkey.do5g7ax6gsam36owvlhf732bqvh6kxuwsiclzxq7pqdpyn224zuwq.domains.proton.ch.
+; protonmail2._domainkey.anshulg.com. 300 IN CNAME protonmail2.domainkey.do5g7ax6gsam36owvlhf732bqvh6kxuwsiclzxq7pqdpyn224zuwq.domains.proton.ch.
+; protonmail3._domainkey.anshulg.com. 300 IN CNAME protonmail3.domainkey.do5g7ax6gsam36owvlhf732bqvh6kxuwsiclzxq7pqdpyn224zuwq.domains.proton.ch.
+_gh-ansg191-lab-o.anshulg.com. 300 IN TXT "6f94005a5c"
+_github-pages-challenge-ansg191.anshulg.com. 300 IN TXT "8038f731860d798bcdef41d348f252"
+auth.anshulg.com. 60 IN A 34.94.107.30
+ldap.auth.anshulg.com. 60 IN A 34.94.107.30
+charts.anshulg.com. 300 IN CNAME ansg191.github.io.
+pptrees.anshulg.com. 300 IN CNAME pp-trees.web.app.
