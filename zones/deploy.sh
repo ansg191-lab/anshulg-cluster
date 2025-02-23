@@ -13,7 +13,7 @@ for file in *.zonefile; do
 	# Get header
 	header=$(head -n 1 "$file")
 
-	# Extract provider and zone using grep and sed
+	# Extract provider and zone
 	if [[ $header =~ "; provider="(.*)" zone="(.*)"" ]]; then
 		provider=${BASH_REMATCH[1]}
 		zone=${BASH_REMATCH[2]}
