@@ -130,6 +130,12 @@ resource "google_project_iam_binding" "service_account_user" {
   ]
 }
 
+resource "google_project_iam_member" "gh-action-dns-admin" {
+  project = data.google_project.default.id
+  role    = "roles/dns.admin"
+  member  = "serviceAccount:${google_service_account.github-action.email}"
+}
+
 # endregion Deployment
 
 # region Backups
