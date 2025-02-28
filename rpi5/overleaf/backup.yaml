@@ -11,7 +11,7 @@ spec:
         spec:
           initContainers:
             - name: mongo-backup
-              image: mongo:8.0.5@sha256:e91de87dba7132d55559677c28cffc84aba42b87adffd86349392935878c94cb
+              image: mongo:8.0.5@sha256:f6164e498dbaee3966031c1ced1bfa0fd1c4961151b38a770fa6994f4b0dcae7
               imagePullPolicy: IfNotPresent
               command:
                 - sh
