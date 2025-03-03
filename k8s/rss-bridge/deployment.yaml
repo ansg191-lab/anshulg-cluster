@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: rss-bridge
-          image: ghcr.io/ansg191/rss-bridge:latest@sha256:c2b15e0180ff209933f24d657f257c2fb500c58922bb0931e8b99b560315195a
+          image: ghcr.io/ansg191/rss-bridge:latest@sha256:f8a22a1b844e2e582e9f1197f91bae8b7f972d5a6657d625ec203c5ff9b0501a
           imagePullPolicy: Always
           ports:
             - containerPort: 80
