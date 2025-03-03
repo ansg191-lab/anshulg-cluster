@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: n-eight-n
-          image: n8nio/n8n:1.81.2@sha256:b517a2f221157aabcef3580ef0a9a2afa0438462b36754b29d420d1172e5246f
+          image: n8nio/n8n:1.81.3@sha256:48ab26ea98fb28b002795fe82416693a6147226ee0866b17eeec941f466ea769
           ports:
             - containerPort: 5678
           volumeMounts:
