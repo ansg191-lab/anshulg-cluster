@@ -211,7 +211,7 @@ spec:
         envFrom:
         - configMapRef:
             name: default-controller-env
-        image: rancher/system-upgrade-controller:v0.14.2@sha256:3cdbfdd90f814702cefb832fc4bdb09ea93865a4d06c6bafd019d1dc6a9f34c9
+        image: rancher/system-upgrade-controller:v0.15.1@sha256:365ba1a4af94a330466df87388271ddb3d324b2f9385cde6b4d1d39f39174639
         imagePullPolicy: IfNotPresent
         name: system-upgrade-controller
         securityContext:
