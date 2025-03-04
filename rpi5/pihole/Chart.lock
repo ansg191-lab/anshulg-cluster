@@ -1,9 +1,9 @@
 dependencies:
 - name: pihole
   repository: https://mojo2600.github.io/pihole-kubernetes/
-  version: 2.27.0
+  version: 2.28.0
 - name: unbound
   repository: https://charts.pascaliske.dev
   version: 1.0.3
-digest: sha256:a9ccab2122b4ecffa60d515452e2251fcfc648261a0071677194491b56622afe
-generated: "2024-11-29T04:11:04.690411105Z"
+digest: sha256:52e652ba4e27ce508262e1f00526f6f04aa09c4225a4da3ac6506ffb2b52fddc
+generated: "2025-03-03T01:22:50.076666606Z"
