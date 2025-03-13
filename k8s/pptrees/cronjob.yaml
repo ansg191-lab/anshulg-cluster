@@ -13,7 +13,7 @@ spec:
         spec:
           containers:
             - name: pp-tree-importer
-              image: ghcr.io/ansg191-lab/pp-tree-importer2:main@sha256:cbb694ea478b4f94600774d5095536bd5c6ae99ec262fb9084521f51cc6c1bcb
+              image: ghcr.io/ansg191-lab/pp-tree-importer2:main@sha256:daf1aba6a34e99ba0eabc88c17f4d2d68bf70cf3f9fdada02c851c56ff23435d
               imagePullPolicy: IfNotPresent
               env:
                 - name: GOOGLE_APPLICATION_CREDENTIALS
