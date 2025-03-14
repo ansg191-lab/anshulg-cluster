@@ -1,8 +1,21 @@
-; provider=gcp zone=anshulg-direct
-anshulg.direct. 60 IN A 192.168.1.100
+;; provider=gcp zone=anshulg-direct
+;;
+;; Domain: anshulg.direct
+;;
+;; Uses DNS rebinding to access internal sites using public
+;; certificates.
+
+;; SOA Record
+anshulg.direct. 21600 IN SOA ns-cloud-c1.googledomains.com. cloud-dns-hostmaster.google.com. 1 21600 3600 259200 300
+
+;; NS Records
 anshulg.direct. 21600 IN NS ns-cloud-c1.googledomains.com.
 anshulg.direct. 21600 IN NS ns-cloud-c2.googledomains.com.
 anshulg.direct. 21600 IN NS ns-cloud-c3.googledomains.com.
 anshulg.direct. 21600 IN NS ns-cloud-c4.googledomains.com.
-anshulg.direct. 21600 IN SOA ns-cloud-c1.googledomains.com. cloud-dns-hostmaster.google.com. 1 21600 3600 259200 300
+
+;; A Records
+;; Route to RPI5 K8S Load Balancer
+anshulg.direct. 60 IN A 192.168.1.100
+
 *.anshulg.direct. 60 IN A 192.168.1.100
