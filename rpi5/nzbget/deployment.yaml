@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: nzbget
-          image: lscr.io/linuxserver/nzbget:24.8.20250318@sha256:f41055bbbf3be8f76804f8bb395016b8f0474e4705fced581342cfbb11695dd5
+          image: lscr.io/linuxserver/nzbget:24.8.20250321@sha256:fb5d03c6ac45705dd2198637b539ff44810af753126d10bc326fbf028aa3c053
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID
