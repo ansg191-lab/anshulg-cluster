@@ -19,6 +19,7 @@ EOF
 gcloud compute scp --zone=$ZONE server.toml $SERVER:data/server.toml
 gcloud compute scp --zone=$ZONE csr.cnf $SERVER:certs/csr.cnf
 gcloud compute scp --zone=$ZONE Caddyfile $SERVER:Caddyfile
+gcloud compute scp --zone=$ZONE haproxy.cfg $SERVER:haproxy.cfg
 gcloud compute scp --zone=$ZONE renew.sh $SERVER:renew.sh
 gcloud compute scp --zone=$ZONE setup.sh $SERVER:setup.sh
 

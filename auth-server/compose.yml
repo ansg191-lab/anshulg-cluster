@@ -6,7 +6,7 @@ services:
 
     ports:
       - "127.0.0.1:8443:8443"
-      - "636:3636"
+      - "127.0.0.1:3636:3636"
 
     volumes:
       - /home/anshulgupta/data:/data

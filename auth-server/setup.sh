@@ -64,5 +64,11 @@ sudo systemctl start caddy
 sudo cp Caddyfile /etc/caddy/Caddyfile
 sudo systemctl restart caddy
 
+# Install HAProxy
+sudo zypper install -y haproxy
+sudo cp haproxy.cfg /etc/haproxy/haproxy.cfg
+sudo systemctl enable haproxy
+sudo systemctl restart haproxy
+
 # Start the server
 sudo docker compose -f /home/anshulgupta/compose.yml up -d
