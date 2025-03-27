@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
 
-set -eux
+set -eu
 
 ZONE="us-west2-b"
 USER="anshulgupta"
 INSTANCE="kanidm-instance"
 SERVER="$USER@$INSTANCE"
 
+echo "Deploying to $SERVER in $ZONE"
+
+echo "::group::Copying files to server"
 gcloud compute scp --zone=$ZONE compose.yml $SERVER:compose.yml
 gcloud compute ssh --zone=$ZONE $SERVER << EOF
 set -eux
@@ -22,7 +25,9 @@ gcloud compute scp --zone=$ZONE Caddyfile $SERVER:Caddyfile
 gcloud compute scp --zone=$ZONE haproxy.cfg $SERVER:haproxy.cfg
 gcloud compute scp --zone=$ZONE renew.sh $SERVER:renew.sh
 gcloud compute scp --zone=$ZONE setup.sh $SERVER:setup.sh
+echo "::endgroup::"
 
+echo "Running setup script on $SERVER"
 gcloud compute ssh --zone=$ZONE $SERVER << EOF
 set -eux
 chmod +x setup.sh
