@@ -20,3 +20,7 @@ chown 1000:100 tls.crt
 chown 1000:100 tls.key
 chmod 400 tls.crt
 chmod 400 tls.key
+
+# shellcheck disable=SC1091
+source /home/anshulgupta/cronenv.sh
+curl -fsS "$KUMA_PING_URL"

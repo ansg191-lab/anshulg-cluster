@@ -60,6 +60,12 @@ else
 fi
 popd
 
+# Error if cronenv.sh doesn't exist
+if [ ! -e "/home/anshulgupta/cronenv.sh" ] ; then
+	echo "cronenv.sh doesn't exist, please create it"
+	exit 1
+fi
+
 # Setup renewal script cron job
 echo "Setting up renewal script cron job"
 chmod +x renew.sh
