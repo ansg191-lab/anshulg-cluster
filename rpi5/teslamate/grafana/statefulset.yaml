@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: teslaboard
-          image: teslamate/grafana:1.32.0@sha256:76b8d0599b552e517df406805183b4ef578bc74cee8bcd147ab8698057d63629
+          image: teslamate/grafana:1.33.0@sha256:855579034efa16e50829be27bc9948d10301e90ec0da8ecdee1d68e4a8674c76
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000
