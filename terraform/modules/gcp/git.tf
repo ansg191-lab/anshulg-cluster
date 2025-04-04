@@ -48,15 +48,6 @@ resource "google_compute_address" "git" {
 	network_tier = "PREMIUM"
 }
 
-# Static IPV6 Address for git Instance
-resource "google_compute_address" "git_ipv6" {
-	name         = "git-static-ipv6"
-	region       = "us-west2"
-	address_type = "EXTERNAL"
-	ip_version   = "IPV6"
-	network_tier = "PREMIUM"
-}
-
 # Firewall rule for git Instance
 # Allow HTTP, HTTPS, and SSH traffic
 resource "google_compute_firewall" "git" {
@@ -73,7 +64,7 @@ resource "google_compute_firewall" "git" {
 		ports = ["443"]
 	}
 
-	source_ranges = ["0.0.0.0/0", "::/0"]
+	source_ranges = ["0.0.0.0/0"]
 	target_tags = ["git-server"]
 }
 
