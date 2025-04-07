@@ -55,6 +55,8 @@ data:
               - name: TELECINE
               - name: TELESYNC
               - name: CAM
+        delete_old_custom_formats: true
+        replace_existing_custom_formats: true
         custom_formats:
           - trash_ids:
               # Unwanted
@@ -178,6 +180,8 @@ data:
                 qualities:
                   - WEBRip-720p
                   - WEBDL-720p
+        delete_old_custom_formats: true
+        replace_existing_custom_formats: true
         custom_formats:
           - trash_ids:
             # Unwanted
