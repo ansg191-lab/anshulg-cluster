@@ -8,7 +8,7 @@ spec:
   source:
     chart: mongodb
     repoURL: https://charts.bitnami.com/bitnami
-    targetRevision: 16.4.12
+    targetRevision: 16.5.0
     helm:
       values: |
         arbiter:
