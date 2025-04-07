@@ -188,7 +188,7 @@ data:
             - e2315f990da2e2cbfc9fa5b7a6fcfe48 # LQ (Release Title)
             - 23297a736ca77c0fc8e70f8edd7ee56c # Upscaled
             - 47435ece6b99a0b477caf360e79ba0bb # x265 (HD)
-            - e1a997ddb54e3ecbfe06341ad323c458 # Obfuscated
+            # - e1a997ddb54e3ecbfe06341ad323c458 # Obfuscated
 
               # HQ Source Groups
             - d6819cba26b1a6508138d25fb5e32293 # HD Bluray Tier 01
