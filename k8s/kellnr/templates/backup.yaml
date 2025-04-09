@@ -11,7 +11,7 @@ spec:
         spec:
           containers:
             - name: kellnr-backup
-              image: creativeprojects/resticprofile:0.29.1@sha256:02a8a687a2a294950d845a0698557ec037029de6201775a127d233a39fa11338
+              image: creativeprojects/resticprofile:0.30.0@sha256:c62fa4ff0d13c71ae3410bbfd8b64f4c8ca61ab15cc178f102dc0d1ffc39ad2c
               imagePullPolicy: IfNotPresent
               command:
                 - resticprofile
