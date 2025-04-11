@@ -30,6 +30,8 @@ anshulg.com. 86400 IN MX 10 in1-smtp.messagingengine.com.
 anshulg.com. 86400 IN MX 20 in2-smtp.messagingengine.com.
 *.anshulg.com. 86400 IN MX 10 in1-smtp.messagingengine.com.
 *.anshulg.com. 86400 IN MX 20 in2-smtp.messagingengine.com.
+git.anshulg.com. 86400 IN MX 10 in1-smtp.messagingengine.com.
+git.anshulg.com. 86400 IN MX 20 in2-smtp.messagingengine.com.
 
 ;; DKIM Records
 fm1._domainkey.anshulg.com. 300 IN CNAME fm1.anshulg.com.dkim.fmhosted.com.
