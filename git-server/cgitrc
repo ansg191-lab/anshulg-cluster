@@ -1,0 +1,22 @@
+#
+# cgit config
+# see cgitrc(5) for details
+
+# css=/cgit-css/cgit.css
+# logo=/cgit-css/cgit.png
+css=/cgit.css
+logo=/cgit.png
+
+enable-blame=1
+enable-commit-graph=1
+enable-follow-links=1
+enable-index-links=1
+enable-log-filecount=1
+enable-log-linecount=1
+snapshots=all
+
+scan-path=/srv/git
+
+# repo.url=ansg191-lab/anshulg-cluster
+# repo.path=/srv/git/anshulg-cluster.git
+# repo.desc=GKE & K3S Cluster managed by ArgoCD & Terraform

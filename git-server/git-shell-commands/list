@@ -1,0 +1,2 @@
+#!/bin/sh
+find /srv/git -type d -name "*.git" | sed 's|/srv/git/||'

@@ -1,0 +1,15 @@
+git.anshulg.com {
+	encode zstd gzip
+
+    @assets path /cgit.css /cgit.js /cgit.png /favicon.ico /robots.txt
+    handle @assets {
+    	root * /usr/share/cgit/
+    	file_server
+    }
+
+    reverse_proxy unix//run/fcgiwrap.socket {
+    	transport fastcgi {
+    		env SCRIPT_FILENAME /usr/lib/cgit/cgit.cgi
+    	}
+    }
+}
