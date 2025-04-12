@@ -73,7 +73,13 @@ install_git() {
 install_cgit() {
 	# Install cgit
 	echo "::group::Installing cgit"
-	sudo apt-get install -y --no-install-recommends cgit fcgiwrap
+	sudo apt-get install -y --no-install-recommends \
+		cgit \
+		fcgiwrap \
+		highlight \
+		python3-markdown \
+		python3-docutils \
+		groff
 	sudo systemctl enable fcgiwrap.socket fcgiwrap.service
 	sudo systemctl start fcgiwrap.socket fcgiwrap.service
 }

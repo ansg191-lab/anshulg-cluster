@@ -15,6 +15,11 @@ enable-log-filecount=1
 enable-log-linecount=1
 snapshots=all
 
+email-filter=/usr/lib/cgit/filters/email-gravatar.py
+source-filter=/usr/lib/cgit/filters/syntax-highlighting.sh
+about-filter=/usr/lib/cgit/filters/about-formatting.sh
+readme=:README.md
+
 scan-path=/srv/git
 
 # repo.url=ansg191-lab/anshulg-cluster
