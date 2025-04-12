@@ -1,0 +1,2 @@
+#!/bin/sh
+df -h /srv/git | awk 'NR==1 || NR==2 { printf "%-12s %-12s %-12s %-12s %-12s\n", $1, $2, $3, $4, $5 }'

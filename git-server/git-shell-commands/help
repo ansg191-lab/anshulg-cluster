@@ -1,2 +1,2 @@
 #!/bin/sh
-echo "Available git-shell commands: [help, list]"
+echo "Available git-shell commands: [help, disk, list, sync]"
