@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: overseerr
-          image: ghcr.io/sct/overseerr:develop@sha256:67af2c834f3a1c64bf5a5bcd7f557be93242a1387c91359923625dbe614305de
+          image: ghcr.io/sct/overseerr:develop@sha256:861362480adf7d057431680f44d85afa56ba0dc24356f7cc3ef5700d24cf1b5c
           imagePullPolicy: IfNotPresent
           env:
             - name: PORT
