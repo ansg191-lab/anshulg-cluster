@@ -226,18 +226,11 @@ setup_mta() {
 	sudo chown mail:mail /etc/nullmailer/remotes
 	sudo chmod 600 /etc/nullmailer/remotes
 
-	echo "Configuring nullmailer adminaddr..."
-	echo "ansg191@anshulg.com" > adminaddr
-	sudo mv adminaddr /etc/nullmailer/adminaddr
-	sudo chown root:root /etc/nullmailer/adminaddr
-	sudo chmod 644 /etc/nullmailer/adminaddr
-
-	echo "Configuring nullmailer defaultdomain..."
-	echo "git.anshulg.com" > defaultdomain
-	sudo mv defaultdomain /etc/nullmailer/defaultdomain
-	sudo chown root:root /etc/nullmailer/defaultdomain
-	sudo chmod 644 /etc/nullmailer/defaultdomain
-	sudo cp /etc/nullmailer/defaultdomain /etc/nullmailer/defaulthost
+	# Configure /etc/mailname
+	echo "Configuring /etc/mailname..."
+	echo "git.anshulg.com" | sudo tee /etc/mailname > /dev/null
+	sudo chown root:root /etc/mailname
+	sudo chmod 644 /etc/mailname
 
 	echo "Restarting nullmailer..."
 	sudo systemctl restart nullmailer
