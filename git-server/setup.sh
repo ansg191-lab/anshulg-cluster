@@ -264,6 +264,34 @@ setup_notion_script() {
 	echo "::endgroup::"
 }
 
+setup_fail2ban() {
+	echo "::group::Setting up fail2ban"
+	sudo apt-get install -y fail2ban nftables
+
+	# Create a jail.d/customization.local file
+	sudo mkdir -p /etc/fail2ban/jail.d
+	sudo tee /etc/fail2ban/jail.d/customization.local > /dev/null <<EOF
+[sshd]
+enabled = true
+bantime = 1w
+findtime = 1d
+
+[DEFAULT]
+destemail = root@git.anshulg.com
+mta = mail
+
+banaction = nftables
+banaction_allports = nftables[type=allports]
+
+action = %(action_mwl)s
+EOF
+	sudo chmod 644 /etc/fail2ban/jail.d/customization.local
+
+	# Restart fail2ban
+	sudo systemctl restart fail2ban
+	echo "::endgroup::"
+}
+
 # Main script execution
 setup_mta
 check_gitdir
@@ -277,3 +305,4 @@ setup_cgit_socket
 setup_cgit
 setup_mirroring
 setup_notion_script
+setup_fail2ban
