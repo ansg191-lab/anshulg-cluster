@@ -264,9 +264,26 @@ setup_notion_script() {
 	echo "::endgroup::"
 }
 
+setup_firewall() {
+	echo "::group::Setting up firewall"
+	sudo apt-get install -y nftables
+	sudo cp firewall.conf /etc/nftables.conf
+	sudo chmod 755 /etc/nftables.conf
+
+	# Enable and start nftables
+	sudo systemctl enable nftables
+	sudo systemctl start nftables
+
+	# Manually load the rules
+	sudo nft -f /etc/nftables.conf
+	echo "Firewall rules loaded."
+
+	echo "::endgroup::"
+}
+
 setup_fail2ban() {
 	echo "::group::Setting up fail2ban"
-	sudo apt-get install -y fail2ban nftables
+	sudo apt-get install -y fail2ban
 
 	# Create a jail.d/customization.local file
 	sudo mkdir -p /etc/fail2ban/jail.d
@@ -293,10 +310,12 @@ EOF
 }
 
 # Main script execution
+update_system
+setup_firewall
+setup_fail2ban
 setup_mta
 check_gitdir
 setup_git_user
-update_system
 install_ca
 install_caddy
 install_git
@@ -305,4 +324,3 @@ setup_cgit_socket
 setup_cgit
 setup_mirroring
 setup_notion_script
-setup_fail2ban
