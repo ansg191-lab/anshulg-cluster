@@ -283,7 +283,7 @@ mta = mail
 banaction = nftables
 banaction_allports = nftables[type=allports]
 
-action = %(action_mwl)s
+action = %(action_)s
 EOF
 	sudo chmod 644 /etc/fail2ban/jail.d/customization.local
 
