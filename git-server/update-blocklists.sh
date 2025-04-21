@@ -34,24 +34,21 @@ if ! command -v $NFT &> /dev/null; then
 	exit 1
 fi
 
-init_table() {
-	$NFT add table inet "$NFT_TABLE" || true
-	$NFT add chain inet "$NFT_TABLE" "$NFT_CHAIN" '{ type filter hook input priority filter - 2; }' || true
-}
+# Create NFT file for atomic updates
+TABLE_FILE=$(mktemp)
+CHAIN_FILE=$(mktemp)
+trap '{ rm -f "$TABLE_FILE" "$CHAIN_FILE"; }' EXIT
 
-contains_rule() {
-	local name="$1"
-
-	local json
-	json=$($NFT -j list chain inet "$NFT_TABLE" "$NFT_CHAIN")
-
-	echo "$json" | jq -e --arg blocklist "@$name" '
-		.nftables[]
-		| select(.rule != null)
-		| .rule
-		| select(.expr[]? | select(.match != null and .match.right == $blocklist))
-	' > /dev/null
-}
+# Initialize the table and chain
+cat <<EOF > "$TABLE_FILE"
+table inet $NFT_TABLE
+flush table inet $NFT_TABLE
+table inet $NFT_TABLE {
+EOF
+cat <<EOF >> "$CHAIN_FILE"
+chain $NFT_CHAIN {
+	type filter hook input priority filter - 2; policy accept;
+EOF
 
 install_blocklist() {
 	local blocklist_name="$1"
@@ -61,25 +58,29 @@ install_blocklist() {
 	local blocklist
 	blocklist=$(curl --silent --fail --show-error --location "$blocklist_url")
 
-	# Flush existing set if it exists
-	$NFT flush set inet "$NFT_TABLE" "$blocklist_name" 2>/dev/null || true
-	# Create the set
-	$NFT add set inet "$NFT_TABLE" "$blocklist_name" "{ type ipv4_addr; flags interval; auto-merge; }" || true
-
 	# Add rule to block ips in the set
-	if ! contains_rule "$blocklist_name" ; then
-		$NFT add rule inet "$NFT_TABLE" "$NFT_CHAIN" ip saddr "@$blocklist_name" drop
-	fi
+	echo "ip saddr @${blocklist_name} drop" >> "$CHAIN_FILE"
 
 	# Filter out comments and empty lines, sort (removing duplicates), and paste into a single line delimited by commas
 	elements=$(echo "$blocklist" | grep -Ev '^\s*($|#)' | sort -u | paste -sd, -)
-	# Add the elements to the set
-	echo "add element inet $NFT_TABLE $blocklist_name { $elements }" | $NFT -f -
-
+	# Create set and add elements to it
+	cat <<EOF >> "$TABLE_FILE"
+set $blocklist_name {
+	type ipv4_addr;
+	flags interval;
+	auto-merge;
+	elements = { $elements }
 }
-
-init_table
+EOF
+}
 
 for blocklist in "${BLOCKLISTS[@]}"; do
 	install_blocklist "$blocklist"
 done
+
+echo "}" >> "$CHAIN_FILE"
+cat "$CHAIN_FILE" >> "$TABLE_FILE"
+echo "}" >> "$TABLE_FILE"
+
+# Apply the changes
+$NFT -f "$TABLE_FILE"
