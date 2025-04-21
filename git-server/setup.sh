@@ -278,6 +278,14 @@ setup_firewall() {
 	sudo nft -f /etc/nftables.conf
 	echo "Firewall rules loaded."
 
+	# Setup blocklist
+	sudo chmod +x update-blocklists.sh
+	sudo ./update-blocklists.sh
+
+	# Add cron job to update blocklists every hour (offset to 3 minutes to avoid conflict with other jobs)
+	CRON_JOB="3 * * * * /usr/bin/bash $(realpath update-blocklists.sh)"
+	add_crontab_entry "root" "$CRON_JOB"
+
 	echo "::endgroup::"
 }
 
