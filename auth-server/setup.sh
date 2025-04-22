@@ -34,11 +34,16 @@ sudo zypper -n install -y google-cloud-cli
 echo "::endgroup::"
 
 # Set data permissions
+mkdir -p data
 chmod 700 data
+chmod 600 data/server.toml
+cp server.toml data/server.toml
 chmod 400 data/server.toml
 
 # Setup certificates
 echo "::group::Setting up certificates"
+mkdir -p certs
+cp csr.cnf certs/csr.cnf
 pushd certs
 chmod 600 csr.cnf
 
@@ -86,4 +91,5 @@ echo "::endgroup::"
 
 # Start the server
 echo "Starting Auth Server"
+mkdir -p backups
 sudo docker compose -f /home/anshulgupta/compose.yml up -d
