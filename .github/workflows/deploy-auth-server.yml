@@ -58,5 +58,4 @@ jobs:
           ssh-keyscan -H auth.anshulg.com >> ~/.ssh/known_hosts
 
       - name: Run deployment script
-        working-directory: auth-server
-        run: ./deploy.sh
+        run: ./x.pl deploy auth
