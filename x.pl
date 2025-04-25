@@ -966,7 +966,7 @@ Anshul Gupta <ansg191@anshulg.com>
 
 The MIT License (MIT)
 
-Copyright (c) 2024 Anshul Gupta
+Copyright (c) 2025 Anshul Gupta
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
