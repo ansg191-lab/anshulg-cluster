@@ -770,7 +770,7 @@ sub command_deploy {
     # Check that $server-server/deploy.sh exists
     my $deploy_script = "$server-server/deploy.sh";
     die "Deploy script not found: $deploy_script\n"
-        if ( !-f $deploy_script );
+      if ( !-f $deploy_script );
 
     # Run the deploy script
     {
