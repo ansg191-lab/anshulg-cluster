@@ -764,12 +764,31 @@ sub command_seal {
     return;
 }
 
+sub command_deploy {
+    my $server = shift @ARGV or die "Missing required argument: SERVER\n";
+
+    # Check that $server-server/deploy.sh exists
+    my $deploy_script = "$server-server/deploy.sh";
+    die "Deploy script not found: $deploy_script\n"
+        if ( !-f $deploy_script );
+
+    # Run the deploy script
+    {
+        my $dir = pushd("$server-server");
+        system("./deploy.sh") == 0
+          or die "Failed to run deploy script: $OS_ERROR\n";
+    }
+
+    return;
+}
+
 my $subcommand    = shift @ARGV or pod2usage(2);
 my %command_table = (
     'new'    => \&command_new,
     'helm'   => \&command_helm,
     'secret' => \&command_secret,
     'seal'   => \&command_seal,
+    'deploy' => \&command_deploy,
 );
 
 if ( exists $command_table{$subcommand} ) {
@@ -859,6 +878,12 @@ Seal all unencrypted secrets in the directory.
     -s, --skip-check            Skip kubectl context check
     -y, --yes                   Skip confirmation
 
+=head2 deploy
+
+./x.pl deploy SERVER
+
+Deploy the `deploy.sh` script on the SERVER.
+
 =head1 DIAGNOSTICS
 
 =over
@@ -909,6 +934,10 @@ This check can be disabled with the C<--skip-checks> flag.
 The C<kubectl> current context is not the same as the provided cluster.
 
 This check can be disabled with the C<--skip-checks> flag.
+
+=item Deploy script not found
+
+The deploy script was not found in the provided server's directory.
 
 =back
 
