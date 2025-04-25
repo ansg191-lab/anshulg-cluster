@@ -13,6 +13,7 @@ sudo systemctl start firewalld
 sudo firewall-cmd --permanent --add-service=ssh
 sudo firewall-cmd --permanent --add-service=http
 sudo firewall-cmd --permanent --add-service=https
+sudo firewall-cmd --permanent --add-service=ldaps
 sudo firewall-cmd --permanent --add-port=443/udp
 sudo firewall-cmd --reload
 echo "::endgroup::"
