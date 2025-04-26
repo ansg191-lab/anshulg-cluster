@@ -47,6 +47,13 @@
       "groupName": "intel-device-plugins"
     },
     {
+      "matchPackageNames": [
+        "teslamate/teslamate",
+        "teslamate/grafana"
+      ],
+      "groupName": "teslamate"
+    },
+    {
       "matchUpdateTypes": ["patch", "digest"],
       "automerge": true
     }
