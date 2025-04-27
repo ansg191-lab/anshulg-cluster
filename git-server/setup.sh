@@ -6,6 +6,8 @@ USER="git"
 GROUP="git"
 GITDIR="/srv/git"
 
+GH_MIRROR_VERSION="0.1.3"
+
 check_gitdir() {
 	# Check that /srv/git exists and is mounted
 	echo "::group::Checking $GITDIR"
@@ -192,6 +194,13 @@ add_crontab_entry() {
 
 setup_mirroring() {
 	echo "::group::Setting up mirroring"
+	# Download and install github_mirror
+	echo "Downloading github_mirror..."
+	wget -qO github_mirror.deb "https://github.com/ansg191/github-mirror/releases/download/v${GH_MIRROR_VERSION}/github_mirror-${GH_MIRROR_VERSION}-Linux-x86_64.deb"
+	echo "Installing github_mirror..."
+	sudo apt-get install -y ./github_mirror.deb
+	rm github_mirror.deb
+
 	# Copy config.ini to git user home directory
 	echo "Copying config.ini to $GITDIR..."
 	sudo cp config.ini $GITDIR/config.ini
