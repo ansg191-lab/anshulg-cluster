@@ -60,5 +60,15 @@
   ],
   "ignorePaths": [
     "rpi5/windmill/values.yaml"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["git-server/setup.sh"],
+      "matchStrings": [
+        "#\\s*renovate:\\s*datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\s.*?_VERSION=\"(?<currentValue>.*)\"\\s"
+      ],
+      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
+    }
   ]
 }
