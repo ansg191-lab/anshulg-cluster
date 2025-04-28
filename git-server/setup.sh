@@ -15,6 +15,10 @@ cleanup() {
 	echo "Restarting cron..."
 	systemctl start cron
 
+	# Cleanup root
+	echo "Cleaning up root..."
+	rm -rf root
+
 	echo "Done."
 }
 
@@ -22,7 +26,7 @@ disable_cron() {
 	echo "::group::Stopping cron"
 	local cron_pid children
 
-	echo "Waiting for cronjobs to finish..."
+	echo "Waiting for cron jobs to finish..."
 	cron_pid=$(pidof cron || true)
 	if [[ -n $cron_pid ]]; then
 		while true; do
@@ -70,18 +74,30 @@ check_gitdir() {
 	echo "::endgroup::"
 }
 
-update_system() {
-	# Update the system
-	echo "::group::Updating system"
+install_packages() {
+	echo "::group::Installing packages"
 	apt-get update
-	apt-get upgrade -y
+	xargs apt-get install -y < packages.txt
+	echo "::endgroup::"
+}
+
+copy_root() {
+	echo "::group::Copying root"
+
+	echo "Setting permissions..."
+	chown -R root:root root/etc
+	chown -R $USER:$GROUP root/srv/git
+	chown -R root:root root/usr/local/sbin
+
+	echo "Copying files..."
+	rsync -a root/ /
+
 	echo "::endgroup::"
 }
 
 install_ca() {
 	# Install CA certificates
 	echo "::group::Installing CA certificates"
-	apt-get install -y ca-certificates
 	wget -O /home/anshulgupta/ca.crt http://privateca-content-64cbe468-0000-233e-beaa-14223bc3fa9e.storage.googleapis.com/c745acb2f145f7f9e343/ca.crt
 	chmod 644 /home/anshulgupta/ca.crt
 	cp /home/anshulgupta/ca.crt /usr/local/share/ca-certificates/anshulg.crt
@@ -92,37 +108,18 @@ install_ca() {
 install_caddy() {
 	# Install caddy
 	echo "::group::Installing Caddy"
-	apt-get install -y caddy
 	systemctl enable caddy
 	systemctl start caddy
-
-	cp Caddyfile /etc/caddy/Caddyfile
 	systemctl restart caddy
-	echo "::endgroup::"
-}
-
-install_git() {
-	# Install git
-	echo "::group::Installing git"
-	apt-get install -y git
 	echo "::endgroup::"
 }
 
 install_cgit() {
 	# Install cgit
 	echo "::group::Installing cgit"
-	apt-get install -y --no-install-recommends \
-		cgit \
-		fcgiwrap \
-		highlight \
-		python3-markdown \
-		python3-docutils \
-		groff
 	systemctl enable fcgiwrap.socket fcgiwrap.service
 	systemctl start fcgiwrap.socket fcgiwrap.service
-}
 
-setup_cgit_socket() {
 	echo "Making cgit available to caddy..."
 	# Create systemd override for fcgiwrap socket to change ownership to caddy
 	mkdir -p /etc/systemd/system/fcgiwrap.socket.d
@@ -152,12 +149,6 @@ EOF
 	else
 	  echo "Success: Socket $SOCKET_PATH is correctly owned by caddy:caddy"
 	fi
-}
-
-setup_cgit() {
-	# Copy cgit configuration
-	echo "Copying cgit configuration..."
-	cp cgitrc /etc/cgitrc
 
 	echo "::endgroup::"
 }
@@ -190,13 +181,6 @@ setup_git_user() {
 
 	# Ensure /srv/git is owned by the git user
 	chown -R $USER:$GROUP $GITDIR
-
-	# Copy git-shell-commands
-	echo "Copying git-shell-commands..."
-	mkdir -p $GITDIR/git-shell-commands
-	cp -r git-shell-commands/* $GITDIR/git-shell-commands
-	chown -R $USER:$GROUP $GITDIR/git-shell-commands
-	chmod -R 755 $GITDIR/git-shell-commands
 }
 
 add_crontab_entry() {
@@ -237,12 +221,6 @@ setup_mirroring() {
 	apt-get install -y ./github_mirror.deb
 	rm github_mirror.deb
 
-	# Copy config.ini to git user home directory
-	echo "Copying config.ini to $GITDIR..."
-	cp config.ini $GITDIR/config.ini
-	chown "$USER:$GROUP" $GITDIR/config.ini
-	chmod 644 $GITDIR/config.ini
-
 	# Ensure tokens directory exists
 	echo "Creating tokens directory..."
 	mkdir -p $GITDIR/tokens
@@ -250,7 +228,7 @@ setup_mirroring() {
 	chmod 700 $GITDIR/tokens
 
 	# Setup cronjob
-	CRON_JOB="*/5 * * * * /usr/bin/github_mirror -C $GITDIR/config.ini --quiet"
+	CRON_JOB="*/5 * * * * /usr/bin/github_mirror -C /etc/github_mirror.conf --quiet"
 	add_crontab_entry "$USER" "$CRON_JOB"
 
 	echo "::endgroup::"
@@ -260,9 +238,6 @@ setup_mta() {
 	echo "::group::Setting up MTA"
 
 	FASTMAIL_PASS=$(tr -d '\n' < fastmail_pass.txt)
-
-	# Install and configure nullmailer
-	apt-get install -y nullmailer mailutils
 
 	# Configure nullmailer
 	echo "Configuring nullmailer remotes..."
@@ -286,16 +261,6 @@ setup_mta() {
 setup_notion_script() {
 	echo "::group::Setting up Notion Disk Monitor script"
 
-	# Copy the script to the git user's home directory
-	echo "Copying notion-df.py to $GITDIR..."
-	cp notion-df.py $GITDIR/notion-df.py
-	chown "$USER:$GROUP" $GITDIR/notion-df.py
-	chmod 755 $GITDIR/notion-df.py
-
-	# Install required Python packages
-	echo "Installing required Python packages..."
-	apt-get install -y python3-dotenv python3-requests
-
 	# Create .env.notion file
 	echo "Creating .env.notion file..."
 	touch $GITDIR/.env.notion
@@ -311,10 +276,6 @@ setup_notion_script() {
 
 setup_firewall() {
 	echo "::group::Setting up firewall"
-	apt-get install -y nftables
-	cp firewall.conf /etc/nftables.conf
-	chmod 755 /etc/nftables.conf
-
 	# Enable and start nftables
 	systemctl enable nftables
 	systemctl start nftables
@@ -324,11 +285,10 @@ setup_firewall() {
 	echo "Firewall rules loaded."
 
 	# Setup blocklist
-	chmod +x update-blocklists.sh
-	./update-blocklists.sh
+	/usr/local/sbin/update-blocklists.sh
 
 	# Add cron job to update blocklists every hour (offset to 3 minutes to avoid conflict with other jobs)
-	CRON_JOB="3 * * * * /usr/bin/bash $(realpath update-blocklists.sh)"
+	CRON_JOB="3 * * * * /usr/bin/bash /usr/local/sbin/update-blocklists.sh"
 	add_crontab_entry "root" "$CRON_JOB"
 
 	echo "::endgroup::"
@@ -336,8 +296,6 @@ setup_firewall() {
 
 setup_fail2ban() {
 	echo "::group::Setting up fail2ban"
-	apt-get install -y fail2ban
-
 	# Create a jail.d/customization.local file
 	mkdir -p /etc/fail2ban/jail.d
 	tee /etc/fail2ban/jail.d/customization.local > /dev/null <<EOF
@@ -371,17 +329,15 @@ fi
 # Main script execution
 trap cleanup EXIT
 disable_cron
-update_system
+install_packages
+check_gitdir
+copy_root
+install_ca
 setup_firewall
 setup_fail2ban
 setup_mta
-check_gitdir
 setup_git_user
-install_ca
 install_caddy
-install_git
 install_cgit
-setup_cgit_socket
-setup_cgit
 setup_mirroring
 setup_notion_script
