@@ -9,6 +9,42 @@ GITDIR="/srv/git"
 # renovate: datasource=github-releases depName=ansg191/github-mirror
 GH_MIRROR_VERSION="0.1.3"
 
+cleanup() {
+	echo "Cleaning up..."
+	# Restore cron
+	echo "Restarting cron..."
+	sudo systemctl start cron
+
+	echo "Done."
+}
+trap cleanup EXIT
+
+disable_cron() {
+	echo "::group::Stopping cron"
+	local cron_pid children
+
+	echo "Waiting for cronjobs to finish..."
+	cron_pid=$(pidof cron || true)
+	if [[ -n $cron_pid ]]; then
+		while true; do
+			children=$(pgrep -P "$cron_pid" || true)
+			if [[ -z $children ]]; then
+				echo "No cron jobs are running."
+				break
+			else
+				echo "Waiting for cron jobs to finish..."
+				sleep 5
+			fi
+		done
+	fi
+
+	echo "Stopping cron..."
+	sudo systemctl stop cron
+
+	echo "Cron disabled..."
+	echo "::endgroup::"
+}
+
 check_gitdir() {
 	# Check that /srv/git exists and is mounted
 	echo "::group::Checking $GITDIR"
@@ -328,6 +364,7 @@ EOF
 }
 
 # Main script execution
+disable_cron
 update_system
 setup_firewall
 setup_fail2ban
