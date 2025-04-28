@@ -33,7 +33,7 @@ jobs:
           repo: caddyserver/caddy
 
       - name: Caddy Verify
-        run: caddy adapt --config ./git-server/Caddyfile
+        run: caddy adapt --config ./git-server/root/etc/caddy/Caddyfile
 
   deploy:
     runs-on: ubuntu-latest
