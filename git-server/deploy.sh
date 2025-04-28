@@ -16,5 +16,5 @@ echo "Running setup script on $SERVER"
 ssh $SERVER << EOF
 set -eux
 chmod +x setup.sh
-bash setup.sh
+sudo bash setup.sh
 EOF
