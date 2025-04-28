@@ -25,5 +25,5 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: windmill
-    version: 2.0.402
+    version: 2.0.406
     repository: https://windmill-labs.github.io/windmill-helm-charts/
