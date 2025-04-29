@@ -7,7 +7,7 @@ GROUP="git"
 GITDIR="/srv/git"
 
 # renovate: datasource=github-releases depName=ansg191/github-mirror
-GH_MIRROR_VERSION="0.1.3"
+GH_MIRROR_VERSION="0.1.4"
 
 cleanup() {
 	echo "Cleaning up..."
