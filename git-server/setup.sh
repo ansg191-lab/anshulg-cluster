@@ -8,6 +8,10 @@ GITDIR="/srv/git"
 
 # renovate: datasource=github-releases depName=ansg191/github-mirror
 GH_MIRROR_VERSION="0.1.4"
+# renovate: datasource=github-releases depName=restic/restic
+RESTIC_VERSION="0.18.0"
+# renovate: datasource=github-releases depName=creativeprojects/resticprofile
+RESTICPROFILE_VERSION="0.30.0"
 
 cleanup() {
 	echo "Cleaning up..."
@@ -320,6 +324,61 @@ EOF
 	echo "::endgroup::"
 }
 
+install_restic() {
+	echo "::group::Installing restic and resticprofile"
+	# Download and install restic
+	echo "Downloading restic..."
+	wget -qO restic.bz2 "https://github.com/restic/restic/releases/download/v$RESTIC_VERSION/restic_${RESTIC_VERSION}_linux_amd64.bz2"
+	echo "Installing restic..."
+	bzip2 -d restic.bz2
+	chmod +x restic
+	mv restic /usr/local/bin/
+
+	# Download and install resticprofile
+	echo "Downloading resticprofile..."
+	wget -qO resticprofile.tar.gz "https://github.com/creativeprojects/resticprofile/releases/download/v$RESTICPROFILE_VERSION/resticprofile_no_self_update_${RESTICPROFILE_VERSION}_linux_amd64.tar.gz"
+	echo "Installing resticprofile..."
+	mkdir resticprofile
+	tar -xzf resticprofile.tar.gz -C resticprofile
+	rm resticprofile.tar.gz
+	mv resticprofile/resticprofile /usr/local/bin/
+	rm -rf resticprofile
+
+	# Print version
+	restic version
+	resticprofile version
+
+	# Install bash completion
+	restic generate --bash-completion /etc/bash_completion.d/restic
+	chmod +x /etc/bash_completion.d/restic
+	resticprofile generate --bash-completion > /etc/bash_completion.d/resticprofile
+    chmod +x /etc/bash_completion.d/resticprofile
+
+	echo "::endgroup::"
+}
+
+setup_backup() {
+	echo "::group::Setting up backups"
+
+	# Check files
+	if [ ! -f /etc/resticprofile/password.txt ]; then
+		echo "Error: /etc/resticprofile/password.txt does not exist. Exiting." >&2
+		exit 1
+	fi
+	chmod 400 /etc/resticprofile/password.txt
+
+	if [ ! -f /etc/resticprofile/auth.txt ]; then
+		echo "Error: /etc/resticprofile/auth.txt does not exist. Exiting." >&2
+		exit 1
+	fi
+	chmod 400 /etc/resticprofile/auth.txt
+
+	CRON_JOB="21 11 * * * . /etc/resticprofile/env.sh ; /usr/local/bin/resticprofile backup --quiet"
+	add_crontab_entry "root" "$CRON_JOB"
+
+	echo "::endgroup"
+}
+
 # Check if the script is run as root
 if [ "$(id -u)" -ne 0 ]; then
 	echo "This script must be run as root. Please use sudo."
@@ -341,3 +400,5 @@ install_caddy
 install_cgit
 setup_mirroring
 setup_notion_script
+install_restic
+setup_backup

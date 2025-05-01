@@ -1,0 +1,42 @@
+# yaml-language-server: $schema=https://creativeprojects.github.io/resticprofile/jsonschema/config.json
+
+version: "1"
+
+global:
+  restic-lock-retry-after: "1m"
+  restic-stale-lock-age: "4h"
+
+default:
+  repository: "rest:https://restic.anshulg.com/git-restic/"
+  initialize: false
+  password-file: "/etc/resticprofile/password.txt"
+  compression: "max"
+  force-inactive-lock: true
+
+  retention:
+    before-backup: false
+    after-backup: true
+    keep-daily: 7
+    keep-weekly: 4
+    keep-monthly: 12
+    keep-yearly: 1
+    prune: false
+    host: true
+
+  backup:
+    source:
+      - "/"
+    exclude:
+      - "/proc"
+      - "/sys"
+      - "/dev"
+      - "/tmp"
+      - "/run"
+      - "/mnt"
+      - "/media"
+      - "/lost+found"
+      - "/var/cache"
+      - "/var/tmp"
+    exclude-caches: true
+    tag:
+      - "git-server"
