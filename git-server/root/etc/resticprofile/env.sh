@@ -4,5 +4,8 @@
 # All rights reserved.
 #
 
-export RESTIC_REST_USERNAME="git-restic"
-export RESTIC_REST_PASSWORD=$(cat /etc/resticprofile/auth.txt | tr -d '\n')
+RESTIC_REST_USERNAME="git-restic"
+RESTIC_REST_PASSWORD=$(< /etc/resticprofile/auth.txt tr -d '\n')
+
+export RESTIC_REST_USERNAME
+export RESTIC_REST_PASSWORD
