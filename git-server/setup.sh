@@ -376,7 +376,7 @@ setup_backup() {
 	CRON_JOB="21 11 * * * . /etc/resticprofile/env.sh ; /usr/local/bin/resticprofile backup --quiet"
 	add_crontab_entry "root" "$CRON_JOB"
 
-	echo "::endgroup"
+	echo "::endgroup::"
 }
 
 # Check if the script is run as root
