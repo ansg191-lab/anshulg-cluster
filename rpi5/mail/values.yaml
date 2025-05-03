@@ -1,0 +1,10 @@
+nameOverride: ""
+fullnameOverride: ""
+
+mail:
+  replicaCount: 3
+  existingSecret: "fastmail"
+  persistence:
+    enabled: true
+  metrics:
+    enabled: true

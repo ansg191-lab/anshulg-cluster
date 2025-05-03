@@ -34,6 +34,8 @@ git.anshulg.com. 86400 IN MX 10 in1-smtp.messagingengine.com.
 git.anshulg.com. 86400 IN MX 20 in2-smtp.messagingengine.com.
 k8s.anshulg.com. 86400 IN MX 10 in1-smtp.messagingengine.com.
 k8s.anshulg.com. 86400 IN MX 20 in2-smtp.messagingengine.com.
+rpi5.anshulg.com. 86400 IN MX 10 in1-smtp.messagingengine.com.
+rpi5.anshulg.com. 86400 IN MX 20 in2-smtp.messagingengine.com.
 
 ;; DKIM Records
 fm1._domainkey.anshulg.com. 300 IN CNAME fm1.anshulg.com.dkim.fmhosted.com.
@@ -44,6 +46,7 @@ fm3._domainkey.anshulg.com. 300 IN CNAME fm3.anshulg.com.dkim.fmhosted.com.
 anshulg.com. 300 IN TXT "v=spf1 include:spf.messagingengine.com -all"
 git.anshulg.com. 300 IN TXT "v=spf1 include:spf.messagingengine.com -all"
 k8s.anshulg.com. 300 IN TXT "v=spf1 include:spf.messagingengine.com -all"
+rpi5.anshulg.com. 300 IN TXT "v=spf1 include:spf.messagingengine.com -all"
 
 ;; DMARC Record
 _dmarc.anshulg.com. 300 IN TXT "v=DMARC1; p=quarantine; rua=mailto:postmaster@anshulg.com"
