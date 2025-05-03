@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: technitium
+  labels:
+    app: technitium
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: technitium
+  serviceName: technitium
+  template:
+    metadata:
+      name: technitium
+      labels:
+        app: technitium
+    spec:
+      containers:
+        - name: technitium
+          image: technitium/dns-server:13.6.0
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - secretRef:
+                name: secrets
+                optional: false
+          env:
+            - name: DNS_SERVER_DOMAIN
+              value: "technitium"
+          ports:
+            - containerPort: 5380
+              protocol: TCP
+              name: http
+          volumeMounts:
+            - mountPath: /etc/dns
+              name: data
+          #resources:
+          #  requests:
+          #    cpu: 250m
+          #    memory: 500Mi
+          #  limits:
+          #    memory: 1Gi
+          #livenessProbe:
+          #  httpGet:
+          #    port: http
+          #    path: /ping
+          #  initialDelaySeconds: 30
+          #  periodSeconds: 30
+          #  timeoutSeconds: 5
+          #  failureThreshold: 3
+          #readinessProbe:
+          #  httpGet:
+          #    port: http
+          #    path: /ping
+          #  periodSeconds: 10
+          #  timeoutSeconds: 5
+          #  failureThreshold: 3
+      restartPolicy: Always
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
