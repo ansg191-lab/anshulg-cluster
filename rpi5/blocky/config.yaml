@@ -142,7 +142,7 @@ data:
           readHeaderTimeout: 20s
           # optional: Maximum download attempts
           # default: 3
-          attempts: 3
+          attempts: 5
           # optional: Time between the download attempts
           # default: 500ms
           cooldown: 500ms
