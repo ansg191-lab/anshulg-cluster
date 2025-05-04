@@ -8,6 +8,7 @@
   "platformCommit": "enabled",
   "rebaseWhen": "conflicted",
   "separateMajorMinor": true,
+  "separateMinorPatch": true,
   "kubernetes": {
     "fileMatch": [
       "k8s/.+\\.yaml$",
