@@ -41,6 +41,12 @@
     },
     {
       "matchPackageNames": [
+        "ghcr.io/community-tooling/oci-images/paperless-export"
+      ],
+      "allowedVersions": "!/^1\\.\\d+\\.\\d+$/"
+    },
+    {
+      "matchPackageNames": [
         "intel-device-plugins-gpu",
         "intel-device-plugins-operator"
       ],
