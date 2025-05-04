@@ -10,12 +10,8 @@ spec:
         spec:
           initContainers:
             - name: paperless-backup
-              image: ghcr.io/paperless-ngx/paperless-ngx:2.15.3@sha256:39b337e73c978238f0b529baf42f1b59b65d17eed35cd61bc1ccbbf779b5d58b
+              image: ghcr.io/community-tooling/oci-images/paperless-export:0.0.1@sha256:f0355e402b08ed973ceb15bc92f8ff44ad558e38cbe9ace544a4e87ea0a5f019
               imagePullPolicy: IfNotPresent
-              command:
-                - sh
-                - -c
-                - document_exporter /usr/src/paperless/export
               env:
                 - name: PAPERLESS_DBHOST
                   valueFrom:
@@ -59,7 +55,7 @@ spec:
                 - mountPath: /usr/src/paperless/consume
                   name: consume
                   subPath: Scanner
-                - mountPath: /usr/src/paperless/export
+                - mountPath: /export
                   name: export
           containers:
             - name: restic
