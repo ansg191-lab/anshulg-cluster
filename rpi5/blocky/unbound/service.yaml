@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: unbound
+spec:
+  clusterIP: 10.43.0.11
+  selector:
+    app: unbound
+  ports:
+    - protocol: TCP
+      port: 53
+      targetPort: dns-tcp
+      name: dns-tcp
+    - protocol: UDP
+      port: 53
+      targetPort: dns-udp
+      name: dns-udp
+  type: ClusterIP
