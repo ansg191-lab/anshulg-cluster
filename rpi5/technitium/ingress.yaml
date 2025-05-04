@@ -22,18 +22,3 @@ spec:
       - main: technitium.local
         sans:
           - technitium.internal
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: technitium
-spec:
-  ingressClassName: tailscale
-  defaultBackend:
-    service:
-      name: technitium
-      port:
-        number: 80
-  tls:
-    - hosts:
-        - technitium
