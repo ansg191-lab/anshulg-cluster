@@ -11,7 +11,7 @@ GH_MIRROR_VERSION="0.1.4"
 # renovate: datasource=github-releases depName=restic/restic
 RESTIC_VERSION="0.18.0"
 # renovate: datasource=github-releases depName=creativeprojects/resticprofile
-RESTICPROFILE_VERSION="0.30.0"
+RESTICPROFILE_VERSION="0.30.1"
 
 cleanup() {
 	echo "Cleaning up..."
