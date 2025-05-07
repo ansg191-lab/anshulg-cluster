@@ -10,18 +10,18 @@
   "separateMajorMinor": true,
   "separateMinorPatch": true,
   "kubernetes": {
-    "fileMatch": [
-      "k8s/.+\\.yaml$",
-      "rpi5/.+\\.yaml$"
+    "managerFilePatterns": [
+      "/k8s/.+\\.yaml$/",
+      "/rpi5/.+\\.yaml$/"
     ],
     "ignorePaths": [
       "k8s/matrix/postgres.yaml"
     ]
   },
   "argocd": {
-    "fileMatch": [
-      "k8s/.+\\.yaml$",
-      "rpi5/.+\\.yaml$"
+    "managerFilePatterns": [
+      "/k8s/.+\\.yaml$/",
+      "/rpi5/.+\\.yaml$/"
     ]
   },
   "pre-commit": {
@@ -61,7 +61,10 @@
       "groupName": "teslamate"
     },
     {
-      "matchUpdateTypes": ["patch", "digest"],
+      "matchUpdateTypes": [
+        "patch",
+        "digest"
+      ],
       "automerge": true
     }
   ],
@@ -71,7 +74,9 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": ["git-server/setup.sh"],
+      "managerFilePatterns": [
+        "/git-server/setup.sh/"
+      ],
       "matchStrings": [
         "#\\s*renovate:\\s*datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\s.*?_VERSION=\"(?<currentValue>.*)\"\\s"
       ],
