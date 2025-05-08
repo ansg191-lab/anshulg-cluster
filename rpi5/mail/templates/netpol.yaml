@@ -1,0 +1,15 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: restrict-mail-access
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: mail
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              anshulg.com/access-mail: "true"
+  policyTypes:
+  - Ingress
