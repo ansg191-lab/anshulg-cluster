@@ -93,7 +93,7 @@ origin = "https://auth.anshulg.com"
 [http_client_address_info]
 # proxy-v2 = ["127.0.0.1"]
 #   # OR
-x-forward-for = ["127.0.0.1"]
+x-forward-for = ["127.0.0.1", "172.18.0.1", "::ffff:172.18.0.1"]
 
 #   LDAPS requests can be reverse proxied by a loadbalancer.
 #   To preserve the original IP of the caller, these systems
@@ -103,7 +103,7 @@ x-forward-for = ["127.0.0.1"]
 #   format the information is provided in.
 #   Defaults to "none" (no trusted sources)
 [ldap_client_address_info]
-proxy-v2 = ["127.0.0.1"]
+proxy-v2 = ["127.0.0.1", "172.18.0.1", "::ffff:172.18.0.1"]
 
 [ online_backup ]
 #   The path to the output folder for online backups
