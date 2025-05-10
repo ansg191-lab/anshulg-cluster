@@ -26,8 +26,6 @@ spec:
         externalTrafficPolicy: Local
 
     providers:
-      kubernetesGateway:
-        enabled: true
       kubernetesCRD:
         allowExternalNameServices: true
         allowCrossNamespace: true
