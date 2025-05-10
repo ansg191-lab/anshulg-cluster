@@ -24,24 +24,52 @@ spec:
           ports:
             - containerPort: 4180
               protocol: TCP
+              name: http
+            - containerPort: 4443
+              protocol: TCP
+              name: https
           envFrom:
             - secretRef:
                 name: oauth-config
           livenessProbe:
             httpGet:
-              port: 4180
+              port: https
               path: /ping
+              scheme: HTTPS
             periodSeconds: 30
             timeoutSeconds: 5
             failureThreshold: 3
           readinessProbe:
             httpGet:
-              port: 4180
+              port: https
               path: /ready
+              scheme: HTTPS
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 3
+          volumeMounts:
+            - mountPath: /etc/ssl/certs/ca-certificates.crt
+              name: ca
+              subPath: ca.crt
+            - mountPath: /certs
+              name: tls
+          securityContext:
+            runAsGroup: 2000
       restartPolicy: Always
+      volumes:
+        - name: ca
+          configMap:
+            name: anshulg-ca
+        - name: tls
+          csi:
+            driver: csi.cert-manager.io
+            readOnly: true
+            volumeAttributes:
+              csi.cert-manager.io/issuer-group: cas-issuer.jetstack.io
+              csi.cert-manager.io/issuer-kind: GoogleCASClusterIssuer
+              csi.cert-manager.io/issuer-name: anshulg-ca
+              csi.cert-manager.io/dns-names: "radarr-auth.${POD_NAMESPACE}.svc.cluster.local,radarr-auth.${POD_NAMESPACE},radarr-auth"
+              csi.cert-manager.io/fs-group: "2000"
 ---
 apiVersion: v1
 kind: Service
@@ -52,6 +80,6 @@ spec:
     app: oauth-proxy
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 4180
+      port: 443
+      targetPort: https
   type: ClusterIP

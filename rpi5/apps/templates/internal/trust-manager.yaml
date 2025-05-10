@@ -9,6 +9,12 @@ spec:
     chart: trust-manager
     repoURL: https://charts.jetstack.io
     targetRevision: v0.17.1
+    helm:
+      values: |
+        secretTargets:
+          enabled: true
+          authorizedSecrets:
+            - anshulg-ca
   destination:
     server: {{ .Values.spec.destination.server }}
     namespace: cert-manager

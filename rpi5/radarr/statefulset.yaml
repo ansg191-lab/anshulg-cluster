@@ -65,11 +65,17 @@ spec:
           ports:
             - containerPort: 7878
               protocol: TCP
+              name: http
+            - containerPort: 9898
+              protocol: TCP
+              name: https
           volumeMounts:
             - mountPath: /config
               name: config
             - mountPath: /data
               name: data
+            - mountPath: /certs
+              name: tls
           resources:
             requests:
               cpu: 250m
@@ -109,6 +115,17 @@ spec:
             medium: Memory
         - name: tarsnap-cache
           emptyDir: { }
+        - name: tls
+          csi:
+            driver: csi.cert-manager.io
+            readOnly: true
+            volumeAttributes:
+              csi.cert-manager.io/issuer-group: cas-issuer.jetstack.io
+              csi.cert-manager.io/issuer-kind: GoogleCASClusterIssuer
+              csi.cert-manager.io/issuer-name: anshulg-ca
+              csi.cert-manager.io/dns-names: radarr.${POD_NAMESPACE}.svc.cluster.local,radarr.${POD_NAMESPACE},radarr
+              csi.cert-manager.io/pkcs12-enable: "true"
+              csi.cert-manager.io/pkcs12-password: "password"
   volumeClaimTemplates:
     - metadata:
         name: config

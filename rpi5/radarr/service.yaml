@@ -6,7 +6,8 @@ spec:
   selector:
     app: radarr
   ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 7878
+    - name: https
+      protocol: TCP
+      port: 443
+      targetPort: https
   type: ClusterIP

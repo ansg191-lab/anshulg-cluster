@@ -9,6 +9,8 @@ spec:
         name: anshulg-ca-crt
         key: ca.crt
   target:
+    secret:
+      key: "ca.crt"
     configMap:
       key: "ca.crt"
     namespaceSelector:

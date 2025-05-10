@@ -33,3 +33,15 @@ spec:
     ingressRoute:
       dashboard:
         enabled: true
+
+    # Replace CA certs with trust-manager CA certs
+    additionalVolumeMounts:
+      - name: ca-certs
+        mountPath: /etc/ssl/certs/ca-certificates.crt
+        readOnly: true
+        subPath: ca.crt
+    deployment:
+      additionalVolumes:
+        - name: ca-certs
+          configMap:
+            name: anshulg-ca
