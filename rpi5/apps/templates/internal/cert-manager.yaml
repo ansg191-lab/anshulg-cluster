@@ -25,3 +25,22 @@ spec:
     automated:
       prune: true
       selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cert-manager-csi-driver
+  namespace: argocd
+spec:
+  project: internal
+  source:
+    chart: cert-manager-csi-driver
+    repoURL: https://charts.jetstack.io
+    targetRevision: v0.10.3
+  destination:
+    server: {{ .Values.spec.destination.server }}
+    namespace: cert-manager
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
