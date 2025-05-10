@@ -28,8 +28,6 @@ spec:
     providers:
       kubernetesGateway:
         enabled: true
-        statusAddress:
-          ip: 192.168.1.100
       kubernetesCRD:
         allowExternalNameServices: true
         allowCrossNamespace: true
