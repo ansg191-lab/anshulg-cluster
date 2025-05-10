@@ -41,7 +41,15 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 3
+          volumeMounts:
+            - mountPath: /etc/ssl/certs/ca-certificates.crt
+              name: ca
+              subPath: ca.crt
       restartPolicy: Always
+      volumes:
+        - name: ca
+          configMap:
+            name: anshulg-ca
 ---
 apiVersion: v1
 kind: Service
