@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: iperf3
+spec:
+  ingressClassName: tailscale
+  defaultBackend:
+    service:
+      name: iperf3
+      port:
+        number: 5201
+  tls:
+    - hosts:
+        - iperf3
