@@ -7,6 +7,9 @@ spec:
   commonName: blocky.local
   dnsNames:
     - blocky.local
+    - blocky.internal
+    - dashboard.blocky.local
+    - dashboard.blocky.internal
   duration: 2160h0m0s
   renewBefore: 720h0m0s
   privateKey:

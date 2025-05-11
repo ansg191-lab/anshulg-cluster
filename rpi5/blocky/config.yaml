@@ -232,9 +232,9 @@ data:
     #  flushInterval: 30s
 
     # optional: Blocky can synchronize its cache and blocking state between multiple instances through redis.
-    #redis:
+    redis:
       # Server address and port or master name if sentinel is used
-    #  address: redismaster
+      address: 10.43.0.13:6379
       # Username if necessary
     #  username: usrname
       # Password if necessary
@@ -242,7 +242,7 @@ data:
       # Database, default: 0
     #  database: 2
       # Connection is required for blocky to start. Default: false
-    #  required: true
+      required: true
       # Max connection attempts, default: 3
     #  connectionAttempts: 10
       # Time between the connection attempts, default: 1s

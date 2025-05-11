@@ -16,12 +16,22 @@ spec:
       services:
         - name: blocky
           port: 80
+    - kind: Rule
+      match: Host(`dashboard.blocky.local`) || Host(`dashboard.blocky.internal`)
+      middlewares:
+        - name: security-headers
+          namespace: kube-system
+      services:
+        - name: grafana
+          port: 80
   tls:
     secretName: blocky-cert-tls
     domains:
       - main: blocky.local
         sans:
           - blocky.internal
+          - dashboard.blocky.local
+          - dashboard.blocky.internal
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
