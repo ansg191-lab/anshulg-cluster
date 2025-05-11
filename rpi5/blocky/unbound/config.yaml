@@ -19,6 +19,7 @@ data:
         local-data: "scrutiny.internal. A 192.168.1.100"
         local-data: "smokeping.internal. A 192.168.1.100"
         local-data: "sonarr.internal. A 192.168.1.100"
+        local-data: "speedtest.internal. A 192.168.1.100"
         local-data: "technitium.internal. A 192.168.1.100"
         local-data: "teslaboard.internal. A 192.168.1.100"
         local-data: "teslamate.internal. A 192.168.1.100"

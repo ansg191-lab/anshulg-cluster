@@ -1,0 +1,37 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: speedtest
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`speedtest.local`) || Host(`speedtest.internal`)
+      middlewares:
+        - name: security-headers
+          namespace: kube-system
+      services:
+        - name: speedtest
+          port: 80
+  tls:
+    secretName: speedtest-cert-tls
+    domains:
+      - main: speedtest.local
+        sans:
+          - speedtest.internal
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: speedtest
+spec:
+  ingressClassName: tailscale
+  defaultBackend:
+    service:
+      name: speedtest
+      port:
+        number: 80
+  tls:
+    - hosts:
+        - speedtest
