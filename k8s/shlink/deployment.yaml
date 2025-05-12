@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: shlink
-          image: shlinkio/shlink:4.4.6
+          image: shlinkio/shlink:4.4.6@sha256:1a697baca56ab8821783e0ce53eb4fb22e51bb66749ec50581adc0cb6d031d7a
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
