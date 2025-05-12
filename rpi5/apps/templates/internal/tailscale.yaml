@@ -18,6 +18,8 @@ spec:
     targetRevision: 1.82.5
     helm:
       values: |
+        proxyConfig:
+          defaultProxyClass: "tailscale-default-class"
         apiServerProxyConfig:
           mode: "true"
   destination:
@@ -25,3 +27,14 @@ spec:
     namespace: tailscale
   syncPolicy:
     automated: {}
+---
+apiVersion: tailscale.com/v1alpha1
+kind: ProxyClass
+metadata:
+  name: tailscale-default-class
+  namespace: tailscale
+spec:
+  statefulSet:
+    pod:
+      annotations:
+        linkerd.io/inject: enabled
