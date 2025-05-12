@@ -65,11 +65,11 @@ spec:
             driver: csi.cert-manager.io
             readOnly: true
             volumeAttributes:
-              csi.cert-manager.io/issuer-group: cas-issuer.jetstack.io
-              csi.cert-manager.io/issuer-kind: GoogleCASClusterIssuer
-              csi.cert-manager.io/issuer-name: anshulg-ca
+              csi.cert-manager.io/issuer-kind: ClusterIssuer
+              csi.cert-manager.io/issuer-name: rpi5-ca
               csi.cert-manager.io/dns-names: "radarr-auth.${POD_NAMESPACE}.svc.cluster.local,radarr-auth.${POD_NAMESPACE},radarr-auth"
               csi.cert-manager.io/fs-group: "2000"
+              csi.cert-manager.io/duration: 720h0m0s
 ---
 apiVersion: v1
 kind: Service

@@ -8,6 +8,9 @@ spec:
     - configMap:
         name: anshulg-ca-crt
         key: ca.crt
+    - secret:
+        name: rpi5-ca-cert-tls
+        key: tls.crt
   target:
     secret:
       key: "ca.crt"
