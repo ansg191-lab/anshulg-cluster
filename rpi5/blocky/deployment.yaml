@@ -35,27 +35,24 @@ spec:
             - mountPath: /app/config.yml
               name: config
               subPath: config.yml
-          #resources:
-          #  requests:
-          #    cpu: 250m
-          #    memory: 500Mi
-          #  limits:
-          #    memory: 1Gi
-          #livenessProbe:
-          #  httpGet:
-          #    port: http
-          #    path: /ping
-          #  initialDelaySeconds: 30
-          #  periodSeconds: 30
-          #  timeoutSeconds: 5
-          #  failureThreshold: 3
-          #readinessProbe:
-          #  httpGet:
-          #    port: http
-          #    path: /ping
-          #  periodSeconds: 10
-          #  timeoutSeconds: 5
-          #  failureThreshold: 3
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              memory: 192Mi
+          readinessProbe:
+            exec:
+              command:
+                - /app/blocky
+                - healthcheck
+            initialDelaySeconds: 30
+          livenessProbe:
+            exec:
+              command:
+                - /app/blocky
+                - healthcheck
+            initialDelaySeconds: 60
       restartPolicy: Always
       volumes:
         - name: config
