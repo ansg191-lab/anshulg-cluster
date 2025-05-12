@@ -45,3 +45,40 @@ spec:
             serviceAccountSecretRef:
               name: clouddns-dns01-solver-svc-acct
               key: dns-01-key.json
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: rpi5-ca-cert
+spec:
+  secretName: rpi5-ca-cert-tls
+  commonName: RPI5 Cluster Intermediate CA
+  duration: 8760h0m0s # 1 year
+  renewBefore: 5840h0m0s # 8 months
+  privateKey:
+    algorithm: ECDSA
+    size: 521
+    rotationPolicy: Always
+  isCA: true
+  encodeUsagesInRequest: true
+  subject:
+    organizations:
+      - Anshul Gupta
+    organizationalUnits:
+      - rpi5
+    provinces:
+      - California
+    countries:
+      - US
+  issuerRef:
+    group: cas-issuer.jetstack.io
+    kind: GoogleCASClusterIssuer
+    name: anshulg-ca
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: rpi5-ca
+spec:
+  ca:
+    secretName: rpi5-ca-cert-tls
