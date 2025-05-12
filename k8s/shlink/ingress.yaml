@@ -1,0 +1,20 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: shlink
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`l.anshulg.com`)
+      middlewares:
+        - name: security-headers
+          namespace: traefik
+      services:
+        - name: shlink
+          port: 80
+  tls:
+    secretName: shlink-cert-tls
+    domains:
+      - main: l.anshulg.com

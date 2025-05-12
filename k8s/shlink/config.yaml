@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config
+data:
+  DEFAULT_DOMAIN: "l.anshulg.com"
+  IS_HTTPS_ENABLED: "true"
+  MULTI_SEGMENT_SLUGS_ENABLED: "true"
+  SHORT_URL_TRAILING_SLASH: "true"
+  ANONYMIZE_REMOTE_ADDR: "false"
+  PORT: "8080"
