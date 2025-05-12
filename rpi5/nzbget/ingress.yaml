@@ -1,11 +1,4 @@
 apiVersion: traefik.io/v1alpha1
-kind: ServersTransport
-metadata:
-  name: nzbget
-spec:
-  serverName: nzbget
----
-apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: nzbget
@@ -22,8 +15,7 @@ spec:
           namespace: kube-system
       services:
         - name: nzbget
-          port: 443
-          serversTransport: nzbget
+          port: 80
   tls:
     secretName: nzbget-cert-tls
     domains:
@@ -41,7 +33,7 @@ spec:
     service:
       name: nzbget
       port:
-        number: 443
+        number: 80
   tls:
     - hosts:
         - nzbget

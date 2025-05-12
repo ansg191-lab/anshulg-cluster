@@ -14,6 +14,8 @@ spec:
   template:
     metadata:
       name: nzbget
+      annotations:
+        linkerd.io/inject: enabled
       labels:
           app: nzbget
     spec:
@@ -32,16 +34,11 @@ spec:
             - containerPort: 6789
               protocol: TCP
               name: http
-            - containerPort: 6791
-              protocol: TCP
-              name: https
           volumeMounts:
             - mountPath: /config
               name: config
             - mountPath: /data
               name: data
-            - mountPath: /certs
-              name: tls
             - mountPath: /etc/ssl/certs/ca-certificates.crt
               name: ca
               subPath: ca.crt
@@ -72,14 +69,5 @@ spec:
         - name: ca
           configMap:
             name: anshulg-ca
-        - name: tls
-          csi:
-            driver: csi.cert-manager.io
-            readOnly: true
-            volumeAttributes:
-              csi.cert-manager.io/issuer-kind: ClusterIssuer
-              csi.cert-manager.io/issuer-name: rpi5-ca
-              csi.cert-manager.io/dns-names: nzbget.${POD_NAMESPACE}.svc.cluster.local,nzbget.${POD_NAMESPACE},nzbget
-              csi.cert-manager.io/duration: 720h0m0s
       nodeSelector:
         kubernetes.io/hostname: odroid-h4
