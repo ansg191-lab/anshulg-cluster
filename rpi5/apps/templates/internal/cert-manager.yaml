@@ -15,6 +15,10 @@ spec:
     repoURL: https://charts.jetstack.io
     targetRevision: v1.17.2
     helm:
+      values: |
+        config:
+          featureGates:
+            UseCertificateRequestBasicConstraints: true
       parameters:
         - name: installCRDs
           value: "true"
