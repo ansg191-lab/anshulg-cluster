@@ -12,6 +12,8 @@ spec:
   template:
     metadata:
       name: tika
+      annotations:
+        linkerd.io/inject: enabled
       labels:
         app: tika
     spec:

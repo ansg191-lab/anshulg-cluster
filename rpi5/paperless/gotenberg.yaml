@@ -12,6 +12,8 @@ spec:
   template:
     metadata:
       name: gotenberg
+      annotations:
+        linkerd.io/inject: enabled
       labels:
         app: gotenberg
     spec:
