@@ -41,6 +41,8 @@ spec:
         readOnly: true
         subPath: ca.crt
     deployment:
+      podAnnotations:
+        linkerd.io/inject: enabled
       additionalVolumes:
         - name: ca-certs
           configMap:
