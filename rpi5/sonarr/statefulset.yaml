@@ -13,6 +13,8 @@ spec:
   template:
     metadata:
       name: sonarr
+      annotations:
+        linkerd.io/inject: enabled
       labels:
         app: sonarr
     spec:
