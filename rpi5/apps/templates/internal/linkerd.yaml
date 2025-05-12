@@ -139,3 +139,21 @@ spec:
   syncPolicy:
     syncOptions:
       - ServerSideApply=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: linkerd-viz
+  namespace: argocd
+spec:
+  project: internal
+  source:
+    chart: linkerd-viz
+    repoURL: https://helm.linkerd.io/edge
+    targetRevision: v2025.5.2
+  destination:
+    server: {{ .Values.spec.destination.server }}
+    namespace: linkerd
+  syncPolicy:
+    syncOptions:
+      - ServerSideApply=true
