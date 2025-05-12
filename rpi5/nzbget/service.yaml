@@ -6,7 +6,12 @@ spec:
   selector:
     app: nzbget
   ports:
-    - protocol: TCP
+    - name: http
+      protocol: TCP
       port: 80
-      targetPort: 6789
+      targetPort: http
+    - name: https
+      protocol: TCP
+      port: 443
+      targetPort: https
   type: ClusterIP

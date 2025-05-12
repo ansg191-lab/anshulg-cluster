@@ -5,8 +5,6 @@ metadata:
 spec:
   secretName: nzbget-cert-tls
   commonName: nzbget.local
-  ipAddresses:
-    - 192.168.1.39
   dnsNames:
     - nzbget.local
     - nzbget.internal

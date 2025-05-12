@@ -31,11 +31,20 @@ spec:
           ports:
             - containerPort: 6789
               protocol: TCP
+              name: http
+            - containerPort: 6791
+              protocol: TCP
+              name: https
           volumeMounts:
             - mountPath: /config
               name: config
             - mountPath: /data
               name: data
+            - mountPath: /certs
+              name: tls
+            - mountPath: /etc/ssl/certs/ca-certificates.crt
+              name: ca
+              subPath: ca.crt
       initContainers:
         - name: copy-config
           image: busybox:1.37.0@sha256:37f7b378a29ceb4c551b1b5582e27747b855bbfaa73fa11914fe0df028dc581f
@@ -60,5 +69,17 @@ spec:
           hostPath:
             path: /data
             type: Directory
+        - name: ca
+          configMap:
+            name: anshulg-ca
+        - name: tls
+          csi:
+            driver: csi.cert-manager.io
+            readOnly: true
+            volumeAttributes:
+              csi.cert-manager.io/issuer-kind: ClusterIssuer
+              csi.cert-manager.io/issuer-name: rpi5-ca
+              csi.cert-manager.io/dns-names: nzbget.${POD_NAMESPACE}.svc.cluster.local,nzbget.${POD_NAMESPACE},nzbget
+              csi.cert-manager.io/duration: 720h0m0s
       nodeSelector:
         kubernetes.io/hostname: odroid-h4
