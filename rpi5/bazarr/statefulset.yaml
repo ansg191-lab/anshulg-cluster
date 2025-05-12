@@ -13,6 +13,8 @@ spec:
   template:
     metadata:
       name: bazarr
+      annotations:
+        linkerd.io/inject: enabled
       labels:
         app: bazarr
     spec:
