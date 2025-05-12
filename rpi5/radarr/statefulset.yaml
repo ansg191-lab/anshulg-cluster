@@ -13,6 +13,8 @@ spec:
   template:
     metadata:
       name: radarr
+      annotations:
+        linkerd.io/inject: enabled
       labels:
         app: radarr
     spec:
