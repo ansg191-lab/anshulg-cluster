@@ -62,3 +62,12 @@ spec:
       dnsConfig:
         nameservers:
           - 10.43.0.11
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                topologyKey: "kubernetes.io/hostname"
+                labelSelector:
+                  matchLabels:
+                    app: blocky
+              weight: 100
