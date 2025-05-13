@@ -26,4 +26,4 @@ appVersion: "1.16.0"
 dependencies:
   - name: uptime-kuma
     repository: https://k3rnelpan1c-dev.github.io/uptime-kuma-helm/
-    version: 1.4.0
+    version: 1.5.0
