@@ -172,6 +172,29 @@ spec:
     helm:
       valueFiles:
         - https://raw.githubusercontent.com/linkerd/linkerd2/main/grafana/values.yaml
+      values: |
+        grafana.ini:
+          server:
+            root_url: http://localhost:8080/
+          auth:
+            disable_login_form: false
+          auth.anonymous:
+            enabled: true
+            org_role: Viewer
+          auth.basic:
+            enabled: true
+        datasources:
+          datasources.yaml:
+            datasources:
+              - name: prometheus
+                type: prometheus
+                access: proxy
+                orgId: 1
+                url: http://prometheus.linkerd.svc.cluster.local:9090
+                isDefault: true
+                jsonData:
+                  timeInterval: "5s"
+                editable: true
   destination:
     server: {{ .Values.spec.destination.server }}
     namespace: linkerd
