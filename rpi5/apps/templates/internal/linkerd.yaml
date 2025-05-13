@@ -157,3 +157,21 @@ spec:
   syncPolicy:
     syncOptions:
       - ServerSideApply=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: linkerd-grafana
+  namespace: argocd
+spec:
+  project: internal
+  source:
+    chart: grafana
+    repoURL: https://grafana.github.io/helm-charts
+    targetRevision: v9.0.0
+    helm:
+      valueFiles:
+        - https://raw.githubusercontent.com/linkerd/linkerd2/main/grafana/values.yaml
+  destination:
+    server: {{ .Values.spec.destination.server }}
+    namespace: linkerd
