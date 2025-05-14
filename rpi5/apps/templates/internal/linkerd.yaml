@@ -133,6 +133,7 @@ spec:
           externalCA: true
           issuer:
             scheme: kubernetes.io/tls
+        cniEnabled: true
   destination:
     server: {{ .Values.spec.destination.server }}
     namespace: linkerd
@@ -175,6 +176,9 @@ spec:
     repoURL: https://helm.linkerd.io/edge
     targetRevision: v2025.5.2
     helm:
+      parameters:
+        - name: repairController.enabled
+          value: "true"
       values: |
         destCNINetDir: "/var/lib/rancher/k3s/agent/etc/cni/net.d"
         destCNIBinDir: "/var/lib/rancher/k3s/data/cni"
