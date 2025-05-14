@@ -34,12 +34,15 @@ spec:
             timeoutSeconds: 5
             failureThreshold: 3
           securityContext:
+            allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
             runAsNonRoot: true
             runAsUser: 10001
             capabilities:
               drop:
                 - ALL
+            seccompProfile:
+              type: RuntimeDefault
           resources:
             requests:
               cpu: 5m
