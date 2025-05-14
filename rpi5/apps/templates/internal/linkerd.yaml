@@ -158,6 +158,29 @@ spec:
     syncOptions:
       - ServerSideApply=true
 ---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: linkerd-cni
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: linkerd-cni
+  namespace: argocd
+spec:
+  project: internal
+  source:
+    chart: linkerd2-cni
+    repoURL: https://helm.linkerd.io/edge
+    targetRevision: v2025.5.2
+  destination:
+    server: {{ .Values.spec.destination.server }}
+    namespace: linkerd-cni
+  syncPolicy:
+    syncOptions:
+      - ServerSideApply=true
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
