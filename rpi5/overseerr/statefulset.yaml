@@ -13,6 +13,8 @@ spec:
   template:
     metadata:
       name: overseerr
+      annotations:
+        linkerd.io/inject: enabled
       labels:
         app: overseerr
     spec:
