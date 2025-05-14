@@ -2,8 +2,8 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: whoami
-{{/*  labels:*/}}
-{{/*    pod-security.kubernetes.io/enforce: restricted*/}}
+  labels:
+    pod-security.kubernetes.io/enforce: restricted
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
