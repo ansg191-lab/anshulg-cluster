@@ -133,6 +133,7 @@ spec:
           externalCA: true
           issuer:
             scheme: kubernetes.io/tls
+        cniEnabled: true
   destination:
     server: {{ .Values.spec.destination.server }}
     namespace: linkerd
@@ -174,6 +175,10 @@ spec:
     chart: linkerd2-cni
     repoURL: https://helm.linkerd.io/edge
     targetRevision: v2025.5.2
+    helm:
+      parameters:
+        - name: repairController.enabled
+          value: "true"
   destination:
     server: {{ .Values.spec.destination.server }}
     namespace: linkerd-cni
