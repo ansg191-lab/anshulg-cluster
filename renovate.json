@@ -9,6 +9,10 @@
   "rebaseWhen": "conflicted",
   "separateMajorMinor": true,
   "separateMinorPatch": true,
+  "timezone": "America/Los_Angeles",
+  "automergeSchedule": [
+    "* 2-8 * * *"
+  ],
   "kubernetes": {
     "managerFilePatterns": [
       "/k8s/.+\\.yaml$/",
