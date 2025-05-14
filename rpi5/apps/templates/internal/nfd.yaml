@@ -35,7 +35,7 @@ spec:
   source:
     chart: intel-device-plugins-operator
     repoURL: https://intel.github.io/helm-charts/
-    targetRevision: 0.32.0
+    targetRevision: 0.32.1
   destination:
     server: {{ .Values.spec.destination.server }}
     namespace: inteldeviceplugins-system
@@ -50,7 +50,7 @@ spec:
   source:
     chart: intel-device-plugins-gpu
     repoURL: https://intel.github.io/helm-charts/
-    targetRevision: 0.32.0
+    targetRevision: 0.32.1
     helm:
       parameters:
         - name: nodeFeatureRule
