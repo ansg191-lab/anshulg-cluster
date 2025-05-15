@@ -31,7 +31,7 @@ spec:
   ingressClassName: tailscale
   defaultBackend:
     service:
-      name: sonarr
+      name: sonarr-auth
       port:
         number: 80
   tls:
