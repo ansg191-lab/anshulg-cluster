@@ -156,7 +156,7 @@ spec:
   source:
     chart: linkerd-viz
     repoURL: https://helm.linkerd.io/edge
-    targetRevision: v2025.5.2
+    targetRevision: 2025.5.3
   destination:
     server: {{ .Values.spec.destination.server }}
     namespace: linkerd-viz
