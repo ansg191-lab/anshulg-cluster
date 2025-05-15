@@ -18,7 +18,7 @@ spec:
   source:
     chart: linkerd-crds
     repoURL: https://helm.linkerd.io/edge
-    targetRevision: v2025.5.2
+    targetRevision: 2025.5.3
     helm:
       values: |
         installGatewayAPI: false
