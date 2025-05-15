@@ -10,6 +10,9 @@ spec:
     spec:
       activeDeadlineSeconds: 600
       template:
+        metadata:
+          annotations:
+            linkerd.io/inject: enabled
         spec:
           containers:
             - name: recyclarr

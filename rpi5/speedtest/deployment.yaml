@@ -12,6 +12,8 @@ spec:
   template:
     metadata:
       name: speedtest
+      annotations:
+        linkerd.io/inject: enabled
       labels:
         app: speedtest
     spec:

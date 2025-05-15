@@ -17,6 +17,8 @@ spec:
   template:
     metadata:
       name: trailarr
+      annotations:
+        linkerd.io/inject: enabled
       labels:
         app: trailarr
     spec:
