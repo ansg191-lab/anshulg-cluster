@@ -9,3 +9,19 @@ mail:
   metrics:
     enabled: true
   recreateOnRedeploy: false
+  resources:
+    requests:
+      cpu: "10m"
+      memory: "128Mi"
+    limits:
+      memory: "512Mi"
+
+  container:
+    postfix:
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        seccompProfile:
+          type: RuntimeDefault
