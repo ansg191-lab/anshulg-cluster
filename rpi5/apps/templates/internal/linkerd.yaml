@@ -204,7 +204,7 @@ spec:
   source:
     chart: grafana
     repoURL: https://grafana.github.io/helm-charts
-    targetRevision: v9.0.0
+    targetRevision: 9.0.1
     helm:
       valueFiles:
         - https://raw.githubusercontent.com/linkerd/linkerd2/main/grafana/values.yaml
