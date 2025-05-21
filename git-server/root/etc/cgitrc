@@ -21,6 +21,7 @@ about-filter=/usr/lib/cgit/filters/about-formatting.sh
 readme=:README.md
 
 scan-path=/srv/git
+remove-suffix=1
 
 # repo.url=ansg191-lab/anshulg-cluster
 # repo.path=/srv/git/anshulg-cluster.git
