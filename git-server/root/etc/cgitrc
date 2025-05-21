@@ -7,6 +7,10 @@
 css=/cgit.css
 logo=/cgit.png
 
+remove-suffix=1
+section-from-path=1
+repository-sort=age
+
 enable-blame=1
 enable-commit-graph=0
 enable-follow-links=1
@@ -21,7 +25,6 @@ about-filter=/usr/lib/cgit/filters/about-formatting.sh
 readme=:README.md
 
 scan-path=/srv/git
-remove-suffix=1
 
 # repo.url=ansg191-lab/anshulg-cluster
 # repo.path=/srv/git/anshulg-cluster.git
