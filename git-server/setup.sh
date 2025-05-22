@@ -7,7 +7,7 @@ GROUP="git"
 GITDIR="/srv/git"
 
 # renovate: datasource=github-releases depName=ansg191/github-mirror
-GH_MIRROR_VERSION="0.1.4"
+GH_MIRROR_VERSION="0.2.0"
 # renovate: datasource=github-releases depName=restic/restic
 RESTIC_VERSION="0.18.0"
 # renovate: datasource=github-releases depName=creativeprojects/resticprofile
