@@ -126,7 +126,7 @@ spec:
   source:
     chart: linkerd-control-plane
     repoURL: https://helm.linkerd.io/edge
-    targetRevision: 2025.5.3
+    targetRevision: 2025.5.4
     helm:
       values: |
         identity:
