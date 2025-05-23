@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reprepro
+  labels:
+    app: reprepro
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: reprepro
+  template:
+    metadata:
+      name: reprepro
+      labels:
+        app: reprepro
+      annotations:
+        gke-gcsfuse/volumes: "true"
+    spec:
+      serviceAccountName: reprepro
+      containers:
+        - name: reprepro
+          image: caddy:2.10.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+              name: http
+          volumeMounts:
+            - mountPath: /etc/caddy/Caddyfile
+              name: config
+              subPath: Caddyfile
+            - mountPath: /srv
+              name: data
+              readOnly: true
+          #resources:
+          #  requests:
+          #    cpu: 250m
+          #    memory: 500Mi
+          #  limits:
+          #    memory: 1Gi
+          #livenessProbe:
+          #  httpGet:
+          #    port: http
+          #    path: /ping
+          #  initialDelaySeconds: 30
+          #  periodSeconds: 30
+          #  timeoutSeconds: 5
+          #  failureThreshold: 3
+          #readinessProbe:
+          #  httpGet:
+          #    port: http
+          #    path: /ping
+          #  periodSeconds: 10
+          #  timeoutSeconds: 5
+          #  failureThreshold: 3
+      restartPolicy: Always
+      volumes:
+        - name: config
+          configMap:
+            name: caddy-config
+        - name: data
+          csi:
+            driver: gcsfuse.csi.storage.gke.io
+            readOnly: true
+            volumeAttributes:
+              bucketName: "anshulg-debian-apt"
+              gcsfuseLoggingSeverity: warning
+              mountOptions: "implicit-dirs"

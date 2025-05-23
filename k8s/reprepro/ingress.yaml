@@ -1,0 +1,20 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: reprepro
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`apt.anshulg.com`)
+      middlewares:
+        - name: security-headers
+          namespace: traefik
+      services:
+        - name: reprepro
+          port: 80
+  tls:
+    secretName: reprepro-cert-tls
+    domains:
+      - main: apt.anshulg.com

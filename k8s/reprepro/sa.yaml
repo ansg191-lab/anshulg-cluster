@@ -1,0 +1,6 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: reprepro
+  annotations:
+    iam.gke.io/gcp-service-account: "debian-apt-repo@anshulg-cluster.iam.gserviceaccount.com"
