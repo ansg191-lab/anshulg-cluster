@@ -180,7 +180,7 @@ resource "google_storage_bucket" "debian-apt-repo" {
 	location      = "US"
 	force_destroy = false
 
-	uniform_bucket_level_access = true
+	uniform_bucket_level_access = false
 	storage_class               = "STANDARD"
 	public_access_prevention    = "enforced"
 }
