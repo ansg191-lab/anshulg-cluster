@@ -1,7 +1,7 @@
 # kubectl -n reprepro create configmap caddy-config --from-file k8s/reprepro/Caddyfile --dry-run=client -o yaml > k8s/reprepro/config.yaml
 :8080 {
-    root * /srv
-    file_server browse {
-        hide conf db
-    }
+	root * /srv
+	file_server browse {
+		hide conf db
+	}
 }
