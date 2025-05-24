@@ -1,2 +1,2 @@
 #!/bin/sh
-/usr/bin/github_mirror -C /srv/git/config.ini
+/usr/bin/github-mirror -C /etc/github-mirror.conf

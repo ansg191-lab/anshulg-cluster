@@ -6,8 +6,6 @@ USER="git"
 GROUP="git"
 GITDIR="/srv/git"
 
-# renovate: datasource=github-releases depName=ansg191/github-mirror
-GH_MIRROR_VERSION="0.1.4"
 # renovate: datasource=github-releases depName=restic/restic
 RESTIC_VERSION="0.18.0"
 # renovate: datasource=github-releases depName=creativeprojects/resticprofile
@@ -218,12 +216,6 @@ add_crontab_entry() {
 
 setup_mirroring() {
 	echo "::group::Setting up mirroring"
-	# Download and install github_mirror
-	echo "Downloading github_mirror..."
-	wget -qO github_mirror.deb "https://github.com/ansg191/github-mirror/releases/download/v${GH_MIRROR_VERSION}/github_mirror-${GH_MIRROR_VERSION}-Linux-x86_64.deb"
-	echo "Installing github_mirror..."
-	apt-get install -y ./github_mirror.deb
-	rm github_mirror.deb
 
 	# Ensure tokens directory exists
 	echo "Creating tokens directory..."
@@ -232,7 +224,7 @@ setup_mirroring() {
 	chmod 700 $GITDIR/tokens
 
 	# Setup cronjob
-	CRON_JOB="*/5 * * * * /usr/bin/github_mirror -C /etc/github_mirror.conf --quiet"
+	CRON_JOB="*/5 * * * * /usr/bin/github-mirror -C /etc/github-mirror.conf --quiet"
 	add_crontab_entry "$USER" "$CRON_JOB"
 
 	echo "::endgroup::"
