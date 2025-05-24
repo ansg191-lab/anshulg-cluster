@@ -86,6 +86,12 @@ install_packages() {
 copy_root() {
 	echo "::group::Copying root"
 
+	# Install rsync if not already installed
+	if ! command -v rsync &> /dev/null; then
+		echo "rsync could not be found. Installing it..."
+		apt-get install -y rsync
+	fi
+
 	echo "Setting permissions..."
 	chown -R root:root root/etc
 	chown -R $USER:$GROUP root/srv/git
@@ -380,9 +386,9 @@ fi
 # Main script execution
 trap cleanup EXIT
 disable_cron
-install_packages
 check_gitdir
 copy_root
+install_packages
 install_ca
 setup_firewall
 setup_fail2ban
