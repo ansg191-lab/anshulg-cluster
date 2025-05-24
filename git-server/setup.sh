@@ -95,7 +95,7 @@ copy_root() {
 	echo "Setting permissions..."
 	chown -R root:root root/etc
 	chown -R $USER:$GROUP root/srv/git
-	chown -R root:root root/usr/local/sbin
+	chown -R root:root root/usr
 
 	echo "Copying files..."
 	rsync -a root/ /
