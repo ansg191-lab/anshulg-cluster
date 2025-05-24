@@ -1,10 +1,29 @@
 apiVersion: v1
-data:
-  Caddyfile: "# kubectl -n reprepro create configmap caddy-config --from-file k8s/reprepro/Caddyfile
-    --dry-run=client -o yaml > k8s/reprepro/config.yaml\n:8080 {\n\troot * /srv\n\tfile_server
-    browse {\n\t\thide conf db\n\t}\n\n\theader Cache-Control public, max-age=86400\n}\n"
 kind: ConfigMap
 metadata:
-  creationTimestamp: null
-  name: caddy-config
-  namespace: reprepro
+  name: nginx-config
+data:
+  default.conf: |
+    tcp_nopush on;
+    tcp_nodelay on;
+
+    server {
+      listen 8080;
+      root /srv;
+
+      location / {
+        autoindex on;
+        try_files $uri $uri/ =404;
+        expires 1d;
+        add_header Cache-Control "public";
+
+        location /conf {
+          deny all;
+          return 403;
+        }
+        location /db {
+          deny all;
+          return 403;
+        }
+      }
+    }
