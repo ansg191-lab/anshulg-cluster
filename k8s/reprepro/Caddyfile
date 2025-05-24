@@ -4,4 +4,6 @@
 	file_server browse {
 		hide conf db
 	}
+
+	header Cache-Control public, max-age=86400
 }
