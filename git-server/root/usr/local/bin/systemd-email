@@ -1,0 +1,17 @@
+#!/bin/sh
+# systemd-email - Send email notifications about a systemd unit's full status
+# Usage: systemd-email <email_address> <unit_name>
+
+# Check args
+if [ "$#" -ne 2 ]; then
+    echo "Usage: $0 <email_address> <unit_name>"
+    exit 1
+fi
+
+EMAIL_ADDRESS="$1"
+UNIT_NAME="$2"
+
+systemctl status --full "$UNIT_NAME" | \
+    mail -s "Systemd Unit Status: $UNIT_NAME" \
+		-a "From: systemd <root@$(cat /etc/mailname)>" \
+		"$EMAIL_ADDRESS"

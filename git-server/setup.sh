@@ -371,8 +371,15 @@ setup_backup() {
 	fi
 	chmod 400 /etc/resticprofile/auth.txt
 
-	CRON_JOB="21 11 * * * . /etc/resticprofile/env.sh ; /usr/local/bin/resticprofile backup --quiet"
-	add_crontab_entry "root" "$CRON_JOB"
+	# Create 10auth.conf file
+	cat <<EOF > /etc/resticprofile/10auth.conf
+[Service]
+Environment=RESTIC_REST_USERNAME=git-restic
+Environment="RESTIC_REST_PASSWORD=$(< /etc/resticprofile/auth.txt tr -d '\n')"
+EOF
+
+	# Schedule resticprofile using systemd
+	sudo resticprofile schedule
 
 	echo "::endgroup::"
 }

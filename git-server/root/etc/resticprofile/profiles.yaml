@@ -13,6 +13,10 @@ default:
   compression: "max"
   force-inactive-lock: true
 
+  systemd-drop-in-files:
+    - "10auth.conf"
+    - "99failure.conf"
+
   retention:
     before-backup: false
     after-backup: true
@@ -40,3 +44,7 @@ default:
     exclude-caches: true
     tag:
       - "git-server"
+    schedule: '11:21'
+    schedule-permission: system
+    schedule-priority: background
+    schedule-after-network-online: true
