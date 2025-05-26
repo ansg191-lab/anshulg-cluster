@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jellyfin-meilisearch
+  namespace: argocd
+spec:
+  project: media
+  source:
+    chart: meilisearch
+    repoURL: https://meilisearch.github.io/meilisearch-kubernetes
+    targetRevision: v0.13.0
+    helm:
+      values: |
+        environment:
+          MEILI_ENV: production
+        auth:
+          existingMasterKeySecret: meilisearch-master-key
+        persistence:
+          enabled: true
+          storageClass: "local-path"
+        resources:
+          requests:
+            cpu: "100m"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: media
+  syncPolicy:
+    automated:
+      {}
