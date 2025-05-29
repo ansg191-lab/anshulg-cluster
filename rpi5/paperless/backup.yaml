@@ -59,7 +59,7 @@ spec:
                   name: export
           containers:
             - name: restic
-              image: creativeprojects/resticprofile:0.30.1@sha256:b6970c6b7f2c7e2eb5e2b873778e3c0f605bb766151ee7ef015d6a35e866ca7f
+              image: creativeprojects/resticprofile:0.31.0@sha256:62ace60dc05915cb3d739ce7e7122db4bcf186d86b3b4c9e0baae0b8fb199d7c
               imagePullPolicy: IfNotPresent
               command: [ "resticprofile", "backup" ]
               env:
