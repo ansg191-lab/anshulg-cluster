@@ -1,0 +1,13 @@
+[sshd]
+enabled = true
+bantime = 1w
+findtime = 1d
+
+[DEFAULT]
+destemail = root@git.anshulg.com
+mta = mail
+
+banaction = nftables
+banaction_allports = nftables[type=allports]
+
+action = %(action_)s

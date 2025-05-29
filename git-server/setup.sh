@@ -298,25 +298,6 @@ setup_firewall() {
 
 setup_fail2ban() {
 	echo "::group::Setting up fail2ban"
-	# Create a jail.d/customization.local file
-	mkdir -p /etc/fail2ban/jail.d
-	tee /etc/fail2ban/jail.d/customization.local > /dev/null <<EOF
-[sshd]
-enabled = true
-bantime = 1w
-findtime = 1d
-
-[DEFAULT]
-destemail = root@git.anshulg.com
-mta = mail
-
-banaction = nftables
-banaction_allports = nftables[type=allports]
-
-action = %(action_)s
-EOF
-	chmod 644 /etc/fail2ban/jail.d/customization.local
-
 	# Restart fail2ban
 	systemctl restart fail2ban
 	echo "::endgroup::"
