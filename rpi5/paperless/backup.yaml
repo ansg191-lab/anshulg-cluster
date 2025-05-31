@@ -10,7 +10,7 @@ spec:
         spec:
           initContainers:
             - name: paperless-backup
-              image: ghcr.io/community-tooling/oci-images/paperless-export:1.0.2@sha256:a304ba23806673ef5faffb07bb2888cbe99c32dee3f62f24f5aa8e4d19171498
+              image: ghcr.io/community-tooling/oci-images/paperless-export:1.0.3@sha256:f96ab139917c64622e4c91a676962bb05cb976ff9062af36a0f8fa6afc1fb049
               imagePullPolicy: IfNotPresent
               env:
                 - name: PAPERLESS_DBHOST
