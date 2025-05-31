@@ -1,6 +1,6 @@
 dependencies:
 - name: windmill
   repository: https://windmill-labs.github.io/windmill-helm-charts/
-  version: 2.0.422
-digest: sha256:f4fde93c48e59230036a2038ac011c948b6b3b6c26e6b254922e8da452eda2f7
-generated: "2025-05-29T13:13:39.699628803Z"
+  version: 2.0.423
+digest: sha256:8aeb000eef272f7bb44d21c8d6361a96e3524064064a80e6b6bc71f8107a6d4e
+generated: "2025-05-31T05:00:08.4111411Z"
