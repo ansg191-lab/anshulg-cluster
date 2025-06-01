@@ -1,0 +1,41 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: home
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`anshulg.com`)
+      middlewares:
+        - name: security-headers
+          namespace: home
+        - name: compression
+          namespace: home
+      services:
+        - name: home
+          port: 80
+  tls:
+    secretName: home-cert-tls
+    domains:
+      - main: anshulg.com
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: compression
+spec:
+  compress: {}
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: security-headers
+spec:
+  headers:
+    frameDeny: true
+    browserXssFilter: true
+    stsSeconds: 31536000
+    stsIncludeSubdomains: true
+    stsPreload: true

@@ -18,6 +18,9 @@ uptime-kuma:
     fsGroup: 3310
     fsGroupChangePolicy: "OnRootMismatch"
 
+  livenessProbe:
+    initialDelaySeconds: 60
+
 # Traefik IngressRoute options
 ingressRoute:
   enabled: true

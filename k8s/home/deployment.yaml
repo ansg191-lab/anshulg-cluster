@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: home
+  labels:
+    app: home
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: home
+  template:
+    metadata:
+      name: home
+      labels:
+        app: home
+    spec:
+      containers:
+        - name: home
+          image: ghcr.io/ansg191/anshulg-com:0.1.0@sha256:722a384f59ff6aa271401a16a8bffec50e4d0c2d0b7a3d46f2769b5d718da886
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 4321
+              protocol: TCP
+              name: http
+          envFrom:
+            - secretRef:
+                name: secrets
+          resources:
+            requests:
+          #    cpu: 250m
+              memory: 64Mi
+            limits:
+              memory: 128Mi
+          livenessProbe:
+            httpGet:
+              port: http
+              path: /
+            initialDelaySeconds: 60
+          readinessProbe:
+            httpGet:
+              port: http
+              path: /
+      restartPolicy: Always
