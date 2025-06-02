@@ -71,7 +71,9 @@ resource "google_compute_backend_service" "k8s-lb" {
 	cdn_policy {
 		cache_mode                   = "CACHE_ALL_STATIC"
 		signed_url_cache_max_age_sec = 7200
-		max_ttl                      = 31536000
+		default_ttl                  = 3600
+		max_ttl                      = 31622400
+		client_ttl                   = 86400
 		serve_while_stale            = 86400
 	}
 
