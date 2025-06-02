@@ -70,6 +70,7 @@ resource "google_compute_backend_service" "k8s-lb" {
 	enable_cdn       = true
 	cdn_policy {
 		cache_mode                   = "CACHE_ALL_STATIC"
+		signed_url_cache_max_age_sec = 7200
 	}
 
 	custom_response_headers = [
