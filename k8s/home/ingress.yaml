@@ -7,6 +7,18 @@ spec:
     - websecure
   routes:
     - kind: Rule
+      match: Host(`anshulg.com`) && Path(`/`)
+      middlewares:
+        - name: cache-override
+          namespace: home
+        - name: security-headers
+          namespace: home
+        - name: compression
+          namespace: home
+      services:
+        - name: home
+          port: 80
+    - kind: Rule
       match: Host(`anshulg.com`)
       middlewares:
         - name: security-headers
@@ -27,6 +39,15 @@ metadata:
   name: compression
 spec:
   compress: {}
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: cache-override
+spec:
+  headers:
+    customResponseHeaders:
+      Cache-Control: "public, max-age=3600, stale-while-revalidate=86400"
 ---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
