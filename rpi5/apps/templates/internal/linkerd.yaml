@@ -179,7 +179,7 @@ spec:
   source:
     chart: linkerd2-cni
     repoURL: https://helm.linkerd.io/edge
-    targetRevision: 2025.5.5
+    targetRevision: 2025.6.1
     helm:
       parameters:
         - name: repairController.enabled
