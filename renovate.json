@@ -59,6 +59,15 @@
       "groupName": "teslamate"
     },
     {
+      "matchPackageNames": [
+        "linkerd2-cni",
+        "linkerd-viz",
+        "linkerd-crds",
+        "linkerd-control-plane"
+      ],
+      "groupName": "linkerd"
+    },
+    {
       "matchUpdateTypes": [
         "patch",
         "digest"
