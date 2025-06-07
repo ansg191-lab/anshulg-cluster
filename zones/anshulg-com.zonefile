@@ -87,6 +87,7 @@ _atproto.anshulg.com. 300 IN TXT "did=did:plc:yurut6qakvbjy73zs55isoea"
 
 ;; Github Pages Site Verification
 _github-pages-challenge-ansg191.anshulg.com. 300 IN TXT "8038f731860d798bcdef41d348f252"
+_github-pages-challenge-ansg191-lab.anshulg.com. 300 IN TXT "497dc7deb5db2b9730e705fb3573f3"
 
 ;; Github Org Site Verification
 _gh-ansg191-lab-o.anshulg.com. 300 IN TXT "6f94005a5c"
