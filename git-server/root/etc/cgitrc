@@ -17,7 +17,7 @@ enable-follow-links=1
 enable-index-links=1
 enable-log-filecount=1
 enable-log-linecount=1
-snapshots=all
+snapshots=tar.gz tar.zst zip
 
 email-filter=/usr/lib/cgit/filters/email-gravatar.py
 source-filter=/usr/lib/cgit/filters/syntax-highlighting.sh
