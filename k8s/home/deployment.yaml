@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: home
-          image: ghcr.io/ansg191/anshulg-com:0.3.1@sha256:f3d2ff4b81b06011b4d635d3b93d552ab4f56a39076d02ef0994d151346f2789
+          image: ghcr.io/ansg191/anshulg-com:0.3.3@sha256:5bcf485858cf8c6a47ce2325f543acfb7afd0cfbaa0fb4dc696401ac712702db
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 4321
