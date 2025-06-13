@@ -11,7 +11,13 @@ fi
 EMAIL_ADDRESS="$1"
 UNIT_NAME="$2"
 
-systemctl status --full "$UNIT_NAME" | \
-    mail -s "Systemd Unit Status: $UNIT_NAME" \
+{
+    echo "### SYSTEMD STATUS ###"
+    systemctl status --no-pager --lines=0 --full "$UNIT_NAME"
+
+    echo ""
+    echo "### FULL LOGS ###"
+    journalctl -u "$UNIT_NAME" --no-pager --since="$(systemctl show "$UNIT_NAME" -p ExecMainStartTimestamp --value)"
+} | mail -s "Systemd Unit Failure: $UNIT_NAME" \
 		-a "From: systemd <root@$(cat /etc/mailname)>" \
 		"$EMAIL_ADDRESS"
