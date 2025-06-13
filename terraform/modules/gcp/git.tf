@@ -1,7 +1,7 @@
 # Git Server
 resource "google_compute_instance" "git" {
 	name         = "git-instance"
-	machine_type = "f1-micro"
+	machine_type = "e2-small"
 	zone         = "us-west2-b"
 
 	allow_stopping_for_update = true
