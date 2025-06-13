@@ -4,6 +4,9 @@ metadata:
   name: home
   labels:
     app: home
+    tags.datadoghq.com/env: prod
+    tags.datadoghq.com/service: anshulg-com
+    tags.datadoghq.com/version: 0.3.4
 spec:
   replicas: 3
   selector:
@@ -14,6 +17,12 @@ spec:
       name: home
       labels:
         app: home
+        tags.datadoghq.com/env: prod
+        tags.datadoghq.com/service: anshulg-com
+        tags.datadoghq.com/version: 0.3.4
+        admission.datadoghq.com/enabled: "true"
+      annotations:
+        admission.datadoghq.com/js-lib.version: v5.56.0
     spec:
       containers:
         - name: home
@@ -26,6 +35,17 @@ spec:
           envFrom:
             - secretRef:
                 name: secrets
+          env:
+            - name: DD_AGENT_HOST
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: DD_PROFILING_ENABLED
+              value: "true"
+            - name: DD_LOGS_INJECTION
+              value: "true"
+            - name: DD_GIT_REPOSITORY_URL
+              value: github.com/ansg191/anshulg-com
           resources:
             requests:
           #    cpu: 250m
