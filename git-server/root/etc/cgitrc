@@ -19,6 +19,8 @@ enable-log-filecount=1
 enable-log-linecount=1
 snapshots=tar.gz tar.zst zip
 
+cache-size=1024
+
 email-filter=/usr/lib/cgit/filters/email-gravatar.py
 source-filter=/usr/lib/cgit/filters/syntax-highlighting.sh
 about-filter=/usr/lib/cgit/filters/about-formatting.sh
