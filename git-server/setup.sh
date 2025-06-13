@@ -229,9 +229,10 @@ setup_mirroring() {
 	chown "$USER:$GROUP" $GITDIR/tokens
 	chmod 700 $GITDIR/tokens
 
-	# Setup cronjob
-	CRON_JOB="*/5 * * * * /usr/bin/github-mirror -C /etc/github-mirror.conf --quiet"
-	add_crontab_entry "$USER" "$CRON_JOB"
+	# Enable systemd timer for mirroring
+	sudo systemctl daemon-reload
+	sudo systemctl enable git-mirror.timer
+	sudo systemctl start git-mirror.timer
 
 	echo "::endgroup::"
 }
