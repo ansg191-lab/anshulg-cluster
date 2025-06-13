@@ -15,3 +15,11 @@ TimeoutStartSec=5m
 Nice=10
 CPUQuota=20%
 MemoryMax=64M
+
+# Sandboxing
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/srv/git
+PrivateTmp=yes
+SystemCallFilter=@system-service
+NoNewPrivileges=true
