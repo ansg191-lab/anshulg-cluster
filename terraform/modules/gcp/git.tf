@@ -16,11 +16,16 @@ resource "google_compute_instance" "git" {
 	}
 
 	network_interface {
-		network = "default"
+		network    = data.google_compute_network.default.id
+		subnetwork = data.google_compute_subnetwork.default-la.id
 		stack_type = "IPV4_IPV6"
 		access_config {
 			network_tier           = "PREMIUM"
 			nat_ip                 = google_compute_address.git.address
+			public_ptr_domain_name = "git.${data.google_dns_managed_zone.default.dns_name}"
+		}
+		ipv6_access_config {
+			network_tier           = "PREMIUM"
 			public_ptr_domain_name = "git.${data.google_dns_managed_zone.default.dns_name}"
 		}
 	}
@@ -36,6 +41,8 @@ resource "google_compute_instance" "git" {
 		device_name = "git-disk"
 		mode        = "READ_WRITE"
 	}
+
+	hostname = "git.anshulg.com"
 }
 
 # region Networking
@@ -94,7 +101,7 @@ resource "google_compute_resource_policy" "git_backup" {
 			storage_locations = ["us"]
 		}
 		retention_policy {
-			max_retention_days = 7
+			max_retention_days    = 7
 			on_source_disk_delete = "KEEP_AUTO_SNAPSHOTS"
 		}
 	}

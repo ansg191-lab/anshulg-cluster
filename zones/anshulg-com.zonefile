@@ -119,3 +119,4 @@ ldap.auth.anshulg.com. 60 IN A 34.94.107.30
 
 ;; Git Server
 git.anshulg.com. 60 IN A 35.236.59.43
+git.anshulg.com. 60 IN AAAA 2600:1900:4120:716d:0:1:0:0
