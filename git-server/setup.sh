@@ -79,7 +79,8 @@ check_gitdir() {
 install_packages() {
 	echo "::group::Installing packages"
 	apt-get update
-	xargs apt-get install -y < packages.txt
+
+	xargs apt-get install -o DPkg::Options::="--force-confold" -y < packages.txt
 	echo "::endgroup::"
 }
 
@@ -240,7 +241,7 @@ setup_mirroring() {
 setup_mta() {
 	echo "::group::Setting up MTA"
 
-	FASTMAIL_PASS=$(tr -d '\n' < fastmail_pass.txt)
+	FASTMAIL_PASS=$(tr -d '\n' < /srv/git/fastmail_pass.txt)
 
 	# Configure nullmailer
 	echo "Configuring nullmailer remotes..."
@@ -341,23 +342,23 @@ setup_backup() {
 	echo "::group::Setting up backups"
 
 	# Check files
-	if [ ! -f /etc/resticprofile/password.txt ]; then
-		echo "Error: /etc/resticprofile/password.txt does not exist. Exiting." >&2
+	if [ ! -f /srv/git/restic/password.txt ]; then
+		echo "Error: /srv/git/restic/password.txt does not exist. Exiting." >&2
 		exit 1
 	fi
-	chmod 400 /etc/resticprofile/password.txt
+	chmod 400 /srv/git/restic/password.txt
 
-	if [ ! -f /etc/resticprofile/auth.txt ]; then
-		echo "Error: /etc/resticprofile/auth.txt does not exist. Exiting." >&2
+	if [ ! -f /srv/git/restic/auth.txt ]; then
+		echo "Error: /srv/git/restic/auth.txt does not exist. Exiting." >&2
 		exit 1
 	fi
-	chmod 400 /etc/resticprofile/auth.txt
+	chmod 400 /srv/git/restic/auth.txt
 
 	# Create 10auth.conf file
 	cat <<EOF > /etc/resticprofile/10auth.conf
 [Service]
 Environment=RESTIC_REST_USERNAME=git-restic
-Environment="RESTIC_REST_PASSWORD=$(< /etc/resticprofile/auth.txt tr -d '\n')"
+Environment="RESTIC_REST_PASSWORD=$(< /srv/git/restic/auth.txt tr -d '\n')"
 EOF
 
 	# Schedule resticprofile using systemd
@@ -376,13 +377,13 @@ fi
 trap cleanup EXIT
 disable_cron
 check_gitdir
+setup_git_user
 copy_root
 install_packages
 install_ca
 setup_firewall
 setup_fail2ban
 setup_mta
-setup_git_user
 install_caddy
 install_cgit
 setup_mirroring

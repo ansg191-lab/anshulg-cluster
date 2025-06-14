@@ -9,7 +9,7 @@ global:
 default:
   repository: "rest:https://restic.anshulg.com/git-restic/"
   initialize: false
-  password-file: "/etc/resticprofile/password.txt"
+  password-file: "/srv/git/restic/password.txt"
   compression: "max"
   force-inactive-lock: true
 
