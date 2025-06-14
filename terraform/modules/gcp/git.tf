@@ -17,6 +17,7 @@ resource "google_compute_instance" "git" {
 
 	network_interface {
 		network = "default"
+		stack_type = "IPV4_IPV6"
 		access_config {
 			network_tier           = "PREMIUM"
 			nat_ip                 = google_compute_address.git.address
