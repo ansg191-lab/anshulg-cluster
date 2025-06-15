@@ -21,5 +21,7 @@ ProtectSystem=strict
 ProtectHome=yes
 ReadWritePaths=/srv/git
 PrivateTmp=yes
+ProtectProc=invisible
 SystemCallFilter=@system-service
+SystemCallFilter=~@resources @privileged
 NoNewPrivileges=true

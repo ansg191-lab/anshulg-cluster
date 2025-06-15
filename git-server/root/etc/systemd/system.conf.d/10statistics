@@ -1,0 +1,9 @@
+# Enable more unit statistics
+# https://wiki.archlinux.org/title/Systemd/Sandboxing#Enabling_more_unit_statistics
+
+[Manager]
+DefaultCPUAccounting=yes
+DefaultIOAccounting=yes
+DefaultIPAccounting=yes
+DefaultMemoryAccounting=yes
+DefaultTasksAccounting=yes

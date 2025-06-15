@@ -1,0 +1,5 @@
+# Disable non-native syscalls
+# https://wiki.archlinux.org/title/Systemd/Sandboxing#Disabling_non-native_syscalls
+
+[Manager]
+SystemCallArchitectures=native
