@@ -103,6 +103,13 @@ git.anshulg.com. 60 IN SSHFP 3 2 38c632181f3695647cba61d7e63381853672d79ece98637
 git.anshulg.com. 60 IN SSHFP 4 1 ad425d4ec5ba34bfd62a563b9239d2d31dca9e14
 git.anshulg.com. 60 IN SSHFP 4 2 910e30f3143e3f5c5fbfac1ef5fd976a193c25e8476db80e44e1f50a95e086db
 
+auth.anshulg.com. 60 IN SSHFP 1 1 6046f946044a31863c32b71e752b0daff438f824
+auth.anshulg.com. 60 IN SSHFP 1 2 8a326a62c9666871fb4fb2ca80689eb689e787a64612100b9877ab00de00d976
+auth.anshulg.com. 60 IN SSHFP 3 1 7d9cb5394ea11cb64b7a722b3269524f7de0a26f
+auth.anshulg.com. 60 IN SSHFP 3 2 d034a0447d12ca318c600f0034d81a5774d4bad5af34ad99435be15887ed72d2
+auth.anshulg.com. 60 IN SSHFP 4 1 d95c86eb6611a62f074025e87f1c927a2b9849ee
+auth.anshulg.com. 60 IN SSHFP 4 2 f56f66f380176f179181b79bfa9279a5c19196834b5638ad87032a95c4e3354d
+
 ;; CNAME Records
 _acme-challenge.anshulg.com. 300 IN CNAME 53595236-f3c8-411d-95ec-274efba6e8be.14.authorize.certificatemanager.goog.
 charts.anshulg.com. 300 IN CNAME ansg191.github.io.
