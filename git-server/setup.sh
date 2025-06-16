@@ -230,8 +230,14 @@ setup_mirroring() {
 	chown "$USER:$GROUP" $GITDIR/tokens
 	chmod 700 $GITDIR/tokens
 
-	# Enable systemd timer for mirroring
+	# Enable ssh control masters
 	sudo systemctl daemon-reload
+	sudo systemctl enable ssh-control-master@github.com
+	sudo systemctl start ssh-control-master@github.com
+	sudo systemctl enable ssh-control-master@git.sr.ht
+	sudo systemctl start ssh-control-master@git.sr.ht
+
+	# Enable systemd timer for mirroring
 	sudo systemctl enable git-mirror.timer
 	sudo systemctl start git-mirror.timer
 
