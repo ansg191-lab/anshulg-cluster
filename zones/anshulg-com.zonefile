@@ -95,6 +95,13 @@ _gh-ansg191-lab-o.anshulg.com. 300 IN TXT "6f94005a5c"
 ;; AbuseIPDB Site Verification
 anshulg.com. 300 IN TXT "abuseipdb-verification=PSX0gk1m"
 
+;; SSHFP Records
+git.anshulg.com. 60 IN SSHFP 1 1 b8e79866783cee9f2f8075bc9e4abdf021ac7dc2
+git.anshulg.com. 60 IN SSHFP 1 2 dd269c3a8f5e03333adcc9d7c7e4586a8b411c28fbe108e92597d77fcefd5801
+git.anshulg.com. 60 IN SSHFP 3 1 f3079593001ac043d9363bea63b5be0b0b04c4ab
+git.anshulg.com. 60 IN SSHFP 3 2 38c632181f3695647cba61d7e63381853672d79ece9863752c3a593d0cd09907
+git.anshulg.com. 60 IN SSHFP 4 1 ad425d4ec5ba34bfd62a563b9239d2d31dca9e14
+git.anshulg.com. 60 IN SSHFP 4 2 910e30f3143e3f5c5fbfac1ef5fd976a193c25e8476db80e44e1f50a95e086db
 
 ;; CNAME Records
 _acme-challenge.anshulg.com. 300 IN CNAME 53595236-f3c8-411d-95ec-274efba6e8be.14.authorize.certificatemanager.goog.
