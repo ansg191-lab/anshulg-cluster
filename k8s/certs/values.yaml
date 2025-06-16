@@ -1,5 +1,8 @@
 cert-manager:
   installCRDs: true
+  config:
+    featureGates:
+      UseCertificateRequestBasicConstraints: true
 
 cert-manager-google-cas-issuer:
   app:
