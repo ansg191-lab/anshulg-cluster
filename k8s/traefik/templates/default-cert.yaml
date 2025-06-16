@@ -14,9 +14,8 @@ spec:
     algorithm: ECDSA
     size: 256
   issuerRef:
-    name: anshulg-ca
-    kind: GoogleCASClusterIssuer
-    group: cas-issuer.jetstack.io
+    kind: ClusterIssuer
+    name: k8s-ca
 ---
 apiVersion: traefik.io/v1alpha1
 kind: TLSStore

@@ -21,9 +21,8 @@ ingressRoute:
       size: 384
       rotationPolicy: Always
     issuerRef:
-      group: cas-issuer.jetstack.io
-      kind: GoogleCASClusterIssuer
-      name: anshulg-ca
+      kind: ClusterIssuer
+      name: k8s-ca
 
 kellnr:
   kellnr:
