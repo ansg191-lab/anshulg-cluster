@@ -43,4 +43,4 @@ metadata:
   name: k8s-ca
 spec:
   ca:
-    secretName: rpi5-ca-cert-tls
+    secretName: k8s-ca-cert-tls
