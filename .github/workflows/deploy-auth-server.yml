@@ -57,10 +57,13 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.GOOGLE_SSH_KEY }}
 
-      - name: Add known hosts
+      - name: Setup SSH config
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H auth.anshulg.com >> ~/.ssh/known_hosts
+          echo "Host *.anshulg.com
+          VerifyHostKeyDNS yes
+          StrictHostKeyChecking yes" >> ~/.ssh/config
+          chmod 600 ~/.ssh/config
 
       - name: Run deployment script
         run: ./x.pl deploy auth
