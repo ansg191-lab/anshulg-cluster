@@ -6,4 +6,41 @@ spec:
   project: anshulg-cluster
   location: us-west1
   caPoolId: default
-  certificateAuthorityId: anshul-sub-ca-1
+  certificateAuthorityId: anshul-ca-1
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: k8s-ca-cert
+spec:
+  secretName: k8s-ca-cert-tls
+  commonName: K8S Cluster Intermediate CA
+  duration: 8760h0m0s # 1 year
+  renewBefore: 5840h0m0s # 8 months
+  privateKey:
+    algorithm: ECDSA
+    size: 521
+    rotationPolicy: Always
+  isCA: true
+  encodeUsagesInRequest: true
+  subject:
+    organizations:
+      - Anshul Gupta
+    organizationalUnits:
+      - rpi5
+    provinces:
+      - California
+    countries:
+      - US
+  issuerRef:
+    group: cas-issuer.jetstack.io
+    kind: GoogleCASClusterIssuer
+    name: anshulg-ca
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: k8s-ca
+spec:
+  ca:
+    secretName: rpi5-ca-cert-tls

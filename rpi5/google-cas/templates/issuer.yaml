@@ -6,6 +6,7 @@ spec:
   project: anshulg-cluster
   location: us-west1
   caPoolId: default
+  certificateAuthorityId: anshul-ca-1
   credentials:
     name: googlesa
     key: anshulg-cluster-key.json
