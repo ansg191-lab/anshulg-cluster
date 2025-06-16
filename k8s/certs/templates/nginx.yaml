@@ -135,6 +135,5 @@ spec:
     size: 256
     rotationPolicy: Always
   issuerRef:
-    name: anshulg-ca
-    kind: GoogleCASClusterIssuer
-    group: cas-issuer.jetstack.io
+    name: k8s-ca
+    kind: ClusterIssuer
