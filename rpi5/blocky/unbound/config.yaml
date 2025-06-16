@@ -215,7 +215,7 @@ data:
       # Have unbound attempt to serve old responses from cache with a TTL of 0 in
       # the response without waiting for the actual resolution to finish. The
       # actual resolution answer ends up in the cache later on.
-      serve-expired: yes
+      serve-expired: no
 
       # If not 0, then set the SO_RCVBUF socket option to get more buffer space on
       # UDP port 53 incoming queries. So that short spikes on busy servers do not
@@ -303,7 +303,7 @@ data:
       chroot: "/opt/unbound/etc/unbound"
 
       # Deny queries of type ANY with an empty response.
-      deny-any: yes
+      deny-any: no
 
       # Harden against algorithm downgrade when multiple algorithms are
       # advertised in the DS record.
