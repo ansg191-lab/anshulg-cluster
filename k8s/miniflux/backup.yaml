@@ -17,10 +17,12 @@ spec:
                 - sh
                 - -c
                 - |
-                  pg_dump -p 5432 miniflux > /backup/backup.sql
+                  pg_dump -Fd miniflux -f /backup
               env:
                 - name: PGHOST
                   value: miniflux-postgres-postgresql
+                - name: PGPORT
+                  value: "5432"
                 - name: PGUSER
                   value: miniflux
                 - name: PGPASSWORD
