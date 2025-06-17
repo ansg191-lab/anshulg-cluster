@@ -17,7 +17,7 @@ spec:
                 - sh
                 - -c
                 - |
-                  pg_dump -Fd miniflux -f /backup
+                  pg_dump -Fd miniflux -f /backup -v
               env:
                 - name: PGHOST
                   value: miniflux-postgres-postgresql
