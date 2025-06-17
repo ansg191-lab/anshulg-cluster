@@ -3,12 +3,36 @@ kind: CronJob
 metadata:
   name: kellnr-backup
 spec:
-  schedule: "0 * * * *"
+  schedule: "0 13 * * *"
   concurrencyPolicy: Replace
   jobTemplate:
     spec:
       template:
         spec:
+          initContainers:
+            - name: pgdump
+              image: postgres:17.5@sha256:6cf6142afacfa89fb28b894d6391c7dcbf6523c33178bdc33e782b3b533a9342
+              imagePullPolicy: IfNotPresent
+              command:
+                - sh
+                - -c
+                - |
+                  pg_dump -Fd kellnr -f /backup -v
+              env:
+                - name: PGHOST
+                  value: kellnr-postgresql
+                - name: PGPORT
+                  value: "5432"
+                - name: PGUSER
+                  value: kellnr
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: database-secrets
+                      key: password
+              volumeMounts:
+                - mountPath: /backup
+                  name: backup
           containers:
             - name: kellnr-backup
               image: creativeprojects/resticprofile:0.31.0@sha256:8683e91173e33a2dead20a6d3081a52d28300002ebd878f0f7c99c29c408b0dc
@@ -37,6 +61,9 @@ spec:
                 - mountPath: /opt/kdata
                   name: kellnr-storage
                   readOnly: true
+                - mountPath: /backup
+                  name: backup
+                  readOnly: true
           restartPolicy: OnFailure
           affinity:
             podAffinity:
@@ -47,6 +74,8 @@ spec:
                       app.kubernetes.io/instance: kellnr
                       app.kubernetes.io/name: kellnr
           volumes:
+            - name: backup
+              emptyDir: {}
             - name: kellnr-storage
               persistentVolumeClaim:
                 claimName: kellnr
@@ -93,5 +122,6 @@ data:
       backup:
         source:
           - "/opt/kdata"
+          - "/backup"
         tag:
           - "kellnr"
