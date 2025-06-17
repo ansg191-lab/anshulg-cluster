@@ -70,7 +70,7 @@ data:
       restic-stale-lock-age: "4h"
 
     default:
-      repository: "rest:https://restic.anshulg.com/kellnr-restic/"
+      repository: "rest:http://restic.restic.svc.cluster.local/kellnr-restic/"
       initialize: true
       password-file: "/resticprofile/kellnr.txt"
       compression: "max"
