@@ -1,56 +1,29 @@
-apiVersion: postgresql.cnpg.io/v1
-kind: Cluster
+apiVersion: argoproj.io/v1alpha1
+kind: Application
 metadata:
-  name: miniflux-cluster
-  annotations:
-    prometheus.io/scrape: "true"
+  name: miniflux-postgres
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
-  instances: 3
-#  bootstrap:
-#    initdb:
-#      database: miniflux
-#      owner: miniflux
-#    recovery:
-#      source: clusterBackup
-#      database: miniflux
-#      owner: miniflux
-  affinity:
-    enablePodAntiAffinity: true
-    topologyKey: topology.kubernetes.io/zone
-    podAntiAffinityType: required
-    nodeSelector:
-      iam.gke.io/gke-metadata-server-enabled: "true"
-  storage:
-    size: 16Gi
-  backup:
-    barmanObjectStore:
-      destinationPath: "gs://cnpg-backup-bucket-eixpr"
-      serverName: miniflux-cluster
-      data:
-        compression: bzip2
-      googleCredentials:
-        gkeEnvironment: true
-    retentionPolicy: "7d"
-  serviceAccountTemplate:
-    metadata:
-      annotations:
-        iam.gke.io/gcp-service-account: "cnpg-backup-miniflux@anshulg-cluster.iam.gserviceaccount.com"
-  externalClusters:
-    - name: clusterBackup
-      barmanObjectStore:
-        destinationPath: "gs://cnpg-backup-bucket-eixpr"
-        serverName: miniflux-cluster
-        data:
-          compression: bzip2
-        googleCredentials:
-          gkeEnvironment: true
----
-apiVersion: postgresql.cnpg.io/v1
-kind: ScheduledBackup
-metadata:
-  name: miniflux-backup
-spec:
-  schedule: "0 0 0 * * *"
-  backupOwnerReference: self
-  cluster:
-    name: miniflux-cluster
+  project: miniflux
+  source:
+    chart: postgresql
+    repoURL: registry-1.docker.io/bitnamicharts
+    targetRevision: 16.7.11
+    helm:
+      values: |
+        auth:
+          enablePostgresUser: false
+          username: miniflux
+          database: miniflux
+          existingSecret: database-secret
+        architecture: standalone
+        primary:
+          nodeSelector:
+            cloud.google.com/gke-provisioning: "standard"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: miniflux
+#  syncPolicy:
+#    automated: {}

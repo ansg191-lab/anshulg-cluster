@@ -36,12 +36,14 @@ spec:
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
-                  key: uri
-                  name: miniflux-cluster-app
+                  key: databaseUrl
+                  name: miniflux-secret
             # - name: RUN_MIGRATIONS
             #   value: "1"
             # - name: CREATE_ADMIN
             #   value: "1"
+#            - name: MAINTENANCE_MODE
+#              value: "1"
             - name: ADMIN_USERNAME
               valueFrom:
                 secretKeyRef:
