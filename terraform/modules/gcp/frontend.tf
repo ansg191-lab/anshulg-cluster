@@ -34,7 +34,7 @@ resource "google_dns_record_set" "cert-cname" {
 	managed_zone = data.google_dns_managed_zone.default.name
 	type         = google_certificate_manager_dns_authorization.base.dns_resource_record[0].type
 	ttl          = 300
-	rrdatas      = [google_certificate_manager_dns_authorization.base.dns_resource_record[0].data]
+	rrdatas = [google_certificate_manager_dns_authorization.base.dns_resource_record[0].data]
 }
 
 resource "google_certificate_manager_certificate_map" "default" {
@@ -42,10 +42,10 @@ resource "google_certificate_manager_certificate_map" "default" {
 }
 
 resource "google_certificate_manager_certificate_map_entry" "default" {
-	name         = "anshulg-base-map-entry"
+	name    = "anshulg-base-map-entry"
 	certificates = [google_certificate_manager_certificate.default.id]
-	map          = google_certificate_manager_certificate_map.default.name
-	matcher      = "PRIMARY"
+	map     = google_certificate_manager_certificate_map.default.name
+	matcher = "PRIMARY"
 }
 
 # Backend Service
@@ -94,7 +94,7 @@ resource "google_compute_backend_service" "k8s-lb" {
 		group = google_compute_global_network_endpoint_group.k8s.id
 	}
 
-	timeout_sec = 1800
+	timeout_sec                     = 1800
 	connection_draining_timeout_sec = 1800
 }
 
@@ -183,67 +183,4 @@ resource "google_compute_global_forwarding_rule" "ipv6-http" {
 	port_range  = "80"
 	target      = google_compute_target_http_proxy.ipv6-http.id
 	ip_address  = google_compute_global_address.ipv6.id
-}
-
-# DNS Records
-
-resource "google_dns_record_set" "ipv4-base" {
-	managed_zone = data.google_dns_managed_zone.default.name
-	name         = data.google_dns_managed_zone.default.dns_name
-	type         = "A"
-	ttl          = 86400
-	rrdatas      = [
-		google_compute_global_address.ipv4.address
-	]
-}
-
-resource "google_dns_record_set" "ipv4-wildcard" {
-	managed_zone = data.google_dns_managed_zone.default.name
-	name         = "*.${data.google_dns_managed_zone.default.dns_name}"
-	type         = "A"
-	ttl          = 86400
-	rrdatas      = [
-		google_compute_global_address.ipv4.address
-	]
-}
-
-resource "google_dns_record_set" "ipv6-base" {
-	managed_zone = data.google_dns_managed_zone.default.name
-	name         = data.google_dns_managed_zone.default.dns_name
-	type         = "AAAA"
-	ttl          = 86400
-	rrdatas      = [
-		google_compute_global_address.ipv6.address
-	]
-}
-
-resource "google_dns_record_set" "ipv6-wildcard" {
-	managed_zone = data.google_dns_managed_zone.default.name
-	name         = "*.${data.google_dns_managed_zone.default.dns_name}"
-	type         = "AAAA"
-	ttl          = 86400
-	rrdatas      = [
-		google_compute_global_address.ipv6.address
-	]
-}
-
-# HTTPS DNS Records
-resource "google_dns_record_set" "base-https" {
-	managed_zone = data.google_dns_managed_zone.default.name
-	name         = data.google_dns_managed_zone.default.dns_name
-	type         = "HTTPS"
-	ttl          = 86400
-	rrdatas      = [
-		"1 . alpn=\"h3,h2\""
-	]
-}
-
-resource "google_dns_record_set" "wildcard-https" {
-	managed_zone = data.google_dns_managed_zone.default.name
-	name         = "*.${data.google_dns_managed_zone.default.dns_name}"
-	type         = "HTTPS"
-	ttl          = 86400
-	rrdatas      = [
-		"1 . alpn=\"h3,h2\""
-	]
 }
