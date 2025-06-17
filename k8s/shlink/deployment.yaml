@@ -24,33 +24,11 @@ spec:
               protocol: TCP
               name: http
           env:
-            - name: DB_DRIVER
-              value: postgres
-            - name: DB_NAME
-              valueFrom:
-                secretKeyRef:
-                  name: shlink-cluster-app
-                  key: dbname
-            - name: DB_USER
-              valueFrom:
-                secretKeyRef:
-                  name: shlink-cluster-app
-                  key: user
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: shlink-cluster-app
+                  name: database-secrets
                   key: password
-            - name: DB_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: shlink-cluster-app
-                  key: host
-            - name: DB_PORT
-              valueFrom:
-                secretKeyRef:
-                  name: shlink-cluster-app
-                  key: port
           envFrom:
             - configMapRef:
                 name: config

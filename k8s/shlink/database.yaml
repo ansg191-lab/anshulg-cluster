@@ -1,22 +1,29 @@
-apiVersion: postgresql.cnpg.io/v1
-kind: Cluster
+apiVersion: argoproj.io/v1alpha1
+kind: Application
 metadata:
-  name: shlink-cluster
-  annotations:
-    prometheus.io/scrape: "true"
+  name: shlink-postgres
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
-  instances: 3
-  bootstrap:
-    initdb:
-      database: shlink
-      owner: shlink
-  #    recovery:
-  #      source: clusterBackup
-  #      database: miniflux
-  #      owner: miniflux
-  affinity:
-    enablePodAntiAffinity: true
-    topologyKey: topology.kubernetes.io/zone
-    podAntiAffinityType: required
-  storage:
-    size: 8Gi
+  project: default
+  source:
+    chart: postgresql
+    repoURL: registry-1.docker.io/bitnamicharts
+    targetRevision: 16.7.11
+    helm:
+      values: |
+        auth:
+          enablePostgresUser: false
+          username: shlink
+          database: shlink
+          existingSecret: database-secrets
+        architecture: standalone
+        primary:
+          nodeSelector:
+            cloud.google.com/gke-provisioning: "standard"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: shlink
+  syncPolicy:
+    automated: {}

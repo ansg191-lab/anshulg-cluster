@@ -9,3 +9,9 @@ data:
   SHORT_URL_TRAILING_SLASH: "true"
   ANONYMIZE_REMOTE_ADDR: "false"
   PORT: "8080"
+
+  DB_NAME: "shlink"
+  DB_USER: "shlink"
+  DB_DRIVER: "postgres"
+  DB_HOST: "shlink-postgres-postgresql"
+  DB_PORT: "5432"
