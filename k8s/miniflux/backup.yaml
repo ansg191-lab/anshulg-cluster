@@ -77,7 +77,7 @@ data:
       restic-stale-lock-age: "4h"
 
     default:
-      repository: "rest:https://restic.anshulg.com/miniflux-restic/"
+      repository: "rest:http://restic.restic.svc.cluster.local/miniflux-restic/"
       initialize: true
       password-file: "/resticprofile/miniflux.txt"
       compression: "max"
