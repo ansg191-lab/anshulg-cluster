@@ -39,12 +39,12 @@ kellnr:
       protocol: https
     postgres:
       enabled: true
-      address: kellnr-cluster-rw
+      address: kellnr-postgresql
       port: 5432
       db: kellnr
       user: kellnr
       pwdSecretRef:
-        name: kellnr-cluster-app
+        name: database-secrets
         key: password
   pvc:
     enabled: true
@@ -60,3 +60,14 @@ kellnr:
     readOnlyRootFilesystem: false
   nodeSelector:
     cloud.google.com/gke-provisioning: standard
+
+postgresql:
+  auth:
+    enablePostgresUser: false
+    username: kellnr
+    database: kellnr
+    existingSecret: database-secrets
+  architecture: standalone
+  primary:
+    nodeSelector:
+      cloud.google.com/gke-provisioning: standard
