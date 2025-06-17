@@ -60,3 +60,14 @@ kellnr:
     readOnlyRootFilesystem: false
   nodeSelector:
     cloud.google.com/gke-provisioning: standard
+
+postgresql:
+  auth:
+    enablePostgresUser: false
+    username: kellnr
+    database: kellnr
+    existingSecret: database-secrets
+  architecture: standalone
+  primary:
+    nodeSelector:
+      cloud.google.com/gke-provisioning: standard
