@@ -1,22 +1,22 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: blocky-redis
+  name: blocky-valkey
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   source:
-    chart: redis
+    chart: valkey-cluster
     repoURL: https://charts.bitnami.com/bitnami
-    targetRevision: 21.2.4
+    targetRevision: 3.0.4
     helm:
       values: |
-        auth:
-          enabled: false
-        master:
-          service:
-            type: ClusterIP
-            clusterIP: 10.43.0.13
+        usePassword: false
+        service:
+          type: ClusterIP
+          clusterIP: 10.43.0.13
   destination:
     server: https://kubernetes.default.svc
     namespace: blocky
