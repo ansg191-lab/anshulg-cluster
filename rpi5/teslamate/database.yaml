@@ -1,21 +1,25 @@
-apiVersion: postgresql.cnpg.io/v1
-kind: Cluster
+apiVersion: argoproj.io/v1alpha1
+kind: Application
 metadata:
-  name: teslamate-cluster
-  namespace: teslamate
-  annotations:
-    prometheus.io/scrape: "true"
+  name: teslamate-postgres
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
-  instances: 3
-  imageName: ghcr.io/cloudnative-pg/postgresql:17.4
-  enableSuperuserAccess: true
-  bootstrap:
-    initdb:
-      database: teslamate
-      owner: teslamate
-  affinity:
-    enablePodAntiAffinity: true
-    topologyKey: kubernetes.io/hostname
-    podAntiAffinityType: required
-  storage:
-    size: 8Gi
+  project: default
+  source:
+    chart: postgresql-ha
+    repoURL: registry-1.docker.io/bitnamicharts
+    targetRevision: 16.0.14
+    helm:
+      values: |
+        global:
+          postgresql:
+            username: teslamate
+            database: teslamate
+            existingSecret: database-secrets
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: teslamate
+#  syncPolicy:
+#    automated: {}
