@@ -35,20 +35,13 @@ spec:
             - mountPath: /opt/unbound/etc/unbound/a-records.conf
               name: config
               subPath: a-records.conf
-          #resources:
-          #  requests:
-          #    cpu: 250m
-          #    memory: 500Mi
-          #  limits:
-          #    memory: 1Gi
-          #livenessProbe:
-          #  httpGet:
-          #    port: http
-          #    path: /ping
-          #  initialDelaySeconds: 30
-          #  periodSeconds: 30
-          #  timeoutSeconds: 5
-          #  failureThreshold: 3
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 128Mi
           readinessProbe:
             exec:
               command: [ 'sh', '-c', 'drill @127.0.0.1 cloudflare.com || exit 1' ]
