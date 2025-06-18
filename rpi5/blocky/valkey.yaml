@@ -8,15 +8,17 @@ metadata:
 spec:
   project: default
   source:
-    chart: valkey-cluster
+    chart: valkey
     repoURL: https://charts.bitnami.com/bitnami
-    targetRevision: 3.0.4
+    targetRevision: 3.0.14
     helm:
       values: |
-        usePassword: false
-        service:
-          type: ClusterIP
-          clusterIP: 10.43.0.13
+        auth:
+          enabled: false
+        primary:
+          service:
+            type: ClusterIP
+            clusterIP: 10.43.0.13
   destination:
     server: https://kubernetes.default.svc
     namespace: blocky
