@@ -8,6 +8,10 @@ metadata:
     reloader.stakater.com/auto: "true"
 spec:
   replicas: 3
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 75%
+      maxSurge: 100%
   selector:
     matchLabels:
       app: blocky
