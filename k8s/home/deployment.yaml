@@ -8,7 +8,11 @@ metadata:
     tags.datadoghq.com/service: anshulg-com
     tags.datadoghq.com/version: 0.3.4
 spec:
-  replicas: 3
+  replicas: 4
+  strategy:
+    rollingUpdate:
+      maxSurge: "50%"
+      maxUnavailable: "50%"
   selector:
     matchLabels:
       app: home
