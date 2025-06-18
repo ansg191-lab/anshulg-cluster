@@ -16,23 +16,3 @@ spec:
     podAntiAffinityType: preferred
   storage:
     size: 8Gi
-  backup:
-    retentionPolicy: "7d"
-    barmanObjectStore:
-      destinationPath: "gs://cnpg-backup-bucket-eixpr"
-      data:
-        compression: bzip2
-      googleCredentials:
-        applicationCredentials:
-          name: backup-secrets
-          key: gcsCredentials
----
-apiVersion: postgresql.cnpg.io/v1
-kind: ScheduledBackup
-metadata:
-  name: paperless-backup
-spec:
-  schedule: "0 0 0 * * *"
-  backupOwnerReference: self
-  cluster:
-    name: paperless-cluster
