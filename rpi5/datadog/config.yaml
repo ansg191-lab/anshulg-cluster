@@ -28,6 +28,9 @@ spec:
       enableServiceEndpoints: true
   override:
     nodeAgent:
+      image:
+        # See https://github.com/DataDog/helm-charts/issues/1713#issuecomment-2897213720
+        tag: "7.68.0-rc.2"
       extraConfd:
         configMap:
           name: confd-config
