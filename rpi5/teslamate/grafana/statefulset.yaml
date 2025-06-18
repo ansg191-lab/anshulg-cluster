@@ -27,30 +27,23 @@ spec:
               name: http
           env:
             - name: DATABASE_USER
-              valueFrom:
-                secretKeyRef:
-                  key: username
-                  name: teslamate-cluster-superuser
+              value: postgres
             - name: DATABASE_PASS
               valueFrom:
                 secretKeyRef:
                   key: password
-                  name: teslamate-cluster-superuser
+                  name: database-secrets
             - name: DATABASE_NAME
-              valueFrom:
-                secretKeyRef:
-                  key: dbname
-                  name: teslamate-cluster-app
+              value: teslamate
             - name: DATABASE_HOST
-              valueFrom:
-                secretKeyRef:
-                  key: host
-                  name: teslamate-cluster-superuser
+              value: teslamate-postgres-postgresql-ha-pgpool
             - name: GF_SERVER_ROOT_URL
               value: "https://teslaboard.anshulg.direct/"
           volumeMounts:
             - mountPath: /var/lib/grafana
               name: data
+            - mountPath: /tmp
+              name: tmp
           securityContext:
             runAsUser: 10001
             runAsGroup: 10001
@@ -71,6 +64,10 @@ spec:
       restartPolicy: Always
       securityContext:
         fsGroup: 10001
+      volumes:
+        - name: tmp
+          emptyDir:
+            medium: Memory
   volumeClaimTemplates:
     - metadata:
         name: data

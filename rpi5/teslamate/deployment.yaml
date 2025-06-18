@@ -32,15 +32,9 @@ spec:
               echo "Postgres is up and running!"
           env:
             - name: DATABASE_HOST
-              valueFrom:
-                secretKeyRef:
-                  key: host
-                  name: teslamate-cluster-app
+              value: teslamate-postgres-postgresql-ha-pgpool
             - name: DATABASE_USER
-              valueFrom:
-                secretKeyRef:
-                  key: username
-                  name: teslamate-cluster-app
+              value: teslamate
           securityContext:
             runAsUser: 10001
             runAsNonRoot: true
@@ -66,25 +60,16 @@ spec:
                 name: secrets
           env:
             - name: DATABASE_USER
-              valueFrom:
-                secretKeyRef:
-                  key: username
-                  name: teslamate-cluster-superuser
+              value: postgres
             - name: DATABASE_PASS
               valueFrom:
                 secretKeyRef:
                   key: password
-                  name: teslamate-cluster-superuser
+                  name: database-secrets
             - name: DATABASE_NAME
-              valueFrom:
-                secretKeyRef:
-                  key: dbname
-                  name: teslamate-cluster-app
+              value: teslamate
             - name: DATABASE_HOST
-              valueFrom:
-                secretKeyRef:
-                  key: host
-                  name: teslamate-cluster-superuser
+              value: teslamate-postgres-postgresql-ha-pgpool
             - name: DISABLE_MQTT
               value: "true"
           securityContext:
