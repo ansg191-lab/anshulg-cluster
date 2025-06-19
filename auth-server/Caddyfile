@@ -13,11 +13,11 @@ auth.anshulg.com {
 
     # Webfinger endpoint for Tailscale OAuth
     # TODO: Make this dynamic based on the user-agent or IP address
-	redir /.well-known/webfinger https://auth.example.com/oauth2/openid/tailscale{uri} 307
+	redir /.well-known/webfinger https://auth.anshulg.com/oauth2/openid/tailscale{uri} 307
 
 	reverse_proxy https://localhost:8443 {
 		transport http {
-			tls_trusted_ca_certs /home/anshulgupta/ca.crt
+			tls_trusted_ca_certs /etc/caddy/AnshulGuptaRootCA.crt
 			tls_server_name auth.anshulg.com
 		}
 	}
