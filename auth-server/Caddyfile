@@ -11,10 +11,6 @@
 auth.anshulg.com {
 	encode zstd gzip
 
-    # Webfinger endpoint for Tailscale OAuth
-    # TODO: Make this dynamic based on the user-agent or IP address
-	redir /.well-known/webfinger https://auth.anshulg.com/oauth2/openid/tailscale{uri} 307
-
 	reverse_proxy https://localhost:8443 {
 		transport http {
 			tls_trusted_ca_certs /etc/caddy/AnshulGuptaRootCA.crt

@@ -19,6 +19,14 @@ spec:
         - name: home
           port: 80
     - kind: Rule
+      match: Host(`anshulg.com`) && Path(`/.well-known/webfinger`)
+      middlewares:
+        - name: webfinger-redirect
+          namespace: home
+      services:
+        - name: home
+          port: 80
+    - kind: Rule
       match: Host(`anshulg.com`)
       middlewares:
         - name: security-headers
@@ -81,3 +89,15 @@ spec:
     regex: ^https?://www\.anshulg\.com/(.*)
     replacement: https://anshulg.com/${1}
     permanent: true
+---
+# Webfinger endpoint for Tailscale OAuth
+# TODO: Make this dynamic based on the user-agent or IP address
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: webfinger-redirect
+spec:
+  redirectRegex:
+    regex: ^https?://anshulg\.com/.well-known/webfinger(.*)
+    replacement: https://auth.anshulg.com/oauth2/openid/tailscale/.well-known/webfinger${1}
+    permanent: false
