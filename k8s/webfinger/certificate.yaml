@@ -1,0 +1,27 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: webfinger-cert
+spec:
+  secretName: webfinger-cert-tls
+  commonName: webfinger.anshulg.com
+  dnsNames:
+    - ts.anshulg.com
+  duration: 2160h0m0s
+  renewBefore: 720h0m0s
+  privateKey:
+    algorithm: ECDSA
+    size: 384
+    rotationPolicy: Always
+  subject:
+    organizations:
+      - Anshul Gupta
+    organizationalUnits:
+      - k8s
+    provinces:
+      - California
+    countries:
+      - US
+  issuerRef:
+    kind: ClusterIssuer
+    name: k8s-ca
