@@ -26,7 +26,7 @@ spec:
       serviceAccountName: reprepro
       containers:
         - name: reprepro
-          image: nginxinc/nginx-unprivileged:1.29.0@sha256:6cc82633c23919e0599558ad73b643f95b748f265e192140affb260771c4e778
+          image: nginxinc/nginx-unprivileged:1.29.0@sha256:5957d8d004517de8a53af6812bdb1b779d7c6746a611569af59b22660925f47b
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
