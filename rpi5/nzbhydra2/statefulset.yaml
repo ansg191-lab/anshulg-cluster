@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: nzbhydra2
-          image: lscr.io/linuxserver/nzbhydra2:7.15.3@sha256:379926a2f5bf6d126ff1a92cf7e6fdeb791aaaf05bbf9b0e4cdf0d0321009f6a
+          image: lscr.io/linuxserver/nzbhydra2:7.15.3@sha256:0e4e62a6f21cba862bdcef2b64b38b5dbca1139fa88f932ecd2dd377e8f016e1
           imagePullPolicy: Always
           ports:
             - containerPort: 5076
