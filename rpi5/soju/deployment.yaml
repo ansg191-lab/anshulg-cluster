@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: soju
+  labels:
+    app: soju
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: soju
+  template:
+    metadata:
+      name: soju
+      labels:
+        app: soju
+    spec:
+      containers:
+        - name: soju
+          image: codeberg.org/emersion/soju:v0.9.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 6697
+              protocol: TCP
+          env: []
+          volumeMounts:
+            - mountPath: /soju-config
+              name: config
+              subPath: soju-config
+            - mountPath: /certs
+              name: tls
+              readOnly: true
+          #resources:
+          #  requests:
+          #    cpu: 250m
+          #    memory: 500Mi
+          #  limits:
+          #    memory: 1Gi
+          #livenessProbe:
+          #  httpGet:
+          #    port: http
+          #    path: /ping
+          #  initialDelaySeconds: 30
+          #  periodSeconds: 30
+          #  timeoutSeconds: 5
+          #  failureThreshold: 3
+          #readinessProbe:
+          #  httpGet:
+          #    port: http
+          #    path: /ping
+          #  periodSeconds: 10
+          #  timeoutSeconds: 5
+          #  failureThreshold: 3
+      restartPolicy: Always
+      volumes:
+        - name: config
+          secret:
+            secretName: soju-secrets
+        - name: tls
+          csi:
+            driver: csi.cert-manager.io
+            readOnly: true
+            volumeAttributes:
+              csi.cert-manager.io/issuer-kind: ClusterIssuer
+              csi.cert-manager.io/issuer-name: rpi5-ca
+              csi.cert-manager.io/dns-names: "irc.${POD_NAMESPACE}.svc.cluster.local,irc.${POD_NAMESPACE},irc,irc.internal,irc.anshulg.direct"
+              csi.cert-manager.io/duration: 720h0m0s

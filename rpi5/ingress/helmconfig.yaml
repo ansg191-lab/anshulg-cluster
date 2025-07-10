@@ -20,14 +20,6 @@ spec:
           trustedIPs:
             - 10.0.0.0/8
             - 192.168.0.0/16
-      ircs:
-        port: 6697
-        expose:
-          default: true
-        exposedPort: 6697
-        protocol: TCP
-        tls:
-          enabled: true
 
     service:
       spec:
