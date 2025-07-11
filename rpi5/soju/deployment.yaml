@@ -30,27 +30,18 @@ spec:
             - mountPath: /certs
               name: tls
               readOnly: true
-          #resources:
-          #  requests:
-          #    cpu: 250m
-          #    memory: 500Mi
-          #  limits:
-          #    memory: 1Gi
-          #livenessProbe:
-          #  httpGet:
-          #    port: http
-          #    path: /ping
-          #  initialDelaySeconds: 30
-          #  periodSeconds: 30
-          #  timeoutSeconds: 5
-          #  failureThreshold: 3
-          #readinessProbe:
-          #  httpGet:
-          #    port: http
-          #    path: /ping
-          #  periodSeconds: 10
-          #  timeoutSeconds: 5
-          #  failureThreshold: 3
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              memory: 256Gi
+          livenessProbe:
+            tcpSocket:
+              port: 6697
+          readinessProbe:
+            tcpSocket:
+              port: 6697
       restartPolicy: Always
       volumes:
         - name: config
