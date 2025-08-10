@@ -1,0 +1,63 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../kustomize/base
+  - ../../kustomize/workloads/deployment
+
+components:
+  - ../../kustomize/components/security-context
+  - ../../kustomize/components/tailscale
+
+namePrefix: whoami-
+labels:
+  - pairs:
+      app.kubernetes.io/name: whoami
+    includeSelectors: true
+
+images:
+  - name: busybox
+    newName: traefik/whoami
+    newTag: v1.11.0
+    digest: sha256:200689790a0a0ea48ca45992e0450bc26ccab5307375b41c84dfc4f2475937ab
+
+configMapGenerator:
+  - name: domain-config
+    literals:
+      - DOMAIN=whoami.internal
+  - name: tailscale-config
+    literals:
+      - TS_HOST=whoami
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: domain-config
+      fieldPath: data.DOMAIN
+    targets:
+      - select:
+          kind: Certificate
+          name: cert
+        fieldPaths:
+          - spec.commonName
+          - spec.dnsNames.0
+      - select:
+          kind: IngressRoute
+          name: ingress
+        fieldPaths:
+          - spec.routes.0.match
+        options:
+          index: 1
+          delimiter: "`"
+      - select:
+          kind: IngressRoute
+          name: ingress
+        fieldPaths:
+          - spec.tls.domains.0.main
+
+patches:
+  - target:
+      group: apps
+      version: v1
+      kind: Deployment
+    path: patch-deployment.yaml

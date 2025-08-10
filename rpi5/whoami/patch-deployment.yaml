@@ -1,0 +1,13 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whoami
+spec:
+  template:
+    spec:
+      containers:
+        - name: app
+          readinessProbe:
+            httpGet:
+              port: 80
+              path: /bench

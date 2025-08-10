@@ -1,14 +1,12 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: whoami-cert
-  namespace: whoami
+  name: cert
 spec:
-  secretName: whoami-cert-tls
-  commonName: whoami.local
+  secretName: cert-tls
+  commonName: PLACEHOLDER_DOMAIN
   dnsNames:
-    - whoami.local
-    - whoami.internal
+    - PLACEHOLDER_DOMAIN
   duration: 2160h0m0s
   renewBefore: 720h0m0s
   privateKey:
@@ -25,6 +23,5 @@ spec:
     countries:
       - US
   issuerRef:
-    group: cas-issuer.jetstack.io
-    kind: GoogleCASClusterIssuer
-    name: anshulg-ca
+    kind: ClusterIssuer
+    name: rpi5-ca

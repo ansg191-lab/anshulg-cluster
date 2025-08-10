@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ts-ingress
+spec:
+  ingressClassName: tailscale
+  defaultBackend:
+    service:
+      name: svc
+      port:
+        number: 80
+  tls:
+    - hosts:
+        - PLACEHOLDER

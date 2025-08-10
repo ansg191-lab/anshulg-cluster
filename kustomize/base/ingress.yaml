@@ -1,0 +1,17 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: ingress
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`PLACEHOLDER_DOMAIN`)
+      services:
+        - name: svc
+          port: 80
+  tls:
+    secretName: cert-tls
+    domains:
+      - main: PLACEHOLDER_DOMAIN

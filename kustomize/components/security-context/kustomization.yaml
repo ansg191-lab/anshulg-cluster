@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+patches:
+  - target:
+      group: apps
+      version: v1
+      kind: Deployment
+    path: patch-pod-securitycontext.yaml
+  - target:
+      group: apps
+      version: v1
+      kind: StatefulSet
+    path: patch-pod-securitycontext.yaml
+
+  - target:
+      group: apps
+      version: v1
+      kind: Deployment
+    path: patch-container-securitycontext.yaml

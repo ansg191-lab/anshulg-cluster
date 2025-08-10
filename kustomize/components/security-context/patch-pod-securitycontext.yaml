@@ -1,0 +1,17 @@
+# Strategic-merge patch applied to the Pod template
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: empty
+spec:
+  template:
+    spec:
+      # Pod-level defaults (inherit to containers unless overridden there)
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        fsGroupChangePolicy: "OnRootMismatch"
+        seccompProfile:
+          type: RuntimeDefault
