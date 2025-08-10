@@ -93,7 +93,7 @@ if [ ! -e "tls.crt" ] ; then
     gcloud privateca certificates create kandim-cert \
         --issuer-pool default \
         --issuer-location us-west1 \
-        --ca anshul-sub-ca-1 \
+        --ca anshul-ca-1 \
         --csr csr.pem \
         --cert-output-file tls.crt \
         --validity "P90D"
