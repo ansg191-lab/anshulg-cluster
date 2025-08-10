@@ -11,3 +11,8 @@ spec:
             httpGet:
               port: 80
               path: /bench
+          resources:
+            requests:
+              cpu: 5m
+            limits:
+              memory: 16Mi
