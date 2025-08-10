@@ -7,7 +7,7 @@ resources:
 replacements:
   - source:
       kind: ConfigMap
-      name: tailscale-config
+      name: domain-config
       fieldPath: data.TS_HOST
     targets:
       - select:

@@ -6,6 +6,7 @@ resources:
   - ../../kustomize/workloads/deployment
 
 components:
+  - ../../kustomize/components/ingress
   - ../../kustomize/components/security-context
   - ../../kustomize/components/tailscale
 
@@ -25,35 +26,7 @@ configMapGenerator:
   - name: domain-config
     literals:
       - DOMAIN=whoami.internal
-  - name: tailscale-config
-    literals:
       - TS_HOST=whoami
-
-replacements:
-  - source:
-      kind: ConfigMap
-      name: domain-config
-      fieldPath: data.DOMAIN
-    targets:
-      - select:
-          kind: Certificate
-          name: cert
-        fieldPaths:
-          - spec.commonName
-          - spec.dnsNames.0
-      - select:
-          kind: IngressRoute
-          name: ingress
-        fieldPaths:
-          - spec.routes.0.match
-        options:
-          index: 1
-          delimiter: "`"
-      - select:
-          kind: IngressRoute
-          name: ingress
-        fieldPaths:
-          - spec.tls.domains.0.main
 
 patches:
   - target:
