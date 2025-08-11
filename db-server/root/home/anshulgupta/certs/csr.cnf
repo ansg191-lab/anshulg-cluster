@@ -1,0 +1,21 @@
+[req]
+distinguished_name = req_distinguished_name
+req_extensions = v3_req
+prompt = no
+
+[req_distinguished_name]
+CN = rpi4.anshulg.com
+O = Anshul Gupta
+OU = RPI4 Postgresql Server
+L = Irvine
+ST = California
+C = US
+
+[v3_req]
+keyUsage = critical, digitalSignature, keyEncipherment
+extendedKeyUsage = serverAuth
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 = rpi4.internal
+DNS.2 = rpi4.anshulg.com

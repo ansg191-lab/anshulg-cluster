@@ -1,0 +1,6 @@
+Types: deb
+URIs: https://apt.anshulg.com
+Suites: trixie
+Components: main
+Enabled: yes
+Signed-By: /usr/share/keyrings/ansg191.pgp
