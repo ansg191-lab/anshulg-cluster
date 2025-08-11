@@ -109,5 +109,5 @@ spec:
       restartPolicy: Always
       volumes:
         - name: certs
-          secret:
-            secretName: anshulg-ca
+          configMap:
+            name: anshulg-ca

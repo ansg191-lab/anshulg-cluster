@@ -21,7 +21,9 @@ gcloud privateca certificates create kandim-cert \
     --cert-output-file tls.crt \
     --validity "P90D"
 
-chown postgres:postgres certs/tls.crt
-chown postgres:postgres certs/tls.key
+chown postgres:postgres tls.crt
+chown postgres:postgres tls.key
 chmod 400 tls.crt
 chmod 400 tls.key
+
+systemctl restart postgresql
