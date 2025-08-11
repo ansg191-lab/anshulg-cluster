@@ -30,6 +30,9 @@ spec:
             - mountPath: /certs
               name: tls
               readOnly: true
+            - mountPath: /etc/ssl/certs/ca-certificates.crt
+              name: ca
+              subPath: ca.crt
           resources:
             requests:
               cpu: 50m
@@ -47,6 +50,9 @@ spec:
         - name: config
           secret:
             secretName: soju-secrets
+        - name: ca
+          configMap:
+            name: anshulg-ca
         - name: tls
           csi:
             driver: csi.cert-manager.io
