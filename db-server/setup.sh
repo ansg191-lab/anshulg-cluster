@@ -12,6 +12,11 @@ NC='\033[0m'
 START_MARKER='<< ADDED BY setup.sh >>'
 END_MARKER='<< END ADDED BY setup.sh >>'
 
+# renovate: datasource=github-releases depName=restic/restic
+RESTIC_VERSION="0.18.0"
+# renovate: datasource=github-releases depName=creativeprojects/resticprofile
+RESTICPROFILE_VERSION="0.31.0"
+
 export GOOGLE_APPLICATION_CREDENTIALS="/home/anshulgupta/google.json"
 
 log() {
@@ -227,6 +232,66 @@ EOF
 	systemctl restart postgresql
 }
 
+install_restic() {
+	log "Installing restic and resticprofile..."
+
+	# Download and install restic
+	log "Downloading restic..."
+	wget -qO restic.bz2 "https://github.com/restic/restic/releases/download/v$RESTIC_VERSION/restic_${RESTIC_VERSION}_linux_arm64.bz2"
+	log "Installing restic..."
+	bzip2 -d restic.bz2
+	chmod +x restic
+	mv restic /usr/local/bin/
+
+	restic version
+
+	# Download and install resticprofile
+	log "Downloading resticprofile..."
+	wget -qO resticprofile.tar.gz "https://github.com/creativeprojects/resticprofile/releases/download/v$RESTICPROFILE_VERSION/resticprofile_no_self_update_${RESTICPROFILE_VERSION}_linux_arm64.tar.gz"
+	log "Installing resticprofile..."
+	mkdir resticprofile
+	tar -xzf resticprofile.tar.gz -C resticprofile
+	rm resticprofile.tar.gz
+	mv resticprofile/resticprofile /usr/local/bin/
+	rm -rf resticprofile
+
+	resticprofile version
+
+	# Install bash completion
+	restic generate --bash-completion /etc/bash_completion.d/restic
+	chmod +x /etc/bash_completion.d/restic
+	resticprofile generate --bash-completion > /etc/bash_completion.d/resticprofile
+    chmod +x /etc/bash_completion.d/resticprofile
+}
+
+setup_backup() {
+	log "Setting up backups..."
+
+	# Check files
+	if [ ! -f /home/anshulgupta/backup/password.txt ]; then
+		log "Error: /home/anshulgupta/backup/password.txt does not exist. Exiting."
+		exit 1
+	fi
+	chmod 400 /home/anshulgupta/backup/password.txt
+
+	if [ ! -f /home/anshulgupta/backup/auth.txt ]; then
+		echo "Error: /home/anshulgupta/backup/auth.txt does not exist. Exiting." >&2
+		exit 1
+	fi
+	chmod 400 /home/anshulgupta/backup/auth.txt
+
+	# Create 10auth.conf file
+	cat <<EOF > /etc/resticprofile/10auth.conf
+[Service]
+Environment=RESTIC_REST_USERNAME=rpi4-restic
+Environment="RESTIC_REST_PASSWORD=$(< /home/anshulgupta/backup/auth.txt tr -d '\n')"
+EOF
+	chmod 600 /etc/resticprofile/10auth.conf
+
+	log "Scheduling backups..."
+	resticprofile schedule
+}
+
 trap cleanup EXIT
 copy_root
 install_packages
@@ -235,3 +300,5 @@ setup_firewall
 setup_mta
 setup_issuer
 setup_postgres
+install_restic
+setup_backup

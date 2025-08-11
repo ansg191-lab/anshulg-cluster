@@ -82,7 +82,8 @@
     {
       "customType": "regex",
       "managerFilePatterns": [
-        "/git-server/setup.sh/"
+        "/git-server/setup.sh/",
+        "/db-server/setup.sh/"
       ],
       "matchStrings": [
         "#\\s*renovate:\\s*datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\s.*?_VERSION=\"(?<currentValue>.*)\"\\s"
