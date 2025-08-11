@@ -39,7 +39,10 @@ spec:
             - name: DATABASE_NAME
               value: teslamate
             - name: DATABASE_HOST
-              value: 192.168.1.79
+              valueFrom:
+                secretKeyRef:
+                  key: host
+                  name: database-secrets
             - name: GF_SERVER_ROOT_URL
               value: "https://teslaboard.anshulg.direct/"
           volumeMounts:

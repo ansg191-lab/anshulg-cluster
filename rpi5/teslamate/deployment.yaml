@@ -32,9 +32,15 @@ spec:
               echo "Postgres is up and running!"
           env:
             - name: DATABASE_HOST
-              value: teslamate-postgres-postgresql-ha-pgpool
+              valueFrom:
+                secretKeyRef:
+                  key: host
+                  name: database-secrets
             - name: DATABASE_USER
-              value: teslamate
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: database-secrets
           securityContext:
             runAsUser: 10001
             runAsNonRoot: true
@@ -60,7 +66,10 @@ spec:
                 name: secrets
           env:
             - name: DATABASE_USER
-              value: postgres
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: database-secrets
             - name: DATABASE_PASS
               valueFrom:
                 secretKeyRef:
@@ -69,7 +78,10 @@ spec:
             - name: DATABASE_NAME
               value: teslamate
             - name: DATABASE_HOST
-              value: teslamate-postgres-postgresql-ha-pgpool
+              valueFrom:
+                secretKeyRef:
+                  key: host
+                  name: database-secrets
             - name: DISABLE_MQTT
               value: "true"
           securityContext:

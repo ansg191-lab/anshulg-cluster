@@ -20,9 +20,15 @@ spec:
                   pg_dump -p 5432 teslamate > /backup/backup.sql
               env:
                 - name: PGHOST
-                  value: teslamate-postgres-postgresql-ha-pgpool
+                  valueFrom:
+                    secretKeyRef:
+                      key: host
+                      name: database-secrets
                 - name: PGUSER
-                  value: postgres
+                  valueFrom:
+                    secretKeyRef:
+                      key: username
+                      name: database-secrets
                 - name: PGPASSWORD
                   valueFrom:
                     secretKeyRef:
