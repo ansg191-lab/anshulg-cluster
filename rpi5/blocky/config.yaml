@@ -348,7 +348,7 @@ data:
       # optional: log timestamps. Default: true
       timestamp: true
       # optional: obfuscate log output (replace all alphanumeric characters with *) for user sensitive data like request domains or responses to increase privacy. Default: false
-      privacy: true
+      privacy: false
 
     # optional: add EDE error codes to dns response
     ede:
