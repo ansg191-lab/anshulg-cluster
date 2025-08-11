@@ -3,4 +3,5 @@ libsasl2-modules
 nftables
 postgresql
 postfix
+unattended-upgrades
 vim
