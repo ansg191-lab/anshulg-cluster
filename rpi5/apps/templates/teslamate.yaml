@@ -23,3 +23,5 @@ spec:
     path: rpi5/teslamate
     directory:
       recurse: true
+  syncPolicy:
+    automated: {}
