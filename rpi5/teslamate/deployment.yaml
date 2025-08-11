@@ -82,6 +82,10 @@ spec:
                 secretKeyRef:
                   key: host
                   name: database-secrets
+            - name: DATABASE_SSL
+              value: "true"
+            - name: DATABASE_SSL_CA_CERT_FILE
+              value: /etc/ssl/certs/ca-certificates.crt
             - name: DISABLE_MQTT
               value: "true"
           securityContext:
@@ -98,4 +102,12 @@ spec:
               memory: 256Mi
             limits:
               memory: 512Mi
+          volumeMounts:
+            - mountPath: /etc/ssl/certs/ca-certificates.crt
+              name: certs
+              subPath: ca.crt
       restartPolicy: Always
+      volumes:
+        - name: certs
+          secret:
+            secretName: anshulg-ca
