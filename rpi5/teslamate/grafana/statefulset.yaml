@@ -27,7 +27,10 @@ spec:
               name: http
           env:
             - name: DATABASE_USER
-              value: postgres
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: database-secrets
             - name: DATABASE_PASS
               valueFrom:
                 secretKeyRef:
@@ -36,7 +39,7 @@ spec:
             - name: DATABASE_NAME
               value: teslamate
             - name: DATABASE_HOST
-              value: teslamate-postgres-postgresql-ha-pgpool
+              value: 192.168.1.79
             - name: GF_SERVER_ROOT_URL
               value: "https://teslaboard.anshulg.direct/"
           volumeMounts:
