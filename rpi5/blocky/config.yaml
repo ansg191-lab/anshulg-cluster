@@ -218,7 +218,7 @@ data:
       type: postgresql
       # directory (should be mounted as volume in docker) for csv, db connection string for mysql/postgresql
     #  target: db_user:db_password@tcp(db_host_or_ip:3306)/db_name?charset=utf8mb4&parseTime=True&loc=Local
-      target: postgres://blocky@192.168.1.79:5432/blocky?sslmode=verify-full
+      target: postgres://blocky@192.168.1.9:5432/blocky?sslmode=verify-full
       #postgresql target: postgres://user:password@db_host_or_ip:5432/db_name
       # if > 0, deletes log files which are older than ... days
       logRetentionDays: 7
