@@ -9,6 +9,7 @@ data:
         local-data: "homepage.internal. A 192.168.1.100"
         local-data: "huginn.internal. A 192.168.1.100"
         local-data: "jellyfin.internal. A 192.168.1.100"
+        local-data: "jellystat.internal. A 192.168.1.100"
         local-data: "irc.internal. A 192.168.1.100"
         local-data: "lazylibrarian.internal. A 192.168.1.100"
         local-data: "nzbget.internal. A 192.168.1.100"
