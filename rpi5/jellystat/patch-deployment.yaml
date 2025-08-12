@@ -1,0 +1,27 @@
+- op: replace
+  path: /spec/template/spec/containers/0/ports
+  value:
+    - containerPort: 3000
+      protocol: TCP
+- op: add
+  path: /spec/template/spec/containers/0/envFrom
+  value:
+    - configMapRef:
+        name: jellystat-config
+    - secretRef:
+        name: secrets
+- op: add
+  path: /spec/template/spec/volumes
+  value:
+    - name: jellystat-backups
+      emptyDir: {}
+    - name: tmp
+      emptyDir:
+        medium: Memory
+- op: add
+  path: /spec/template/spec/containers/0/volumeMounts
+  value:
+    - name: jellystat-backups
+      mountPath: /app/backend/backup-data
+    - name: tmp
+      mountPath: /tmp

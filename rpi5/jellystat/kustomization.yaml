@@ -1,0 +1,45 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../kustomize/base
+  - ../../kustomize/workloads/deployment
+  - secrets.yaml
+
+components:
+  - ../../kustomize/components/ingress
+  - ../../kustomize/components/security-context
+  - ../../kustomize/components/tailscale
+
+namePrefix: jellystat-
+labels:
+  - pairs:
+      app.kubernetes.io/name: jellystat
+    includeSelectors: true
+
+images:
+  - name: busybox
+    newName: cyfershepard/jellystat
+    newTag: 1.1.6
+    digest: sha256:683358900cff8d299fa93add731b2976d7c9bc49f9593f40f5351498fd488767
+
+configMapGenerator:
+  - name: domain-config
+    literals:
+      - DOMAIN=jellystat.internal
+      - TS_HOST=jellystat
+  - name: jellystat-config
+    literals:
+      - POSTGRES_IP=192.168.1.9
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=jellystat
+      - POSTGRES_DB=jfstat
+      - TZ=America/Los_Angeles
+
+patches:
+  - target:
+      kind: Deployment
+    path: patch-deployment.yaml
+  - target:
+      kind: Service
+    path: patch-service.yaml
