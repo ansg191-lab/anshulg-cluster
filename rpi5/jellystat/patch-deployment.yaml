@@ -9,7 +9,7 @@
     - configMapRef:
         name: jellystat-config
     - secretRef:
-        name: secrets
+        name: jellystat-secrets
 - op: add
   path: /spec/template/spec/volumes
   value:
@@ -25,3 +25,6 @@
       mountPath: /app/backend/backup-data
     - name: tmp
       mountPath: /tmp
+- op: replace
+  path: /spec/template/spec/containers/0/securityContext/readOnlyRootFilesystem
+  value: false
