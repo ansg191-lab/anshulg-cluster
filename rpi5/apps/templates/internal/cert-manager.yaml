@@ -40,7 +40,7 @@ spec:
   source:
     chart: cert-manager-csi-driver
     repoURL: https://charts.jetstack.io
-    targetRevision: v0.10.4
+    targetRevision: v0.11.0
   destination:
     server: {{ .Values.spec.destination.server }}
     namespace: cert-manager
