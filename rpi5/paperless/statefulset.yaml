@@ -29,27 +29,27 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: host
-                  name: paperless-cluster-app
+                  name: database
             - name: PAPERLESS_DBPORT
               valueFrom:
                 secretKeyRef:
                   key: port
-                  name: paperless-cluster-app
+                  name: database
             - name: PAPERLESS_DBNAME
               valueFrom:
                 secretKeyRef:
                   key: dbname
-                  name: paperless-cluster-app
+                  name: database
             - name: PAPERLESS_DBUSER
               valueFrom:
                 secretKeyRef:
                   key: user
-                  name: paperless-cluster-app
+                  name: database
             - name: PAPERLESS_DBPASS
               valueFrom:
                 secretKeyRef:
                   key: password
-                  name: paperless-cluster-app
+                  name: database
           envFrom:
             - configMapRef:
                 name: paperless-config
