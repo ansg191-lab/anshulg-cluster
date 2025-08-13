@@ -33,7 +33,7 @@ configMapGenerator:
       - LOG_LEVEL=debug
       - PORT=5055
       - DB_TYPE=postgres
-      - DB_HOST=192.168.1.9
+      - DB_HOST=rpi4.anshulg.direct
       - DB_PORT=5432
       - DB_NAME=jellyseerr
       - DB_USER=jellyseerr
