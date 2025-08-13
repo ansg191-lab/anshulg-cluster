@@ -25,8 +25,8 @@ images:
 configMapGenerator:
   - name: domain-config
     literals:
-      - DOMAIN=jellyseer.internal
-      - TS_HOST=jellyseer
+      - DOMAIN=jellyseerr.internal
+      - TS_HOST=jellyseerr
   - name: env-config
     literals:
       - TZ=America/Los_Angeles
