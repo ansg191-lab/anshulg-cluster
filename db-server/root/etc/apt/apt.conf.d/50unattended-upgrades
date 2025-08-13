@@ -32,6 +32,7 @@ Unattended-Upgrade::Origins-Pattern {
         "origin=Debian,codename=${distro_codename},label=Debian-Security";
         "origin=Debian,codename=${distro_codename}-security,label=Debian-Security";
         "o=Debian Backports,n=${distro_codename}-backports,l=Debian Backports";
+        "o=Raspberry Pi Foundation,codename=${distro_codename}";
         "origin=Ansg191,codename=${distro_codename}";
 
         // Archive or Suite based matching:
