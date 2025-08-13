@@ -19,5 +19,6 @@ subjectAltName = @alt_names
 [alt_names]
 DNS.1 = rpi4.internal
 DNS.2 = rpi4.anshulg.com
+DNS.3 = rpi4.anshulg.direct
 IP.1 = 192.168.1.9
 IP.2 = 192.168.1.79

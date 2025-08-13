@@ -18,4 +18,5 @@ anshulg.direct. 21600 IN NS ns-cloud-c4.googledomains.com.
 ;; Route to RPI5 K8S Load Balancer
 anshulg.direct. 60 IN A 192.168.1.100
 
+rpi4.anshulg.direct. 60 IN A 192.168.1.9
 *.anshulg.direct. 60 IN A 192.168.1.100
