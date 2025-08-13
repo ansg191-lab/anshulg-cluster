@@ -639,7 +639,7 @@ sub _file_contains_ns {
 # See Also  : n/a
 ################################################################################
 sub seal_file {
-    my ( $file, $yes, $controller, $namespace ) = @_;
+    my ( $file, $yes, $controller, $namespace, $ns_wide ) = @_;
 
     # Ask for confirmation
     if ( $yes == 0 ) {
@@ -665,8 +665,9 @@ sub seal_file {
     print "Sealing $file into $sealed_file\n";
 
     # Call kubeseal to seal the secret, die if the command fails
+    my $wide_flag = $ns_wide ? '--scope namespace-wide' : '';
     system(
-"kubeseal --controller-name=\"$controller\" --controller-namespace=\"$namespace\" -f $file -w $sealed_file"
+"kubeseal --controller-name=\"$controller\" --controller-namespace=\"$namespace\" $wide_flag -f $file -w $sealed_file"
       ) == 0
       or die "Failed to seal $file\n";
     return;
@@ -732,6 +733,7 @@ sub seal_precheck {
 sub command_seal {
     my $namespace  = 'kube-system';
     my $controller = 'sealed-secrets';
+    my $ns_wide    = 0;
     my $skip_check = 0;
     my $yes        = 0;
     my $help       = 0;
@@ -739,6 +741,7 @@ sub command_seal {
         'namespace=s'  => \$namespace,
         'controller=s' => \$controller,
         'skip-check'   => \$skip_check,
+        'wide'         => \$ns_wide,
         'yes'          => \$yes,
         'help|?'       => \$help,
     ) or pod2usage(2);
@@ -756,7 +759,7 @@ sub command_seal {
     # Get all unencrypted secret files in the directory
     my $wanted = sub {
         if ( -f && /[.]unencrypted[.]yaml$/sxm ) {
-            seal_file( $_, $yes, $controller, $namespace );
+            seal_file( $_, $yes, $controller, $namespace, $ns_wide );
         }
     };
 
@@ -876,6 +879,7 @@ Seal all unencrypted secrets in the directory.
     -n, --namespace=NAMESPACE   The namespace of the Sealed Secrets controller (default: kube-system)
     -c, --controller=CONTROLLER The name of the Sealed Secrets controller (default: sealed-secrets)
     -s, --skip-check            Skip kubectl context check
+    -w, --wide                  Make the secret namespace-wide
     -y, --yes                   Skip confirmation
 
 =head2 deploy
