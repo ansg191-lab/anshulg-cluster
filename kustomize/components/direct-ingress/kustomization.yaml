@@ -1,0 +1,36 @@
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+resources:
+  - secret.yaml
+  - certificate.yaml
+  - ingress.yaml
+
+configurations:
+  - nameReferences.yaml
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: domain-config
+      fieldPath: data.DIRECT_DOMAIN
+    targets:
+      - select:
+          kind: Certificate
+          name: direct-cert
+        fieldPaths:
+          - spec.commonName
+          - spec.dnsNames.0
+      - select:
+          kind: IngressRoute
+          name: direct-ingress
+        fieldPaths:
+          - spec.routes.0.match
+        options:
+          index: 1
+          delimiter: "`"
+      - select:
+          kind: IngressRoute
+          name: direct-ingress
+        fieldPaths:
+          - spec.tls.domains.0.main

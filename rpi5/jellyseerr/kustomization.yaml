@@ -8,6 +8,7 @@ resources:
 
 components:
   - ../../kustomize/components/ingress
+  - ../../kustomize/components/direct-ingress
   - ../../kustomize/components/security-context
   - ../../kustomize/components/tailscale
 
@@ -26,6 +27,7 @@ configMapGenerator:
   - name: domain-config
     literals:
       - DOMAIN=jellyseerr.internal
+      - DIRECT_DOMAIN=jellyseerr.anshulg.direct
       - TS_HOST=jellyseerr
   - name: env-config
     literals:

@@ -1,0 +1,19 @@
+nameReference:
+  - kind: Service
+    version: v1
+    fieldSpecs:
+      - group: traefik.io
+        version: v1alpha1
+        kind: IngressRoute
+        path: spec/routes/services/name
+  - kind: Secret
+    version: v1
+    fieldSpecs:
+      - group: cert-manager.io
+        version: v1
+        kind: Certificate
+        path: spec/secretName
+      - group: traefik.io
+        version: v1alpha1
+        kind: IngressRoute
+        path: spec/tls/secretName
