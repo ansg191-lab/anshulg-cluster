@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: empty
+spec:
+  template:
+    spec:
+      containers:
+        - name: app
+          envFrom:
+            - configMapRef:
+                name: env-config
+            - secretRef:
+                name: jellyseerr-secrets
+          volumeMounts:
+            - mountPath: /app/config
+              name: data
+            - mountPath: /etc/ssl/certs/ca-certificates.crt
+              name: ca-certs
+              subPath: ca.crt
+          readinessProbe:
+            httpGet:
+              port: 5055
+              path: /api/v1/status
+          livenessProbe:
+            httpGet:
+              port: 5055
+              path: /api/v1/status
+            initialDelaySeconds: 30
+      volumes:
+        - name: ca-certs
+          configMap:
+            name: anshulg-ca

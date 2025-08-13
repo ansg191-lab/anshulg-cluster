@@ -1,0 +1,53 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../kustomize/base
+  - ../../kustomize/workloads/statefulset
+  - secrets.yaml
+
+components:
+  - ../../kustomize/components/ingress
+  - ../../kustomize/components/security-context
+  - ../../kustomize/components/tailscale
+
+namePrefix: jellyseerr-
+labels:
+  - pairs:
+      app.kubernetes.io/name: jellyseerr
+    includeSelectors: true
+
+images:
+  - name: busybox
+    newName: fallenbagel/jellyseerr
+    newTag: 2.7.2@sha256:98296861cf3caebe8ada72e5dbe2729fb10cdb2042d2b82e86065bf870418587
+
+configMapGenerator:
+  - name: domain-config
+    literals:
+      - DOMAIN=jellyseer.internal
+      - TS_HOST=jellyseer
+  - name: env-config
+    literals:
+      - TZ=America/Los_Angeles
+      - LOG_LEVEL=debug
+      - PORT=5055
+      - DB_TYPE=postgres
+      - DB_HOST=192.168.1.9
+      - DB_PORT=5432
+      - DB_NAME=jellyseerr
+      - DB_USER=jellyseerr
+      - DB_USE_SSL=true
+      - DB_SSL_REJECT_UNAUTHORIZED=true
+      - DB_SSL_CA_FILE=/etc/ssl/certs/ca-certificates.crt
+
+patches:
+  - target:
+      kind: StatefulSet
+    path: patch-statefulset.yaml
+  - target:
+      kind: StatefulSet
+    path: patch-statefulset2.yaml
+  - target:
+      kind: Service
+    path: patch-service.yaml
