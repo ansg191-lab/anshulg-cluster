@@ -7,6 +7,7 @@ resources:
 
 components:
   - ../../kustomize/components/ingress
+  - ../../kustomize/components/direct-ingress
   - ../../kustomize/components/security-context
   - ../../kustomize/components/tailscale
 
@@ -25,6 +26,7 @@ configMapGenerator:
   - name: domain-config
     literals:
       - DOMAIN=ollama.internal
+      - DIRECT_DOMAIN=ollama.anshulg.direct
       - TS_HOST=ollama
 
 patches:
