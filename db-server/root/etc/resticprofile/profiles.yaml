@@ -9,7 +9,9 @@ global:
 default:
   repository: "rest:https://restic.anshulg.com/rpi4-restic/"
   initialize: false
-  password-file: "/home/anshulgupta/backup/password.txt"
+  password-file: "/etc/resticprofile/password.txt"
+#  password-command: |
+#    OP_SERVICE_ACCOUNT_TOKEN=$(cat "/home/anshulgupta/1password.txt") op read "op://RPI4/RPI4 Fastmail Password/rpi4.txt"
   compression: "max"
   force-inactive-lock: true
 

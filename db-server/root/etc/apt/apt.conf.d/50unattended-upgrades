@@ -44,6 +44,7 @@ Unattended-Upgrade::Origins-Pattern {
 //      "o=Debian,a=proposed-updates";
 //      "o=Debian Backports,a=stable-backports,l=Debian Backports";
         "o=cloud-sdk,a=cloud-sdk"
+        "site=downloads.1password.com"
 };
 
 // Python regular expressions, matching packages to exclude from upgrading

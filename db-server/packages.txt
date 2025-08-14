@@ -1,3 +1,4 @@
+1password-cli
 google-cloud-cli
 libsasl2-modules
 nftables

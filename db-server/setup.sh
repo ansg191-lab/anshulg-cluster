@@ -17,7 +17,8 @@ RESTIC_VERSION="0.18.0"
 # renovate: datasource=github-releases depName=creativeprojects/resticprofile
 RESTICPROFILE_VERSION="0.31.0"
 
-export GOOGLE_APPLICATION_CREDENTIALS="/home/anshulgupta/google.json"
+OP_SERVICE_ACCOUNT_TOKEN=$(cat "1password.txt")
+export OP_SERVICE_ACCOUNT_TOKEN
 
 log() {
     echo -e "${GREEN}${ELEPHANT} $1${NC}"
@@ -79,8 +80,8 @@ setup_firewall() {
 setup_mta() {
 	log "Setting up Mail Transfer Agent (MTA)..."
 
-	FASTMAIL_USER="ansg191@anshulg.com"
-	FASTMAIL_PASS=$(tr -d '\n' < /home/anshulgupta/fastmail_pass.txt)
+	FASTMAIL_USER=$(op read "op://RPI4/RPI4 Fastmail Password/username")
+	FASTMAIL_PASS=$(op read "op://RPI4/RPI4 Fastmail Password/password")
 
 	log "Configuring /etc/mailname..."
 	echo "rpi4.anshulg.com" > /etc/mailname
@@ -165,9 +166,15 @@ EOF
 setup_issuer() {
 	log "Setting up Google CAS issuer..."
 
+	local GCLOUD_SA_FILE="/etc/gcloud/service-account.json"
+	mkdir -p "$(dirname "$GCLOUD_SA_FILE")"
+	chmod 700 "$(dirname "$GCLOUD_SA_FILE")"
+
+	op read --out-file $GCLOUD_SA_FILE -f "op://RPI4/RPI4 Google Service Account/anshulg-cluster-rpi4-postgres-cas-issuer.json"
+
 	gcloud config set account rpi4-postgres-cas-issuer@anshulg-cluster.iam.gserviceaccount.com
 	gcloud auth activate-service-account rpi4-postgres-cas-issuer@anshulg-cluster.iam.gserviceaccount.com \
-		--key-file /home/anshulgupta/google.json
+		--key-file "$GCLOUD_SA_FILE"
 	gcloud config set project anshulg-cluster
 
 	if [ ! -f certs/tls.crt ]; then
@@ -313,24 +320,18 @@ install_restic() {
 setup_backup() {
 	log "Setting up backups..."
 
-	# Check files
-	if [ ! -f /home/anshulgupta/backup/password.txt ]; then
-		log "Error: /home/anshulgupta/backup/password.txt does not exist. Exiting."
-		exit 1
-	fi
-	chmod 400 /home/anshulgupta/backup/password.txt
+	local REST_USERNAME
+	local REST_PASSWORD
+	REST_USERNAME=$(op read -n "op://RPI4/RPI4 Restic Password/username")
+	REST_PASSWORD=$(op read -n "op://RPI4/RPI4 Restic Password/password")
 
-	if [ ! -f /home/anshulgupta/backup/auth.txt ]; then
-		echo "Error: /home/anshulgupta/backup/auth.txt does not exist. Exiting." >&2
-		exit 1
-	fi
-	chmod 400 /home/anshulgupta/backup/auth.txt
+	op read --out-file /etc/resticprofile/password.txt -f "op://RPI4/RPI4 Restic Password/rpi4.txt"
 
 	# Create 10auth.conf file
 	cat <<EOF > /etc/resticprofile/10auth.conf
 [Service]
-Environment=RESTIC_REST_USERNAME=rpi4-restic
-Environment="RESTIC_REST_PASSWORD=$(< /home/anshulgupta/backup/auth.txt tr -d '\n')"
+Environment=RESTIC_REST_USERNAME=$REST_USERNAME
+Environment="RESTIC_REST_PASSWORD=$REST_PASSWORD"
 EOF
 	chmod 600 /etc/resticprofile/10auth.conf
 
