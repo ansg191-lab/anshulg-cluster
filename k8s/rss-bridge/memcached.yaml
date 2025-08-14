@@ -8,7 +8,7 @@ spec:
   source:
     chart: memcached
     repoURL: https://charts.bitnami.com/bitnami
-    targetRevision: 7.9.6
+    targetRevision: 7.9.7
   destination:
     server: https://kubernetes.default.svc
     namespace: rss-bridge
