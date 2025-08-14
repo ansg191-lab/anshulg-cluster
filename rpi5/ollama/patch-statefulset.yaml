@@ -18,11 +18,11 @@ spec:
               subPath: ca.crt
           readinessProbe:
             httpGet:
-              port: 5055
+              port: 11434
               path: /
           livenessProbe:
             httpGet:
-              port: 5055
+              port: 11434
               path: /
             initialDelaySeconds: 30
       volumes:
