@@ -1,0 +1,36 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../kustomize/base
+  - ../../kustomize/workloads/statefulset
+
+components:
+  - ../../kustomize/components/ingress
+  - ../../kustomize/components/security-context
+  - ../../kustomize/components/tailscale
+
+namePrefix: ollama-
+labels:
+  - pairs:
+      app.kubernetes.io/name: ollama
+    includeSelectors: true
+
+images:
+  - name: busybox
+    newName: ollama/ollama
+    newTag: 0.11.4@sha256:be17b353bf3cfab0b6980530284e64716a57589ed753a82d9a6a2a5fa9a61a31
+
+configMapGenerator:
+  - name: domain-config
+    literals:
+      - DOMAIN=ollama.internal
+      - TS_HOST=ollama
+
+patches:
+  - target:
+      kind: StatefulSet
+    path: patch-statefulset.yaml
+  - target:
+      kind: Service
+    path: patch-service.yaml

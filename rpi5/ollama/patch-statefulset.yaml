@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: empty
+spec:
+  template:
+    spec:
+      containers:
+        - name: app
+          ports:
+            - containerPort: 11434
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /.ollama
+              name: data
+            - mountPath: /etc/ssl/certs/ca-certificates.crt
+              name: ca-certs
+              subPath: ca.crt
+          readinessProbe:
+            httpGet:
+              port: 5055
+              path: /
+          livenessProbe:
+            httpGet:
+              port: 5055
+              path: /
+            initialDelaySeconds: 30
+      volumes:
+        - name: ca-certs
+          configMap:
+            name: anshulg-ca
+      nodeSelector:
+        kubernetes.io/hostname: odroid-h4
