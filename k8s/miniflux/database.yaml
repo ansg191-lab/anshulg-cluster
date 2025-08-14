@@ -10,7 +10,7 @@ spec:
   source:
     chart: postgresql
     repoURL: registry-1.docker.io/bitnamicharts
-    targetRevision: 16.7.24
+    targetRevision: 16.7.26
     helm:
       values: |
         auth:
