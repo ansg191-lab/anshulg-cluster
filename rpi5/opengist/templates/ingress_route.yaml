@@ -1,0 +1,32 @@
+{{- if .Values.ingressRoute.enabled -}}
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "opengist.fullname" . }}
+spec:
+  {{- with .Values.ingressRoute.entryPoints }}
+  entryPoints:
+    {{ toYaml . | nindent 4 }}
+  {{- end }}
+  {{- $service := include "opengist.fullname" . }}
+  {{- range .Values.ingressRoute.hosts }}
+  routes:
+    - kind: Rule
+      match: Host(`{{ . }}`)
+      {{- with $.Values.ingressRoute.middlewares }}
+      middlewares:
+        {{ toYaml . | nindent 8 }}
+      {{- end }}
+      services:
+        - name: {{ $service }}-http
+          port: {{ $.Values.opengist.service.http.port }}
+  {{- end }}
+  {{- if .Values.ingressRoute.tls.enabled }}
+  tls:
+    secretName: {{ include "opengist.fullname" . }}-tls
+    domains:
+      {{- range .Values.ingressRoute.hosts }}
+      - main: {{ . }}
+      {{- end }}
+  {{- end }}
+{{- end }}

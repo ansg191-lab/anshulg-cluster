@@ -1,0 +1,16 @@
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  name: config
+  namespace: opengist
+spec:
+  encryptedData:
+    config.yml: AgClGhYqEsFUdM7EJRPnbvxRszfY7OMZ5zN4fGcIVMFlOrLCXJXtVXpQHjfHsWjnDxIRAXoQIcLQJWr//tviIIH645NPRDzViNX8Bo8B+hd3pNgzbIcfBIL+/CIGnSkrw2PUtBh4YuyYvu1ZKGyZw4h/SKqz7hzDo/wy5JLGR6pQJVgG7VYHCOXF2T896l1QlZ6gMRzHtFTM1FU8kiAU+MnKTS6HAd8fZiqTIHc7yhrDKt2qyl2uLBUXo98UPnltVHmqC0IfuJfZWjCHRZEL1mrDi2vRfcna0URRHv6ky0FDhtVJw0mG3yYmQKKUpICvw4DjOf8b4LV/CuRzU3UJgbsPI86PGweqkTsiH/UNy5BqC8FJpHRSn82wk5nKuIOLJ8s/1Bnsvzbc8JaG86wzNKcAJlpoFd6gmJXrUvjAy9U3lg/2IK3BgQYVgcukEQIOZ/vaH5yRs517GA/+r+vC53ZdMKmMdrgkdoax+ye/tcAzZUMGdKD+da8lORd4WYBA4GuGJdyxGfGa6XH+WUfC/qIHk1YYZIjIhE6cd31DwlZ4PAkZ212ZnmKnnU02PC7g0gyXn5edu7vmkQ54FPBGnQr4XRiAtAEPdsUxxUuL1ZbzdVyw2e8RJla5AJjkKn6Sb/7z+844Th2UrSCWspSCAgZUc/x5JzKoQAOikEsZQwC3JuygrhI6PSotD37wgXcRw8TzgwE1YwXrFHKj+f3q/W5/ucRMRhFKvkM23n65JYLPbYxNLfsbnqMFYBH6MhGZ2BTbagBVu6dd+1CGpkdP0gQhlUmV2gbCuvomSV1gFGIj2guL6CDq0XOqJhUA0bTUQ6nBgqKFSznY1oRO/WzeNCa11y3cNZGfL2EUrjd4v8FX5YPulhj6E7Hjfn2zKSkZ7C80HWhuesGAXSYr+r2R99DTjBIL6o2jPNlBcXgzI/0sH63PC9gESwpolGc3eewoS7FWyohlF+uSsS6K4C4S2AF8OEDEMUJzshhl/4jvpMg2oB+LJDxtlw3vhVA33ML2IA5pQ7ij8afGQ923/PXHk8Ut6HKwyC156e/n48PF10vrE2QeSbnzgwOpkOHFhgnW+RU6z5zVgpjQd+cvAsHjt3z+XQdOnpPeJhJCS7p+pgh3Kk0zIYYqgkROPFn7KAGYF8aBVqZ5uvQ+kHnqjrSJ6xnwDir4MfA=
+  template:
+    metadata:
+      creationTimestamp: null
+      name: config
+      namespace: opengist
+    type: Opaque
