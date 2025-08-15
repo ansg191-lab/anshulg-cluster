@@ -16,6 +16,7 @@ data:
         local-data: "nzbget.internal. A 192.168.1.100"
         local-data: "nzbhydra.internal. A 192.168.1.100"
         local-data: "ollama.internal. A 192.168.1.100"
+        local-data: "opengist.internal. A 192.168.1.100"
         local-data: "overleaf.internal. A 192.168.1.100"
         local-data: "overseerr.internal. A 192.168.1.100"
         local-data: "paperless.internal. A 192.168.1.100"
