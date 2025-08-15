@@ -11,7 +11,7 @@ ingressRoute:
     - opengist.internal
   middlewares:
     - name: security-headers
-      namespace: traefik
+      namespace: kube-system
   tls:
     enabled: true
     duration: 2160h0m0s
