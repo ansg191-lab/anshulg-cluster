@@ -26,3 +26,6 @@ ingressRoute:
 
 opengist:
   configExistingSecret: config
+  persistence:
+    enabled: true
+    storageClass: local-path
