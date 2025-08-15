@@ -8,7 +8,7 @@ ingressRoute:
   entryPoints:
     - websecure
   hosts:
-    - opengist.internal
+    - opengist.anshulg.direct
   middlewares:
     - name: security-headers
       namespace: kube-system
@@ -22,7 +22,7 @@ ingressRoute:
       rotationPolicy: Always
     issuerRef:
       kind: ClusterIssuer
-      name: rpi5-ca
+      name: letsencrypt-prod
 
 opengist:
   configExistingSecret: config
