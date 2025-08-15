@@ -29,3 +29,14 @@ opengist:
   persistence:
     enabled: true
     storageClass: local-path
+
+  meilisearch:
+    enabled: true
+    auth:
+      existingMasterKeySecret: meilisearch-master-key
+    persistence:
+      enabled: true
+      storageClass: local-path
+    resources:
+      requests:
+        cpu: "100m"
