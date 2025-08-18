@@ -1,0 +1,47 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: kometa
+  labels:
+    app.kubernetes.io/name: kometa
+spec:
+  schedule: "0 8 * * *"
+  timeZone: "America/Los_Angeles"
+  jobTemplate:
+    metadata:
+      labels:
+        app.kubernetes.io/name: kometa
+    spec:
+      template:
+        spec:
+          initContainers:
+            - name: copy-config
+              image: busybox:1.37.0@sha256:ab33eacc8251e3807b85bb6dba570e4698c3998eca6f0fc2ccb60575a563ea74
+              imagePullPolicy: IfNotPresent
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  cp /src-config/* /config/
+              volumeMounts:
+                - mountPath: /config
+                  name: config
+                - mountPath: /src-config
+                  name: src-config
+          containers:
+            - name: kometa
+              image: kometateam/kometa:v2.2.1@sha256:83b071e96526fc8d29a4101304a1bc0e5363cedbeec8d6b79293c9316f967d4d
+              imagePullPolicy: IfNotPresent
+              args:
+                - --run
+              volumeMounts:
+                - mountPath: /config
+                  name: config
+          restartPolicy: OnFailure
+          volumes:
+            - name: config
+              persistentVolumeClaim:
+                claimName: kometa-pvc
+            - name: src-config
+              secret:
+                secretName: kometa-config
