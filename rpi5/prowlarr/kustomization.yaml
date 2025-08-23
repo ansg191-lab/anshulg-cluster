@@ -17,8 +17,8 @@ labels:
 
 images:
   - name: busybox
-    newName: fallenbagel/jellyseerr
-    newTag: 2.7.3@sha256:4538137bc5af902dece165f2bf73776d9cf4eafb6dd714670724af8f3eb77764
+    newName: lscr.io/linuxserver/prowlarr
+    newTag: 7.16.0@sha256:af7846187a79159d546f3cb9f96a22ddb46e4114a8904756c512fd203cbeeb73
 
 configMapGenerator:
   - name: domain-config
