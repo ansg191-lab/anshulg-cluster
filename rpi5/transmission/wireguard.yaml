@@ -1,0 +1,16 @@
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  name: wireguard-config
+  namespace: transmission
+spec:
+  encryptedData:
+    wg0.conf: AgCsGRH1yoi8yvd9JJ8xukxwaXL8ZJS1q854X2VMPi0EWlnp6DKbLjoK5qsLDugY5uSCboP3hha/CSbSv4lkjmrh8mNKVHZyhGSIAX8TIYScQ8JiDXQFB4parvbCbKQn7Cqto64sOVNK+JDS6iIuYwiudovh7vwiRDVz0NCgLNexTwzuDJlVqqNMWGXkXvg3ed/klhVQ4mWvSxIhW6Kddz6yZbgHcAKd2KKNysR8i1xECyYcEoa5q5Dm3g2/5xWm8QF4uP8X+x17oEJ1CmStS2XPP32Z6VRAm6JRo38oYbjazp33QmpY9J+Uwhdwy6geYcSct7+r1LoUY2TezW/9qyhh/2LlkAFx6zZKfOPcmMYWl5I0lLOJ788SkHzf3/Ynn7wXc/8QRqRWj/UcXijZp3/yuJdObC9dXVKM6PXjDHNOf/guBJccnzM2C3aFdOgBknXhKEO+P5FA0j9zwQHJy5g11gyeB7xpqXFIhHr/rUoHW16hI3LPsA9fLEDzEa/4d75kUgJMPLsEO7Rs4+PzrbO/YGKzpkfqm8YRocthRQPbRP/0u192Dns01ZvjfX3qivW3vym7mJDWczyPRHz2OmIlvVDwNEscmLVLvWtJWkZtB7DXj0aE6aQxclaO+9y0hiEEJKafG0C5acRzw1LTws3y3+rhlFadr+JGFab7TTX9VQtXAc4vnFuZGSrTgPhTSmoBqKW6uqJOLsaNXaksvlMrVa0ex1PwKJH08jw1KjXant999hx08bXS6btrJe+4uhubCiRdQtgj7H8qXg4yH4egPfhVMvUOtQMrc8bcC3bYP0FU6CtwzzTZIbWve4yC8Cwlxa0KNYoQdBLVby8Q75+lyx5B/e5lPYbKSUGGFTz0BCdbwxp+j045x9H/R+/3fv4o7xhPrYxhOmMTskFLhDFLiP1SFkCS7e/1hORd37GFmkxY9lruihWq6DFC/O5e+0gSQvq7MfYxcORwl+OAcelRfO5FmRJ/+biAzLbvsNm+ZTgR05BNX38nG+r7Q9IW4g1yK9aw+gF2HgjBnyXO5hX87HVDdsf3umzRYmlirmamRvgXUnAKmz5FdIeMsGz1gxrBoImVTQfmBxqytpNC/NmQvp6HlmriP82npZHUAUj48CXL5rFpbUGRu00niPE9jct24mISpow05voasXwo5ATltX2zVVdWAZjiYd3ZFbN5G7Lvmz42gdh4tA==
+  template:
+    metadata:
+      creationTimestamp: null
+      name: wireguard-config
+      namespace: transmission
+    type: Opaque

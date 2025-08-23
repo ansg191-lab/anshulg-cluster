@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: transmission
+  labels:
+    app: transmission
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: transmission
+  serviceName: transmission
+  template:
+    metadata:
+      name: transmission
+      labels:
+        app: transmission
+    spec:
+      initContainers:
+        - name: copy-config
+          image: busybox:1.37.0@sha256:ab33eacc8251e3807b85bb6dba570e4698c3998eca6f0fc2ccb60575a563ea74
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+            - -c
+            - |
+              cp /secret/* /config
+          volumeMounts:
+            - mountPath: /secret
+              name: wg-config-src
+            - mountPath: /config
+              name: wg-config
+      containers:
+        - name: transmission
+          image: lscr.io/linuxserver/transmission:4.0.6@sha256:50f9c0c60d932e56214b1d0538d757265c2b03dc7b0c683f7564e366f70a339a
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+            - -c
+            - |
+              sleep 10 && exec /init
+          env:
+            - name: PUID
+              value: "0"
+            - name: PGID
+              value: "0"
+            - name: TZ
+              value: America/Los_Angeles
+            - name: DOCKER_MODS
+              value: "jordanpotter/docker-mods:transmission-nat-pmp"
+          ports:
+            - containerPort: 9091
+              protocol: TCP
+              name: http
+          volumeMounts:
+            - mountPath: /config
+              name: config
+            - mountPath: /data
+              name: data
+        - name: wireguard
+          image: lscr.io/linuxserver/wireguard:1.0.20250521@sha256:ae0a555aa5cebfc9d510c8a7b439e210db2556e36757d10f2989b850a5e63b81
+          imagePullPolicy: Always
+          env:
+            - name: PUID
+              value: "0"
+            - name: PGID
+              value: "0"
+            - name: TZ
+              value: "America/Los_Angeles"
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
+                - SYS_MODULE
+            privileged: true
+          volumeMounts:
+            - mountPath: /config/wg_confs
+              name: wg-config
+      restartPolicy: Always
+      volumes:
+        - name: data
+          hostPath:
+            path: /data
+            type: Directory
+        - name: wg-config-src
+          secret:
+            secretName: wireguard-config
+        - name: wg-config
+          emptyDir: {}
+      nodeSelector:
+        kubernetes.io/hostname: odroid-h4
+  volumeClaimTemplates:
+    - metadata:
+        name: config
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
