@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: empty
+spec:
+  template:
+    spec:
+      containers:
+        - name: app
+          envFrom:
+            - configMapRef:
+                name: env-config
+          volumeMounts:
+            - mountPath: /config
+              name: data
+          readinessProbe:
+            httpGet:
+              port: 9696
+              path: /api/v1/health
+          livenessProbe:
+            httpGet:
+              port: 9696
+              path: /api/v1/health
+            initialDelaySeconds: 30

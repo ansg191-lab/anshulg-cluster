@@ -1,0 +1,43 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../kustomize/base
+  - ../../kustomize/workloads/statefulset
+
+components:
+  - ../../kustomize/components/ingress
+  - ../../kustomize/components/tailscale
+
+namePrefix: prowlarr-
+labels:
+  - pairs:
+      app.kubernetes.io/name: prowlarr
+    includeSelectors: true
+
+images:
+  - name: busybox
+    newName: fallenbagel/jellyseerr
+    newTag: 2.7.3@sha256:4538137bc5af902dece165f2bf73776d9cf4eafb6dd714670724af8f3eb77764
+
+configMapGenerator:
+  - name: domain-config
+    literals:
+      - DOMAIN=prowlarr.internal
+      - TS_HOST=prowlarr
+  - name: env-config
+    literals:
+      - TZ=America/Los_Angeles
+      - PUID=1000
+      - PGID=1000
+
+patches:
+  - target:
+      kind: StatefulSet
+    path: patch-statefulset.yaml
+  - target:
+      kind: StatefulSet
+    path: patch-statefulset2.yaml
+  - target:
+      kind: Service
+    path: patch-service.yaml
