@@ -69,6 +69,15 @@ spec:
           volumeMounts:
             - mountPath: /config/wg_confs
               name: wg-config
+        - name: natpmp
+          image: debian:13.0@sha256:6d87375016340817ac2391e670971725a9981cfc24e221c47734681ed0f6c0f5
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+            - -c
+            - |
+              apt-get update && apt-get install -y natpmpc && \
+              while true ; do ping -c1 1.1.1.1; sleep 1; done
       restartPolicy: Always
       volumes:
         - name: data
