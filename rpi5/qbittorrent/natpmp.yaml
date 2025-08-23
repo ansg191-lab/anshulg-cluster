@@ -31,10 +31,10 @@ data:
         date
 
         natpmpc -a 1 0 udp 60 -g 10.2.0.1
-        PORT=$(natpmpc -a 1 0 tcp 60 -g 10.2.0.1 | grep "public port" | awk '{print $4}')
+        PORT=$(natpmpc -a 1 0 tcp 60 -g 10.2.0.1 | tee /dev/tty | grep "public port" | awk '{print $4}')
 
-        echo "NAT-PMP mapping renewed."
-        echo "Updating qbittorrent port..."
+        echo "NAT-PMP mapping $PORT renewed."
+        echo "Updating qbittorrent port to $PORT..."
 
         curl -i -X POST -d 'json={"listen_port": $PORT}' http://localhost:8080/api/v2/app/setPreferences
 
