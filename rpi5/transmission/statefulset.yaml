@@ -32,7 +32,7 @@ spec:
               name: wg-config
       containers:
         - name: transmission
-          image: lscr.io/linuxserver/transmission:4.0.6@sha256:50f9c0c60d932e56214b1d0538d757265c2b03dc7b0c683f7564e366f70a339a
+          image: lscr.io/linuxserver/transmission:2021.11.18@sha256:9944fcda726c9749914b06268e5435c5ba057191fde0052013c8f84c303763a4
           imagePullPolicy: IfNotPresent
           command:
             - /bin/sh
