@@ -16,6 +16,32 @@ spec:
       labels:
         app: lazylibrarian
     spec:
+      initContainers:
+        - name: make-overlay
+          image: busybox:1.37.0
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: rodata
+              mountPath: /ro
+              readOnly: true
+              mountPropagation: HostToContainer
+            - name: cow
+              mountPath: /cow
+              mountPropagation: Bidirectional
+            - name: merged
+              mountPath: /merged
+              mountPropagation: Bidirectional
+          command:
+            - sh
+            - -euxc
+            - |
+              mkdir -p /cow/upper /cow/work
+              # Create the overlay mount with /ro as the lower (read-only) layer
+              mount -t overlay overlay \
+                -o lowerdir=/ro,upperdir=/cow/upper,workdir=/cow/work \
+                /merged
       containers:
         - name: lazylibrarian
           image: lscr.io/linuxserver/lazylibrarian:116a5342-ls185@sha256:d43f7d9183cc564516d4d789fac0c9bb22dfade8e01032f2e470fdcb05ad3bcc
@@ -37,34 +63,22 @@ spec:
               name: config
             - mountPath: /data
               name: data
-          #resources:
-          #  requests:
-          #    cpu: 250m
-          #    memory: 500Mi
-          #  limits:
-          #    memory: 1Gi
-          #livenessProbe:
-          #  httpGet:
-          #    port: 7878
-          #    path: /ping
-          #  initialDelaySeconds: 30
-          #  periodSeconds: 30
-          #  timeoutSeconds: 5
-          #  failureThreshold: 3
-          #readinessProbe:
-          #  httpGet:
-          #    port: 7878
-          #    path: /ping
-          #  periodSeconds: 10
-          #  timeoutSeconds: 5
-          #  failureThreshold: 3
+            - mountPath: /downloads
+              name: merged
+              readOnly: false
+              mountPropagation: HostToContainer
       restartPolicy: Always
       volumes:
         - name: data
-          nfs:
+          hostPath:
             path: /data
-            server: 192.168.1.52
-            readOnly: false
+        - name: rodata
+          hostPath:
+            path: /data/seedbox/books
+        - name: cow
+          emptyDir: { }
+        - name: merged
+          emptyDir: { }
   volumeClaimTemplates:
     - metadata:
         name: config
