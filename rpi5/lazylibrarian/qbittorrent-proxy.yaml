@@ -87,6 +87,15 @@ spec:
                 < /etc/nginx/templates/default.conf.template \
                 > /etc/nginx/conf.d/default.conf
               nginx -g 'daemon off;'
+          readinessProbe:
+            httpGet:
+              port: 80
+              path: /api/v2/app/version
+          livenessProbe:
+            httpGet:
+              port: 80
+              path: /healthz
+            initialDelaySeconds: 30
       volumes:
         - name: nginx-templates
           configMap:
