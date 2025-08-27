@@ -1,0 +1,106 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-proxy-template
+data:
+  default.conf.template: |
+    server {
+      listen 80 default_server;
+      server_name _;
+
+      # Health check
+      location = /healthz {
+        return 200 'ok';
+        add_header Content-Type text/plain;
+      }
+
+      # Proxy everything else to upstream path
+      location / {
+        # Inject Basic Auth header
+        proxy_set_header Authorization "Basic ${BASIC_B64}";
+
+        # Ensure upstream sees correct host + SNI
+        proxy_set_header Host ${UPSTREAM_HOST};
+        proxy_ssl_server_name on;
+        proxy_ssl_name ${UPSTREAM_HOST};
+
+        # Sensible proxy defaults
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-Port $server_port;
+        proxy_buffering off;
+        proxy_redirect off;
+
+        # Send to exact upstream path
+        proxy_pass https://${UPSTREAM_HOST}${UPSTREAM_PATH};
+      }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qb-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qb-proxy
+  template:
+    metadata:
+      labels:
+        app: qb-proxy
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.29.1
+          ports:
+            - containerPort: 80
+          env:
+            - name: UPSTREAM_HOST
+              value: "56.lw.itsby.design"
+            - name: UPSTREAM_PATH
+              value: "/qbittorrent/"
+            - name: BASIC_USER
+              valueFrom:
+                secretKeyRef:
+                  name: qbt-secret
+                  key: BASIC_USER
+            - name: BASIC_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: qbt-secret
+                  key: BASIC_PASS
+          volumeMounts:
+            - name: nginx-templates
+              mountPath: /etc/nginx/templates
+          # Build the Basic header and render the template, then start nginx
+          command: ["/bin/sh","-c"]
+          args:
+            - |
+              set -eu
+              BASIC_B64="$(printf "%s:%s" "$BASIC_USER" "$BASIC_PASS" | base64 -w0)"
+              export BASIC_B64
+              envsubst '$$UPSTREAM_HOST $$UPSTREAM_PATH $$BASIC_B64' \
+                < /etc/nginx/templates/default.conf.template \
+                > /etc/nginx/conf.d/default.conf
+              nginx -g 'daemon off;'
+      volumes:
+        - name: nginx-templates
+          configMap:
+            name: nginx-proxy-template
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qb-proxy
+spec:
+  selector:
+    app: qb-proxy
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+  type: ClusterIP
