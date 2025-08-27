@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: lazylibrarian
-          image: lscr.io/linuxserver/lazylibrarian:c8ad32b8-ls68@sha256:f2b2bb32ffafd092c42f5a1d4bc51984b2f16426f1a9c73025119531a626488d
+          image: lscr.io/linuxserver/lazylibrarian:116a5342-ls185@sha256:d43f7d9183cc564516d4d789fac0c9bb22dfade8e01032f2e470fdcb05ad3bcc
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID
