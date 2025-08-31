@@ -32,7 +32,7 @@ spec:
               name: wg-config
       containers:
         - name: qbittorrent
-          image: lscr.io/linuxserver/qbittorrent:5.1.2@sha256:d464a92d5656f1fa66baafe610a06a6cafd4bdf900a245e6f20b220f281b456d
+          image: lscr.io/linuxserver/qbittorrent:20.04.1@sha256:fc98c8af048936d0070dc5e5992feab08664f8a61a860d91be02f782f8721485
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID
