@@ -7,7 +7,7 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`audiobookshelf.internal`)
+      match: Host(`audiobookshelf.internal`) || Host(`abs.internal`)
       middlewares:
         - name: security-headers
           namespace: kube-system
@@ -18,3 +18,5 @@ spec:
     secretName: audiobookshelf-cert-tls
     domains:
       - main: audiobookshelf.internal
+        sans:
+          - abs.internal

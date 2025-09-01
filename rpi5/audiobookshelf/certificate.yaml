@@ -7,6 +7,7 @@ spec:
   commonName: audiobookshelf.internal
   dnsNames:
     - audiobookshelf.internal
+    - abs.internal
   duration: 2160h0m0s
   renewBefore: 720h0m0s
   privateKey:
