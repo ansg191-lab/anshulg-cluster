@@ -24,7 +24,7 @@ spec:
             - name: TZ
               value: America/Los_Angeles
           ports:
-            - containerPort: 13378
+            - containerPort: 80
               protocol: TCP
               name: http
           volumeMounts:
