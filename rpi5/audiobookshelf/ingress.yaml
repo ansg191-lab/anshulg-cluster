@@ -1,0 +1,20 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: audiobookshelf
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`audiobookshelf.internal`)
+      middlewares:
+        - name: security-headers
+          namespace: kube-system
+      services:
+        - name: audiobookshelf
+          port: 80
+  tls:
+    secretName: audiobookshelf-cert-tls
+    domains:
+      - main: audiobookshelf.internal
