@@ -16,32 +16,6 @@ spec:
       labels:
         app: lazylibrarian
     spec:
-      initContainers:
-        - name: make-overlay
-          image: busybox:1.37.0
-          imagePullPolicy: IfNotPresent
-          securityContext:
-            privileged: true
-          volumeMounts:
-            - name: rodata
-              mountPath: /ro
-              readOnly: true
-              mountPropagation: HostToContainer
-            - name: cow
-              mountPath: /cow
-              mountPropagation: Bidirectional
-            - name: merged
-              mountPath: /merged
-              mountPropagation: Bidirectional
-          command:
-            - sh
-            - -euxc
-            - |
-              mkdir -p /cow/upper /cow/work
-              # Create the overlay mount with /ro as the lower (read-only) layer
-              mount -t overlay overlay \
-                -o lowerdir=/ro,upperdir=/cow/upper,workdir=/cow/work \
-                /merged
       containers:
         - name: lazylibrarian
           image: lscr.io/linuxserver/lazylibrarian:116a5342-ls185@sha256:d43f7d9183cc564516d4d789fac0c9bb22dfade8e01032f2e470fdcb05ad3bcc
@@ -65,8 +39,37 @@ spec:
               name: data
             - mountPath: /downloads
               name: merged
-              readOnly: false
               mountPropagation: HostToContainer
+        - name: make-overlay
+          image: busybox:1.37.0
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            privileged: true
+          command:
+            - sh
+            - -euxc
+            - |
+              mkdir -p /cow/upper /cow/work
+              mount -t overlay overlay \
+                -o lowerdir=/ro,upperdir=/cow/upper,workdir=/cow/work,metacopy=off,index=off,userxattr \
+                /merged
+              tail -f /dev/null
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - umount
+                  - /merged
+          volumeMounts:
+            - mountPath: /ro
+              name: rodata
+              readOnly: true
+            - mountPath: /cow
+              name: overlay
+            - mountPath: /merged
+              name: merged
+              readOnly: false
+              mountPropagation: Bidirectional
       restartPolicy: Always
       volumes:
         - name: data
@@ -75,10 +78,10 @@ spec:
         - name: rodata
           hostPath:
             path: /seedbox/books
-        - name: cow
-          emptyDir: { }
+        - name: overlay
+          emptyDir: {}
         - name: merged
-          emptyDir: { }
+          emptyDir: {}
   volumeClaimTemplates:
     - metadata:
         name: config
