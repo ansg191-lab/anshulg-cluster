@@ -74,7 +74,7 @@ spec:
             path: /data
         - name: rodata
           hostPath:
-            path: /data/seedbox/books
+            path: /seedbox/books
         - name: cow
           emptyDir: { }
         - name: merged
