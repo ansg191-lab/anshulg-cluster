@@ -1,0 +1,16 @@
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  name: rclone-config
+  namespace: lazylibrarian
+spec:
+  encryptedData:
+    rclone.conf: AgClkXf3ZzWdOwqNU7YsSF+mUU7C0riotEiGQbfKMcvakRRx20amuEC1jFWkynOI76T0Ct37hoK8/2Djw/kF2HZ8uDlG0/CzCN092rGDOORm8GMxuhdPrSI/3KwwOmO54umXneSC4TeejmMEgXHAWqlFI0guFEi08kQrg2O5pwOLxzFD4o7CrL6YXr18g25YWSwalOoAsaoRBJmfsYXWpEvT3O8PC59v0xC93e+luczZH3OR5TBsWnffOxnTzp9YMWrX+DkPPLgb55db1/PAZwBacd+8d0ZGIza1/ELyIm+NnHCdWYKpF32uJqzy5emKy4vMNyg4pKORySl0UDz746cJN0kuDJ7RIvtPOfaO8hItPF1rwQxUH6BpkQu/C0/e3vOoQ5Z+0bO4nh9Y9AoP5bWnD5zYJuwJBrUv8YCRDEyh6kaBhvofphthd75EGq2go+GM8hLH9ylfslUNv9lu+rzJ1mw5EsssXCOnJDjy7D6nKmlGPeB8iFyH/m0wVj61ZVN3dWwgayfTji4AzsGOBfZBxYC59yHRnqEsZiRhQ86EDGqrpNf4e2+BroX/+fDdGoCQqp1junWRaqOdFaeP6HMZVQgQsFhWJCbDzy7Ep4uMpqpYqTgGhMzljtfp71w3wTVNz0HrMAkUULUyc+50m9WzmGl38wu1wD7HDaByt5D8yjq2OOU3DUCxI2F2OuzK3/NL+n4XeRyXVBDDL374ci8+t5v3scEqCdHNEO8qR4evAvr65ynADIzt3RsmOaLOHdb5phX2IBNrZk75KV0dd7HSxt9qVy+ryr0/KiJWMSuLh6AYc7zxU0gdOE2/y39/5XeY282BWNn4rtVq80gfl5zQ21363onsmCrJF1dDsnincvdpJXvGwN70fvSEzyZx7w/LHgV61WaQHCulZw+AICwty+COGrPYqZI12G9rVw==
+  template:
+    metadata:
+      creationTimestamp: null
+      name: rclone-config
+      namespace: lazylibrarian
+    type: Opaque
