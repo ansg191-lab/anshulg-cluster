@@ -34,7 +34,7 @@ data:
       # default: parallel_best
       strategy: parallel_best
       # optional: timeout to query the upstream resolver. Default: 2s
-      timeout: 15s
+      timeout: 60s
       # optional: HTTP User Agent when connecting to upstreams. Default: none
     #  userAgent: "custom UA"
 
@@ -170,7 +170,7 @@ data:
       # If > 0, use this value, if TTL is greater
       # Default: 0
       # Disable due to: https://github.com/0xERR0R/blocky/issues/1741
-      maxTime: -1
+      maxTime: 0
       # Max number of cache entries (responses) to be kept in cache (soft limit). Useful on systems with limited amount of RAM.
       # Default (0): unlimited
       maxItemsCount: 0
