@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: calibre
+  name: calibre-web
   labels:
-    app: calibre
+    app: calibre-web
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: calibre
-  serviceName: calibre
+      app: calibre-web
+  serviceName: calibre-web
   template:
     metadata:
-      name: calibre
+      name: calibre-web
       labels:
-        app: calibre
+        app: calibre-web
     spec:
       containers:
-        - name: calibre
+        - name: calibre-web
           image: linuxserver/calibre-web:0.6.25@sha256:a833d4cf90333f167871fe6ab1f034c7be7bc3d2061a1563fdb6a8fa27af346e
           imagePullPolicy: IfNotPresent
           env:
@@ -54,7 +54,7 @@ spec:
       volumes:
         - name: books
           hostPath:
-            path: /data/Books
+            path: "/data/Calibre Library"
         - name: ca
           configMap:
             name: anshulg-ca

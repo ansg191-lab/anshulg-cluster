@@ -1,0 +1,22 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: calibre-web
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`web.calibre.local`) || Host(`web.calibre.internal`)
+      middlewares:
+        - name: security-headers
+          namespace: kube-system
+      services:
+        - name: calibre-web
+          port: 80
+  tls:
+    secretName: calibre-web-cert-tls
+    domains:
+      - main: web.calibre.local
+        sans:
+          - web.calibre.internal

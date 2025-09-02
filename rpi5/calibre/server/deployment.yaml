@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: calibre
+  labels:
+    app: calibre
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: calibre
+  template:
+    metadata:
+      name: calibre
+      labels:
+        app: calibre
+    spec:
+      containers:
+        - name: calibre
+          image: linuxserver/calibre:8.9.0@sha256:8c69e63e5c62fe3360042c663bd77c93df594f4801438882604511908949b7fe
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PUID
+              value: "0"
+            - name: PGID
+              value: "0"
+            - name: TZ
+              value: "America/Los_Angeles"
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+              name: http
+          volumeMounts:
+            - mountPath: /config
+              name: data
+      restartPolicy: Always
+      volumes:
+        - name: data
+          hostPath:
+            path: /data
