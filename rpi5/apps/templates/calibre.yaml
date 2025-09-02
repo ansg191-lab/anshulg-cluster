@@ -3,6 +3,7 @@ kind: Namespace
 metadata:
   name: calibre
   labels:
+    anshulg.com/access-mail: "true"
     anshulg.com/ca: "true"
 ---
 apiVersion: argoproj.io/v1alpha1
