@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: calibre
+  labels:
+    app: calibre
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: calibre
+  serviceName: calibre
+  template:
+    metadata:
+      name: calibre
+      labels:
+        app: calibre
+    spec:
+      containers:
+        - name: calibre
+          image: linuxserver/calibre-web:0.6.25@sha256:a833d4cf90333f167871fe6ab1f034c7be7bc3d2061a1563fdb6a8fa27af346e
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PUID
+              value: "0"
+            - name: PGID
+              value: "0"
+            - name: TZ
+              value: "America/Los_Angeles"
+            - name: DOCKER_MODS
+              value: "linuxserver/mods:universal-calibre"
+          ports:
+            - containerPort: 8083
+              protocol: TCP
+              name: http
+          volumeMounts:
+            - mountPath: /config
+              name: data
+            - mountPath: /books
+              name: books
+          readinessProbe:
+            httpGet:
+              port: 8083
+              path: /
+            initialDelaySeconds: 30
+          livenessProbe:
+            tcpSocket:
+              port: 8083
+            initialDelaySeconds: 60
+      restartPolicy: Always
+      volumes:
+        - name: books
+          hostPath:
+            path: /data/Books
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
