@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: calibre-web
-          image: linuxserver/calibre-web:0.6.25@sha256:a833d4cf90333f167871fe6ab1f034c7be7bc3d2061a1563fdb6a8fa27af346e
+          image: crocodilestick/calibre-web-automated:V3.1.4@sha256:577e846f104fd21453ef306eefb4a95dd95b3b9ddd2463a150944494284da0fd
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID
@@ -27,8 +27,11 @@ spec:
               value: "0"
             - name: TZ
               value: "America/Los_Angeles"
-            - name: DOCKER_MODS
-              value: "linuxserver/mods:universal-calibre"
+            - name: NETWORK_SHARE_MODE
+              value: "true"
+          envFrom:
+            - secretRef:
+                name: web-env
           ports:
             - containerPort: 8083
               protocol: TCP
@@ -36,7 +39,7 @@ spec:
           volumeMounts:
             - mountPath: /config
               name: data
-            - mountPath: /books
+            - mountPath: /calibre-library
               name: books
             - mountPath: /etc/ssl/certs/ca-certificates.crt
               name: ca
