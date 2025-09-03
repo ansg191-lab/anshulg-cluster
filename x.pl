@@ -665,7 +665,7 @@ sub seal_file {
     print "Sealing $file into $sealed_file\n";
 
     # Call kubeseal to seal the secret, die if the command fails
-    my $wide_flag = $ns_wide ? '--scope namespace-wide' : '';
+    my $wide_flag = $ns_wide ? '--scope namespace-wide' : q{};
     system(
 "kubeseal --controller-name=\"$controller\" --controller-namespace=\"$namespace\" $wide_flag -f $file -w $sealed_file"
       ) == 0
@@ -778,7 +778,7 @@ sub command_deploy {
     # Run the deploy script
     {
         my $dir = pushd("$server-server");
-        system("./deploy.sh") == 0
+        system('./deploy.sh') == 0
           or die "Failed to run deploy script: $OS_ERROR\n";
     }
 
