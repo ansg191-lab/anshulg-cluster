@@ -34,27 +34,20 @@ spec:
               name: metadata
             - name: audiobooks
               mountPath: /audiobooks
-          #resources:
-          #  requests:
-          #    cpu: 250m
-          #    memory: 500Mi
-          #  limits:
-          #    memory: 1Gi
-          #livenessProbe:
-          #  httpGet:
-          #    port: http
-          #    path: /ping
-          #  initialDelaySeconds: 30
-          #  periodSeconds: 30
-          #  timeoutSeconds: 5
-          #  failureThreshold: 3
-          #readinessProbe:
-          #  httpGet:
-          #    port: http
-          #    path: /ping
-          #  periodSeconds: 10
-          #  timeoutSeconds: 5
-          #  failureThreshold: 3
+          resources:
+            requests:
+              cpu: 100m
+              memory: 500Mi
+            limits:
+              memory: 4Gi
+          readinessProbe:
+            httpGet:
+              port: http
+              path: /
+          livenessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 10
       restartPolicy: Always
       volumes:
         - name: audiobooks
