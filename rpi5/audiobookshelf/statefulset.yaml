@@ -49,6 +49,13 @@ spec:
             tcpSocket:
               port: http
             initialDelaySeconds: 10
+          securityContext:
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            allowPrivilegeEscalation: false
       restartPolicy: Always
       volumes:
         - name: audiobooks
