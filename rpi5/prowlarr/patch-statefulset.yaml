@@ -13,12 +13,11 @@ spec:
           volumeMounts:
             - mountPath: /config
               name: data
-#          readinessProbe:
-#            httpGet:
-#              port: 9696
-#              path: /api/v1/health
-#          livenessProbe:
-#            httpGet:
-#              port: 9696
-#              path: /api/v1/health
-#            initialDelaySeconds: 30
+          readinessProbe:
+            httpGet:
+              port: 9696
+              path: /
+          livenessProbe:
+            tcpSocket:
+              port: 9696
+            initialDelaySeconds: 15
