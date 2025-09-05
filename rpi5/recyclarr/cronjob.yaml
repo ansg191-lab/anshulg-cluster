@@ -42,7 +42,8 @@ spec:
                 readOnlyRootFilesystem: true
           volumes:
             - name: tmp
-              emptyDir: {}
+              emptyDir:
+                medium: Memory
             - name: config
               configMap:
                 name: recyclarr-config
