@@ -64,8 +64,6 @@ spec:
         - name: data
           hostPath:
             path: /data
-        - name: downloads
-          emptyDir: {}
         - name: rclone-config
           secret:
             secretName: rclone-config
@@ -77,3 +75,10 @@ spec:
         resources:
           requests:
             storage: 1Gi
+    - metadata:
+        name: downloads
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 10Gi
