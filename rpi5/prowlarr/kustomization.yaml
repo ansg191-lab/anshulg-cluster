@@ -7,7 +7,6 @@ resources:
 
 components:
   - ../../kustomize/components/ingress
-  - ../../kustomize/components/security-context
   - ../../kustomize/components/tailscale
 
 namePrefix: prowlarr-
@@ -29,6 +28,8 @@ configMapGenerator:
   - name: env-config
     literals:
       - TZ=America/Los_Angeles
+      - PUID=1000
+      - PGID=1000
 
 patches:
   - target:
