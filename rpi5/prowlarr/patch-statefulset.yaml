@@ -13,6 +13,8 @@ spec:
           volumeMounts:
             - mountPath: /config
               name: data
+            - mountPath: /run
+              name: run
           readinessProbe:
             httpGet:
               port: 9696
@@ -21,3 +23,11 @@ spec:
             tcpSocket:
               port: 9696
             initialDelaySeconds: 15
+      volumes:
+        - name: run
+          emptyDir:
+            medium: Memory
+      securityContext:
+        fsGroup: 911
+        runAsGroup: 911
+        runAsUser: 911
