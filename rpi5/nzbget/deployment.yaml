@@ -25,9 +25,9 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID
-              value: "0"
+              value: "2007"
             - name: PGID
-              value: "0"
+              value: "3002"
             - name: TZ
               value: "America/Los_Angeles"
           ports:
@@ -54,6 +54,13 @@ spec:
               name: config
             - mountPath: /cfg-secret
               name: cfg-secret
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 2007
+            runAsGroup: 3002
+            readOnlyRootFilesystem: true
+      securityContext:
+        fsGroup: 3002
       restartPolicy: Always
       volumes:
         - name: cfg-secret
