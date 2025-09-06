@@ -22,9 +22,9 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID
-              value: "0"
+              value: "2004"
             - name: PGID
-              value: "0"
+              value: "3002"
             - name: TZ
               value: "America/Los_Angeles"
             - name: NETWORK_SHARE_MODE
@@ -54,6 +54,8 @@ spec:
               port: 8083
             initialDelaySeconds: 60
       restartPolicy: Always
+      securityContext:
+        fsGroup: 3002
       volumes:
         - name: books
           hostPath:
