@@ -18,6 +18,7 @@ spec:
       labels:
         app: sonarr
     spec:
+      hostUsers: false
       initContainers:
         - name: backup-sidecar
           image: ghcr.io/ansg191/containers/arr-backup:main@sha256:f7b7e5a4be5b7e2520629d00701beba89437487c9d1e1e08632af404fb190c18
