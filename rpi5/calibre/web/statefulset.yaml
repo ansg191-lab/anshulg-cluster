@@ -48,7 +48,6 @@ spec:
             httpGet:
               port: 8083
               path: /
-            initialDelaySeconds: 30
           livenessProbe:
             tcpSocket:
               port: 8083
