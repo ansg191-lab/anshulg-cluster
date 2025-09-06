@@ -21,9 +21,9 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID
-              value: "0"
+              value: "2005"
             - name: PGID
-              value: "0"
+              value: "3002"
             - name: TZ
               value: "America/Los_Angeles"
           ports:
