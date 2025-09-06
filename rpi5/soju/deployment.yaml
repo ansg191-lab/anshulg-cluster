@@ -24,6 +24,8 @@ spec:
               protocol: TCP
           env: []
           volumeMounts:
+            - mountPath: /run
+              name: run
             - mountPath: /soju-config
               name: config
               subPath: soju-config
@@ -40,13 +42,33 @@ spec:
             limits:
               memory: 256Mi
           livenessProbe:
-            tcpSocket:
-              port: 6697
+            exec:
+              command:
+                - sojuctl
+                - help
           readinessProbe:
             tcpSocket:
               port: 6697
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+      hostUsers: false
       restartPolicy: Always
       volumes:
+        - name: run
+          emptyDir:
+            medium: Memory
         - name: config
           secret:
             secretName: soju-secrets
