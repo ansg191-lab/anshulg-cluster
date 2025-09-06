@@ -63,7 +63,7 @@ spec:
       securityContext:
         fsGroup: 3002
         runAsGroup: 3002
-        runAsUser: 10001
+        runAsUser: 2001
         runAsNonRoot: true
   volumeClaimTemplates:
     - metadata:
