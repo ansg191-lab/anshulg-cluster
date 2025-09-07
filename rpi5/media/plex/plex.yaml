@@ -23,9 +23,9 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID
-              value: "0"
+              value: "2010"
             - name: PGID
-              value: "0"
+              value: "3002"
             - name: TZ
               value: "America/Los_Angeles"
             - name: VERSION
@@ -60,6 +60,8 @@ spec:
             failureThreshold: 3
           securityContext:
             privileged: true
+      securityContext:
+        fsGroup: 3002
       restartPolicy: Always
       volumes:
         - name: data
