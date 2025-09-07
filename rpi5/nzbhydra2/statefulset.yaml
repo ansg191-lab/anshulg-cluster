@@ -28,9 +28,9 @@ spec:
               mountPath: /downloads
           env:
             - name: PUID
-              value: "1000"
+              value: "10001"
             - name: PGID
-              value: "1000"
+              value: "10001"
             - name: TZ
               value: "America/Los_Angeles"
   volumeClaimTemplates:
