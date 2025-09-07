@@ -26,6 +26,5 @@ spec:
     countries:
       - US
   issuerRef:
-    group: cas-issuer.jetstack.io
-    kind: GoogleCASClusterIssuer
-    name: anshulg-ca
+    kind: ClusterIssuer
+    name: rpi5-ca
