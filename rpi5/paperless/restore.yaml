@@ -12,7 +12,7 @@ spec:
           imagePullPolicy: IfNotPresent
           command:
             - sh
-            - -c
+            - -euxc
             - >-
               python3 manage.py migrate &&
               rm -rf /usr/src/paperless/media/* &&

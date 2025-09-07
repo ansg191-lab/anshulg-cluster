@@ -15,7 +15,7 @@ spec:
               imagePullPolicy: IfNotPresent
               command:
                 - sh
-                - -c
+                - -euxc
                 - |
                   pg_dump -p 5432 teslamate > /backup/backup.sql
               env:

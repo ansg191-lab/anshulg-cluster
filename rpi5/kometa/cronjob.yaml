@@ -21,7 +21,7 @@ spec:
               imagePullPolicy: IfNotPresent
               command:
                 - /bin/sh
-                - -c
+                - -euxc
                 - |
                   cp /src-config/* /config/
               volumeMounts:
