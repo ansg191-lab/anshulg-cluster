@@ -28,9 +28,9 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID
-              value: "0"
+              value: "2009"
             - name: PGID
-              value: "0"
+              value: "3002"
             - name: TZ
               value: "America/Los_Angeles"
             - name: WEBUI_DISABLE_AUTH
@@ -65,6 +65,8 @@ spec:
             timeoutSeconds: 5
             failureThreshold: 3
       restartPolicy: Always
+      securityContext:
+        fsGroup: 3002
       volumes:
         - name: data
           hostPath:
