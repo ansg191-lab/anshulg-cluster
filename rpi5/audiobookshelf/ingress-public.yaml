@@ -1,0 +1,48 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: audiobookshelf-public-cert
+spec:
+  secretName: audiobookshelf-public-cert-tls
+  commonName: audiobookshelf.anshulg.direct
+  dnsNames:
+    - audiobookshelf.anshulg.direct
+    - abs.anshulg.direct
+  duration: 2160h0m0s
+  renewBefore: 720h0m0s
+  privateKey:
+    algorithm: ECDSA
+    size: 384
+    rotationPolicy: Always
+  subject:
+    organizations:
+      - Anshul Gupta
+    organizationalUnits:
+      - rpi5
+    provinces:
+      - California
+    countries:
+      - US
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt-prod
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: paperless-public
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`audiobookshelf.anshulg.direct`) || Host(`abs.anshulg.direct`)
+      services:
+        - name: audiobookshelf
+          port: 80
+  tls:
+    secretName: audiobookshelf-public-cert-tls
+    domains:
+      - main: audiobookshelf.anshulg.direct
+        sans:
+          - abs.anshulg.direct
