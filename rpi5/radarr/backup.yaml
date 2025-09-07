@@ -1,0 +1,108 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: radarr-backup
+spec:
+  schedule: "13 22 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          initContainers:
+            - name: radarr-backup
+              image: ghcr.io/ansg191-lab/arr-backup:0.1.8@sha256:4252f217d584f3c1038b8990df7263b3bf1dedbf5c559827924cf39e3b626982
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: ARR_URL
+                  value: "http://radarr"
+                - name: ARR_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      key: api-key
+                      name: backup-secrets
+                - name: ARR_CONFIG_DIR
+                  value: /config
+                - name: ARR_DEST_DIR
+                  value: /backup
+                - name: RUST_LOG
+                  value: "info"
+              volumeMounts:
+                - mountPath: /config
+                  name: config
+                  readOnly: true
+                - mountPath: /backup
+                  name: backup
+          containers:
+            - name: restic
+              image: creativeprojects/resticprofile:0.31.0@sha256:7aa9467ba73f44e1306b6143fa91af65d3652a964c1b44a83920d2e1336a0944
+              imagePullPolicy: IfNotPresent
+              command: [ "resticprofile", "backup" ]
+              env:
+                - name: RESTIC_REST_USERNAME
+                  value: "radarr-restic"
+                - name: RESTIC_REST_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: restic-password
+                      name: backup-secrets
+              volumeMounts:
+                - mountPath: /resticprofile/profiles.yaml
+                  name: profile
+                  subPath: profiles.yaml
+                - mountPath: /resticprofile/radarr.txt
+                  name: backup-secrets
+                  subPath: radarr.txt
+                - mountPath: /backup
+                  name: backup
+          restartPolicy: OnFailure
+          volumes:
+            - name: config
+              persistentVolumeClaim:
+                claimName: config-radarr-0
+                readOnly: true
+            - name: backup
+              emptyDir: { }
+            - name: profile
+              configMap:
+                name: restic-profile
+            - name: backup-secrets
+              secret:
+                secretName: backup-secrets
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: restic-profile
+data:
+  profiles.yaml: |
+    version: "1"
+
+    global:
+      restic-lock-retry-after: "1m"
+      restic-stale-lock-age: "4h"
+
+    default:
+      repository: "rest:https://restic.anshulg.com/radarr-restic/"
+      initialize: true
+      password-file: "/resticprofile/radarr.txt"
+      compression: "max"
+      force-inactive-lock: true
+
+      env:
+        RESTIC_HOST: "radarr"
+
+      retention:
+        before-backup: false
+        after-backup: true
+        keep-daily: 7
+        keep-weekly: 4
+        keep-monthly: 12
+        keep-yearly: 1
+        prune: true
+        host: true
+
+      backup:
+        source:
+          - "/backup"
+        tag:
+          - "radarr"
