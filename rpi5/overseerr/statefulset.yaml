@@ -62,9 +62,11 @@ spec:
             capabilities:
               drop:
                 - ALL
-            runAsUser: 1000
-            runAsGroup: 1000
       restartPolicy: Always
+      securityContext:
+        fsGroup: 10001
+        runAsUser: 10001
+        runAsGroup: 10001
   volumeClaimTemplates:
     - metadata:
         name: config
