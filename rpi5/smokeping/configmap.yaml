@@ -47,6 +47,16 @@ data:
     title = anshulg.com
     host = anshulg.com
 
+    ++ AnshulGGit
+    menu = git.anshulg.com
+    title = git.anshulg.com
+    host = git.anshulg.com
+
+    ++ AnshulGAuth
+    menu = auth.anshulg.com
+    title = auth.anshulg.com
+    host = auth.anshulg.com
+
     + Europe
 
     menu = Europe
@@ -268,3 +278,8 @@ data:
     menu = Odroid-C4
     title = Odroid-C4
     host = 192.168.1.41
+
+    ++ RPI4
+    menu = Raspberry Pi 4
+    title = Raspberry Pi 4
+    host = 192.168.1.9

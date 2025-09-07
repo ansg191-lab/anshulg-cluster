@@ -22,9 +22,9 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID
-              value: "1000"
+              value: "10001"
             - name: PGID
-              value: "1000"
+              value: "10001"
             - name: TZ
               value: "America/Los_Angeles"
           ports:
@@ -80,6 +80,8 @@ spec:
           configMap:
             name: smokeping-config
       restartPolicy: Always
+      securityContext:
+        fsGroup: 10001
   volumeClaimTemplates:
     - metadata:
         name: config
