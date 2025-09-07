@@ -24,9 +24,9 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID
-              value: "0"
+              value: "2011"
             - name: PGID
-              value: "0"
+              value: "3002"
             - name: TZ
               value: "America/Los_Angeles"
           ports:
@@ -64,6 +64,8 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 3
+      securityContext:
+        fsGroup: 3002
       restartPolicy: Always
       volumes:
         - name: data
