@@ -7,9 +7,6 @@ spec:
   jobTemplate:
     spec:
       template:
-        metadata:
-          annotations:
-            linkerd.io/inject: enabled
         spec:
           initContainers:
             - name: sonarr-backup
