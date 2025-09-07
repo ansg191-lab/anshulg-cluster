@@ -18,50 +18,15 @@ spec:
       labels:
         app: sonarr
     spec:
-      initContainers:
-        - name: backup-sidecar
-          image: ghcr.io/ansg191/containers/arr-backup:main@sha256:f7b7e5a4be5b7e2520629d00701beba89437487c9d1e1e08632af404fb190c18
-          imagePullPolicy: IfNotPresent
-          restartPolicy: Always
-          volumeMounts:
-            - mountPath: /rconfig
-              name: config
-            - mountPath: /tarsnapper.conf
-              name: tarsnapper-config
-              subPath: tarsnapper.conf
-            - mountPath: /config/tarsnap.key
-              name: backup-key
-              subPath: tarsnap.key
-            - mountPath: /backup
-              name: backup-tmpdir
-            - mountPath: /tarsnap-cache
-              name: tarsnap-cache
-          env:
-            - name: ARR_CONFIG_DIR
-              value: /rconfig
-            - name: ARR_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: backup-key
-                  key: api-key
-            - name: ARR_URL
-              value: http://localhost:8989
-            - name: TARSNAPPER_CONFIG
-              value: /tarsnapper.conf
-            - name: ARR_TMP_DIR
-              value: /backup
-          securityContext:
-            runAsUser: 0
-            runAsGroup: 0
       containers:
         - name: sonarr
           image: lscr.io/linuxserver/sonarr:4.0.15@sha256:e00e87e0e7c24fdc992093756f120a6ab292790b6a637ff3641bf813091cd726
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID
-              value: "0"
+              value: "2008"
             - name: PGID
-              value: "0"
+              value: "3002"
             - name: TZ
               value: "America/Los_Angeles"
           ports:
@@ -99,21 +64,12 @@ spec:
             timeoutSeconds: 5
             failureThreshold: 3
       restartPolicy: Always
+      securityContext:
+        fsGroup: 3002
       volumes:
         - name: data
           hostPath:
             path: /data
-        - name: tarsnapper-config
-          configMap:
-            name: tarsnapper-config
-        - name: backup-key
-          secret:
-            secretName: backup-key
-        - name: backup-tmpdir
-          emptyDir:
-            medium: Memory
-        - name: tarsnap-cache
-          emptyDir: { }
         - name: ca
           configMap:
             name: anshulg-ca
@@ -128,15 +84,3 @@ spec:
         resources:
           requests:
             storage: 5Gi
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: tarsnapper-config
-data:
-  tarsnapper.conf: |
-    deltas: 1d 7d 30d 90d
-    target: /rpi5-sonarr/$name-$date
-    jobs:
-      sonarr:
-        source: /backup
