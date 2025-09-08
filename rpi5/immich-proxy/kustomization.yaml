@@ -1,0 +1,47 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../kustomize/base
+  - ../../kustomize/workloads/deployment
+
+components:
+  - ../../kustomize/components/ingress
+  - ../../kustomize/components/direct-ingress
+  - ../../kustomize/components/security-context
+  - ../../kustomize/components/tailscale
+
+namePrefix: immich-
+labels:
+  - pairs:
+      app.kubernetes.io/name: immich
+    includeSelectors: true
+
+images:
+  - name: busybox
+    newName: nginxinc/nginx-unprivileged
+    newTag: 1.29.1@sha256:ad78b4a52a68a93aa3490260e0bf7b3afd35689d312f22bb28300fbe43a158e5
+
+configMapGenerator:
+  - name: domain-config
+    literals:
+      - DOMAIN=immich.internal
+      - DIRECT_DOMAIN=immich.anshulg.direct
+      - TS_HOST=immich
+  - name: nginx-proxy-template
+    files:
+      - default.conf.template=default.conf.template
+  - name: nginx-env
+    literals:
+      - UPSTREAM_HOST=192.168.1.10:30041
+
+patches:
+  - target:
+      kind: Deployment
+    path: patch-deployment.yaml
+  - target:
+      kind: Deployment
+    path: patch-deployment2.yaml
+  - target:
+      kind: Service
+    path: patch-service.yaml

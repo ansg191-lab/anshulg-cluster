@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: immich-proxy
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: immich-proxy
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: {{ .Values.spec.destination.server }}
+    namespace: immich-proxy
+  project: default
+  source:
+    repoURL: {{ .Values.spec.source.repoURL }}
+    targetRevision: {{ .Values.spec.source.branch }}
+    path: rpi5/immich-proxy
+  syncPolicy:
+    automated: {}

@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: empty
+spec:
+  replicas: 3
+  template:
+    spec:
+      containers:
+        - name: app
+          envFrom:
+            - configMapRef:
+                name: nginx-env
+          volumeMounts:
+            - name: nginx-template
+              mountPath: /etc/nginx/templates
+            - name: tmp
+              mountPath: /tmp
+            - name: nginx-conf
+              mountPath: /etc/nginx/conf.d
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /api/server/ping
+          livenessProbe:
+            httpGet:
+              port: 8080
+              path: /healthz
+            initialDelaySeconds: 30
+      volumes:
+        - name: nginx-template
+          configMap:
+            name: nginx-proxy-template
+        - name: tmp
+          emptyDir:
+            medium: Memory
+        - name: nginx-conf
+          emptyDir:
+            medium: Memory
