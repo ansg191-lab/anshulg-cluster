@@ -41,6 +41,8 @@ spec:
               name: data
             - mountPath: /calibre-library
               name: books
+            - mountPath: /cwa-book-ingest
+              name: ingest
             - mountPath: /etc/ssl/certs/ca-certificates.crt
               name: ca
               subPath: ca.crt
@@ -59,6 +61,9 @@ spec:
         - name: books
           hostPath:
             path: "/data/Calibre Library"
+        - name: ingest
+          hostPath:
+            path: "/data/BookImport"
         - name: ca
           configMap:
             name: anshulg-ca
