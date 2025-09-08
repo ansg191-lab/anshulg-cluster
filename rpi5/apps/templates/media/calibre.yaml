@@ -17,7 +17,7 @@ spec:
   destination:
     server: {{ .Values.spec.destination.server }}
     namespace: calibre
-  project: default
+  project: media
   source:
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.branch }}

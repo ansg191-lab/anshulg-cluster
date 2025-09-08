@@ -1,23 +1,21 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: overseerr
+  name: trailarr
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: overseerr
+  name: trailarr
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
     server: {{ .Values.spec.destination.server }}
-    namespace: overseerr
-  project: default
+    namespace: trailarr
+  project: media
   source:
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.branch }}
-    path: rpi5/overseerr
-  syncPolicy:
-    automated: {}
+    path: rpi5/trailarr
