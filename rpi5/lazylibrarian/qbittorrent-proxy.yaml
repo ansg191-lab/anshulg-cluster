@@ -3,14 +3,6 @@ kind: ConfigMap
 metadata:
   name: nginx-proxy-template
 data:
-  setup.sh: |
-    #!/bin/sh
-    set -eu
-    BASIC_B64="$(printf "%s:%s" "$BASIC_USER" "$BASIC_PASS" | base64 -w0)"
-    export BASIC_B64
-    envsubst '$$UPSTREAM_HOST $$UPSTREAM_PATH $$BASIC_B64' \
-      < /etc/nginx/templates/default.conf.template \
-      > /etc/nginx/conf.d/default.conf
   default.conf.template: |
     server {
       listen 8080 default_server;
@@ -66,28 +58,12 @@ spec:
           image: nginxinc/nginx-unprivileged:1.29.1@sha256:ad78b4a52a68a93aa3490260e0bf7b3afd35689d312f22bb28300fbe43a158e5
           ports:
             - containerPort: 8080
-          env:
-            - name: UPSTREAM_HOST
-              value: "56.lw.itsby.design"
-            - name: UPSTREAM_PATH
-              value: "/qbittorrent/"
-            - name: BASIC_USER
-              valueFrom:
-                secretKeyRef:
-                  name: qbt-secret
-                  key: BASIC_USER
-            - name: BASIC_PASS
-              valueFrom:
-                secretKeyRef:
-                  name: qbt-secret
-                  key: BASIC_PASS
+          envFrom:
+            - secretRef:
+                name: qbt-secret
           volumeMounts:
             - name: nginx-templates
-              mountPath: /etc/nginx/templates/default.conf.template
-              subPath: default.conf.template
-            - name: nginx-templates
-              mountPath: /docker-entrypoint.d/99setup.sh
-              subPath: setup.sh
+              mountPath: /etc/nginx/templates
             - name: tmp
               mountPath: /tmp
             - name: conf
@@ -117,7 +93,6 @@ spec:
         - name: nginx-templates
           configMap:
             name: nginx-proxy-template
-            defaultMode: 0755
         - name: tmp
           emptyDir:
             medium: Memory
