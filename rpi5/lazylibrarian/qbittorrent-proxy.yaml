@@ -3,9 +3,17 @@ kind: ConfigMap
 metadata:
   name: nginx-proxy-template
 data:
+  setup.sh: |
+    #!/bin/sh
+    set -eu
+    BASIC_B64="$(printf "%s:%s" "$BASIC_USER" "$BASIC_PASS" | base64 -w0)"
+    export BASIC_B64
+    envsubst '$$UPSTREAM_HOST $$UPSTREAM_PATH $$BASIC_B64' \
+      < /etc/nginx/templates/default.conf.template \
+      > /etc/nginx/conf.d/default.conf
   default.conf.template: |
     server {
-      listen 80 default_server;
+      listen 8080 default_server;
       server_name _;
 
       # Health check
@@ -55,9 +63,9 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: nginx:1.29.1@sha256:33e0bbc7ca9ecf108140af6288c7c9d1ecc77548cbfd3952fd8466a75edefe57
+          image: nginxinc/nginx-unprivileged:1.29.1@sha256:ad78b4a52a68a93aa3490260e0bf7b3afd35689d312f22bb28300fbe43a158e5
           ports:
-            - containerPort: 80
+            - containerPort: 8080
           env:
             - name: UPSTREAM_HOST
               value: "56.lw.itsby.design"
@@ -75,31 +83,47 @@ spec:
                   key: BASIC_PASS
           volumeMounts:
             - name: nginx-templates
-              mountPath: /etc/nginx/templates
-          # Build the Basic header and render the template, then start nginx
-          command: ["/bin/sh","-c"]
-          args:
-            - |
-              set -eu
-              BASIC_B64="$(printf "%s:%s" "$BASIC_USER" "$BASIC_PASS" | base64 -w0)"
-              export BASIC_B64
-              envsubst '$$UPSTREAM_HOST $$UPSTREAM_PATH $$BASIC_B64' \
-                < /etc/nginx/templates/default.conf.template \
-                > /etc/nginx/conf.d/default.conf
-              nginx -g 'daemon off;'
+              mountPath: /etc/nginx/templates/default.conf.template
+              subPath: default.conf.template
+            - name: nginx-templates
+              mountPath: /docker-entrypoint.d/99setup.sh
+              subPath: setup.sh
+            - name: tmp
+              mountPath: /tmp
+            - name: conf
+              mountPath: /etc/nginx/conf.d
           readinessProbe:
             httpGet:
-              port: 80
+              port: 8080
               path: /api/v2/app/version
           livenessProbe:
             httpGet:
-              port: 80
+              port: 8080
               path: /healthz
             initialDelaySeconds: 30
+          securityContext:
+            readOnlyRootFilesystem: true
+            privileged: false
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 10001
+            runAsGroup: 10001
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
       volumes:
         - name: nginx-templates
           configMap:
             name: nginx-proxy-template
+            defaultMode: 0755
+        - name: tmp
+          emptyDir:
+            medium: Memory
+        - name: conf
+          emptyDir:
+            medium: Memory
 ---
 apiVersion: v1
 kind: Service
@@ -111,5 +135,5 @@ spec:
   ports:
     - name: http
       port: 80
-      targetPort: 80
+      targetPort: 8080
   type: ClusterIP
