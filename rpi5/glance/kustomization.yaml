@@ -1,0 +1,43 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../kustomize/base
+  - ../../kustomize/workloads/deployment
+
+components:
+  - ../../kustomize/components/ingress
+  - ../../kustomize/components/security-context
+  - ../../kustomize/components/tailscale
+
+namePrefix: glance-
+labels:
+  - pairs:
+      app.kubernetes.io/name: glance
+    includeSelectors: true
+
+images:
+  - name: busybox
+    newName: glanceapp/glance
+    newTag: v0.8.4@sha256:6df86a7e8868d1eda21f35205134b1962c422957e42a0c44d4717c8e8f741b1a
+
+configMapGenerator:
+  - name: domain-config
+    literals:
+      - DOMAIN=glance.internal
+      - TS_HOST=glance
+  - name: glance-config
+    files:
+      - glance.yml=config/glance.yml
+      - home.yml=config/home.yml
+
+patches:
+  - target:
+      kind: Deployment
+    path: patch-deployment.yaml
+  - target:
+      kind: Deployment
+    path: patch-deployment2.yaml
+  - target:
+      kind: Service
+    path: patch-service.yaml

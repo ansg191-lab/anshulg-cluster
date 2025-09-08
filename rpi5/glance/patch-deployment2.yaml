@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: empty
+spec:
+  replicas: 3
+  template:
+    spec:
+      containers:
+        - name: app
+          volumeMounts:
+            - name: config
+              mountPath: /app/config
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /api/healthz
+          livenessProbe:
+            httpGet:
+              port: 8080
+              path: /api/healthz
+            initialDelaySeconds: 30
+      volumes:
+        - name: config
+          configMap:
+            name: glance-config
