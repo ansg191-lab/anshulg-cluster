@@ -38,3 +38,6 @@ spec:
     pod:
       annotations:
         linkerd.io/inject: enabled
+      securityContext:
+        runAsUser: 10001
+        runAsGroup: 10001
