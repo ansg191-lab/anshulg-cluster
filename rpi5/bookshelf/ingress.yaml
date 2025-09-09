@@ -1,0 +1,20 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: bookshelf
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`bookshelf.internal`)
+      middlewares:
+        - name: security-headers
+          namespace: kube-system
+      services:
+        - name: bookshelf
+          port: 80
+  tls:
+    secretName: bookshelf-cert-tls
+    domains:
+      - main: bookshelf.internal
