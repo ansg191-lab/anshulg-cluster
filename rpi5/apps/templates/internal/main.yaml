@@ -22,7 +22,6 @@ spec:
     - https://senthilrch.github.io/kubefledged-charts/
     - https://eraser-dev.github.io/eraser/charts
     - https://stakater.github.io/stakater-charts
-    - https://cloudnative-pg.github.io/charts
     - https://raw.githubusercontent.com/kubernetes-csi/csi-driver-smb/master/charts
     - https://charts.anshulg.com
     - https://pkgs.tailscale.com/helmcharts
