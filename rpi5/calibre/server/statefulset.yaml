@@ -30,6 +30,9 @@ spec:
             - containerPort: 8080
               protocol: TCP
               name: http
+            - containerPort: 8081
+              protocol: TCP
+              name: content
           volumeMounts:
             - mountPath: /data
               name: data
