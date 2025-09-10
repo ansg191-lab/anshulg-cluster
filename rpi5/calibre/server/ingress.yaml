@@ -12,11 +12,19 @@ spec:
         - name: security-headers
           namespace: kube-system
       services:
-        - name: calibre
-          port: 80
+        - name: calibre-auth
+          port: 443
+          serversTransport: calibre
   tls:
     secretName: calibre-cert-tls
     domains:
       - main: calibre.local
         sans:
           - calibre.internal
+---
+apiVersion: traefik.io/v1alpha1
+kind: ServersTransport
+metadata:
+  name: calibre
+spec:
+  serverName: calibre-auth
