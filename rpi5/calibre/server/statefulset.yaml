@@ -1,11 +1,11 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: calibre
   labels:
     app: calibre
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: calibre
@@ -31,10 +31,22 @@ spec:
               protocol: TCP
               name: http
           volumeMounts:
-            - mountPath: /config
+            - mountPath: /data
               name: data
+            - mountPath: /config
+              name: config
+      securityContext:
+        fsGroup: 3002
       restartPolicy: Always
       volumes:
         - name: data
           hostPath:
             path: /data
+  volumeClaimTemplates:
+    - metadata:
+        name: config
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
