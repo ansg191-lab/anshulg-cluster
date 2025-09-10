@@ -1,0 +1,32 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../../kustomize/base
+  - ../../../kustomize/workloads/deployment
+  - env.yaml
+
+components:
+  - ../../../kustomize/components/security-context
+
+namePrefix: rreading-glasses-
+labels:
+  - pairs:
+      app.kubernetes.io/name: rreading-glasses
+    includeSelectors: true
+
+images:
+  - name: busybox
+    newName: blampe/rreading-glasses
+    newTag: hardcover@sha256:ecdfd6606bc3b9953e97e6ac23e31604ba8af4fe32fb5583388b2e309bf457f0
+
+patches:
+  - target:
+      kind: Deployment
+    path: patch-deployment.yaml
+  - target:
+      kind: Deployment
+    path: patch-deployment2.yaml
+  - target:
+      kind: Service
+    path: patch-service.yaml

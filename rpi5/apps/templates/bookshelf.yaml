@@ -20,4 +20,21 @@ spec:
   source:
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.branch }}
-    path: rpi5/bookshelf
+    path: rpi5/bookshelf/bookshelf
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rreading-glasses
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: {{ .Values.spec.destination.server }}
+    namespace: bookshelf
+  project: default
+  source:
+    repoURL: {{ .Values.spec.source.repoURL }}
+    targetRevision: {{ .Values.spec.source.branch }}
+    path: rpi5/bookshelf/rreading-glasses

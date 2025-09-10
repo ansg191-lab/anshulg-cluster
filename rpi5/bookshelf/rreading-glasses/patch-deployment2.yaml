@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: empty
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+        - name: app
+          command:
+            - /main
+            - serve
+          envFrom:
+            - secretRef:
+                name: rreading-glasses-env
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              memory: 512Mi
+          readinessProbe:
+            httpGet:
+              port: 8788
+              path: /debug/metrics
