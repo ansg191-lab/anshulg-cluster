@@ -12,6 +12,8 @@ spec:
   template:
     metadata:
       name: calibre
+      annotations:
+        linkerd.io/inject: "enabled"
       labels:
         app: calibre
     spec:
