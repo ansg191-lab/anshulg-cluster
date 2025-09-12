@@ -1,6 +1,6 @@
 dependencies:
 - name: connect
   repository: https://1password.github.io/connect-helm-charts/
-  version: 2.0.4
-digest: sha256:f72789810520965a74d2197a5a0aabd93d9367c24e625ef6322a36e5823f0849
-generated: "2025-09-11T16:43:25.348711413Z"
+  version: 2.0.5
+digest: sha256:6bca280927a938870b1e9177746e8287af9fa6f4a2bc68784483ca4a0f60e1a6
+generated: "2025-09-12T21:17:11.182419377Z"
