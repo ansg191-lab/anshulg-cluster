@@ -11,5 +11,5 @@ spec:
   project: internal
   source:
     repoURL: https://github.com/ansg191/oauth-proxy-op.git
-    targetRevision: v0.0.2
+    targetRevision: v0.0.3
     path: config/default
