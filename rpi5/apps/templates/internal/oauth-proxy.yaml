@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: oauth-proxy
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: {{ .Values.spec.destination.server }}
+  project: internal
+  source:
+    repoURL: https://github.com/ansg191/oauth-proxy-op.git
+    targetRevision: v0.0.2
+    path: config/default
