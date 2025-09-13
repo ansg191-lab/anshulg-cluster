@@ -14,7 +14,7 @@ spec:
         - name: security-headers
           namespace: kube-system
       services:
-        - name: bazarr-auth
+        - name: oauth-bazarr
           port: 80
   tls:
     secretName: bazarr-cert-tls
