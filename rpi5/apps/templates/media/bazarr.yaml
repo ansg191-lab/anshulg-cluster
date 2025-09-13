@@ -17,5 +17,3 @@ spec:
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.branch }}
     path: rpi5/bazarr
-  syncPolicy:
-    automated: {}
