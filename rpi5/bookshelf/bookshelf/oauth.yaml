@@ -1,0 +1,25 @@
+apiVersion: oauth.anshulg.com/v1
+kind: Proxy
+metadata:
+  name: bookshelf
+spec:
+  provider:
+    type: oidc
+    clientId: bookshelf
+    clientExistingSecret:
+      name: oauth-config
+      key: client-secret
+    codeChallengeMethod: S256
+    oidcIssuerUrl: https://auth.anshulg.com/oauth2/openid/bookshelf
+  cookie:
+    existingSecret:
+      name: oauth-config
+      key: cookie-secret
+    secure: true
+  proxy:
+    emailDomains:
+      - "*"
+    reverseProxy: true
+  upstream:
+    upstreams:
+      - http://bookshelf.bookshelf.svc.cluster.local/
