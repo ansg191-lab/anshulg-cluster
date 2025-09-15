@@ -8,13 +8,13 @@ spec:
     clientId: bazarr
     clientExistingSecret:
       name: oauth-config
-      key: OAUTH2_PROXY_CLIENT_SECRET
+      key: client-secret
     codeChallengeMethod: S256
     oidcIssuerUrl: https://auth.anshulg.com/oauth2/openid/bazarr
   cookie:
     existingSecret:
       name: oauth-config
-      key: OAUTH2_PROXY_COOKIE_SECRET
+      key: cookie-secret
     secure: true
   proxy:
     emailDomains:
