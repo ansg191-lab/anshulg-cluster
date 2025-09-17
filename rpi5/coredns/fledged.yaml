@@ -8,4 +8,6 @@ metadata:
 spec:
   cacheSpec:
     - images:
-        - rancher/mirrored-coredns-coredns:1.10.1
+        - rancher/mirrored-coredns-coredns:1.12.1
+        - mvance/unbound:1.22.0
+        - ghcr.io/0xerr0r/blocky:v0.26.2
