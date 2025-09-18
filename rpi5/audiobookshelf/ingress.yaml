@@ -11,6 +11,7 @@ spec:
       middlewares:
         - name: security-headers
           namespace: kube-system
+        - name: buffering
       services:
         - name: audiobookshelf
           port: 80

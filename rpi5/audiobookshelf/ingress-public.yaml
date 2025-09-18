@@ -40,6 +40,8 @@ spec:
       services:
         - name: audiobookshelf
           port: 80
+      middlewares:
+        - name: buffering
   tls:
     secretName: audiobookshelf-public-cert-tls
     domains:
