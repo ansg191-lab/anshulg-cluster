@@ -71,23 +71,6 @@ spec:
               memory: 1Gi
             limits:
               memory: 4Gi
-          startupProbe:
-            tcpSocket:
-              port: 8000
-              host: paperless.anshulg.direct
-            failureThreshold: 30
-            periodSeconds: 10
-          livenessProbe:
-            httpGet:
-              port: 8000
-              host: paperless.anshulg.direct
-              path: /
-            periodSeconds: 30
-          readinessProbe:
-            httpGet:
-              port: 8000
-              host: paperless.anshulg.direct
-              path: /
           securityContext:
             runAsUser: 1000
             runAsGroup: 1000
