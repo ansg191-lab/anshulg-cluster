@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: empty
+spec:
+  template:
+    spec:
+      containers:
+        - name: app
+          envFrom:
+            - configMapRef:
+                name: env-config
+          volumeMounts:
+            - mountPath: /data
+              name: data
+            - mountPath: /etc/ssl/certs/ca-certificates.crt
+              name: ca-certs
+              subPath: ca.crt
+            - mountPath: /config
+              name: config
+            - mountPath: /audiobooks
+              name: audiobooks
+              readOnly: true
+#          readinessProbe:
+#            httpGet:
+#              port: 3000
+#              path: /api/v1/status
+#          livenessProbe:
+#            httpGet:
+#              port: 3000
+#              path: /api/v1/status
+#            initialDelaySeconds: 30
+      securityContext:
+        runAsGroup: 3002
+        fsGroup: 3002
+      nodeSelector:
+        kubernetes.io/arch: amd64
+      volumes:
+        - name: ca-certs
+          configMap:
+            name: anshulg-ca
+        - name: config
+          configMap:
+            name: config
+        - name: audiobooks
+          hostPath:
+            path: /data/AudioBooks

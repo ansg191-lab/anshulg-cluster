@@ -1,0 +1,75 @@
+listen: 0.0.0.0:3000
+thread_pool:
+  num_threads: 8
+  queue_size: 100
+  keep_alive: null
+base_dirs:
+  - /audiobooks
+base_dirs_options: {}
+url_path_prefix: null
+shared_secret: null
+limit_rate: null
+transcoding:
+  max_parallel_processes: 16
+  max_runtime_hours: 24
+  low:
+    opus-in-ogg:
+      bitrate: 32
+      compression_level: 5
+      cutoff: SuperWideBand
+      mono: true
+  medium:
+    opus-in-ogg:
+      bitrate: 64
+      compression_level: 8
+      cutoff: SuperWideBand
+      mono: false
+  high:
+    opus-in-ogg:
+      bitrate: 128
+      compression_level: 10
+      cutoff: FullBand
+      mono: false
+  alt_configs: null
+token_validity_hours: 8760
+secret_file: /data/audioserve.secret
+client_dir: client/dist
+cors: null
+ssl: null
+allow_symlinks: false
+search_cache: false
+disable_folder_download: false
+chapters:
+  from_duration: 0
+  duration: 30
+no_dir_collaps: false
+ignore_chapters_meta: false
+positions:
+  ws_timeout:
+    secs: 600
+    nanos: 0
+  backup_file: /data/positions.json
+  restore: None
+  backup_schedule: "0 3 * * *"
+behind_proxy: true
+collections_cache_dir: /data/col_db
+tags: []
+force_cache_update_on_init: false
+natural_files_ordering: true
+static_resource_cache_age: null
+folder_file_cache_age: 86400
+collapse_cd_folders: null
+icons:
+  cache_dir: /data/icons-cache
+  cache_max_size: 100
+  cache_max_files: 1024
+  cache_disabled: false
+  size: 128
+  cache_save_often: false
+  fast_scaling: false
+time_to_folder_end: 10
+read_playlist: false
+collections_options:
+  dont_watch_for_changes: false
+  changes_debounce_interval: 10
+compress_responses: false
