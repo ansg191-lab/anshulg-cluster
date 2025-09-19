@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: calibre-web
-          image: crocodilestick/calibre-web-automated:dev@sha256:55db3d13065b00a3c7a91ed694a7377a8c2b918da6a9e1b6e85881fa190b9763
+          image: crocodilestick/calibre-web-automated:dev@sha256:7664d70b8edf203beccec67384077af8c7ba1a47ab41fac03f6c3da4802713af
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID
