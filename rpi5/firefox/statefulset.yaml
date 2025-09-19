@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: firefox
+  labels:
+    app: firefox
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: firefox
+  serviceName: firefox
+  template:
+    metadata:
+      name: firefox
+      annotations:
+        linkerd.io/inject: "enabled"
+      labels:
+        app: firefox
+    spec:
+      containers:
+        - name: firefox
+          image: linuxserver/firefox:1.2404.1@sha256:e6c37e37e1e9dc4b833fa17bdb5f9f3217f44a6969d0e722af253530fb0d5155
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PUID
+              value: "10001"
+            - name: PGID
+              value: "10001"
+            - name: TZ
+              value: "America/Los_Angeles"
+            - name: FIREFOX_CLI
+              value: "https://kagi.com"
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+              name: http
+          volumeMounts:
+            - mountPath: /config
+              name: data
+      restartPolicy: Always
+      nodeSelector:
+        kubernetes.io/arch: amd64
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
