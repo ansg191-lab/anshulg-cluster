@@ -84,3 +84,5 @@ spec:
               csi.cert-manager.io/issuer-name: rpi5-ca
               csi.cert-manager.io/dns-names: "irc.${POD_NAMESPACE}.svc.cluster.local,irc.${POD_NAMESPACE},irc,irc.internal,irc.anshulg.direct"
               csi.cert-manager.io/duration: 720h0m0s
+              csi.cert-manager.io/key-algorithm: RSA
+              csi.cert-manager.io/key-size: "4096"
