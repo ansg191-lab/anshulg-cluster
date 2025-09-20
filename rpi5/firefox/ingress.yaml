@@ -12,7 +12,7 @@ spec:
         - name: security-headers
           namespace: kube-system
       services:
-        - name: firefox
+        - name: oauth-firefox
           port: 80
   tls:
     secretName: firefox-cert-tls
