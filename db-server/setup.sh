@@ -13,7 +13,7 @@ START_MARKER='<< ADDED BY setup.sh >>'
 END_MARKER='<< END ADDED BY setup.sh >>'
 
 # renovate: datasource=github-releases depName=restic/restic
-RESTIC_VERSION="0.18.0"
+RESTIC_VERSION="0.18.1"
 # renovate: datasource=github-releases depName=creativeprojects/resticprofile
 RESTICPROFILE_VERSION="0.31.0"
 
