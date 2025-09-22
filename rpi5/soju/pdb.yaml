@@ -1,0 +1,9 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: soju-pdb
+spec:
+  selector:
+    matchLabels:
+      app: soju
+  minAvailable: 1
