@@ -4,4 +4,5 @@ metadata:
   name: buffering
 spec:
   buffering:
-    maxRequestBodyBytes: 1048576
+    maxRequestBodyBytes: 10737418240
+    memRequestBodyBytes: 1048576
