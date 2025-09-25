@@ -39,8 +39,8 @@ spec:
       tailscaleInitContainer:
         securityContext:
           privileged: true
-      annotations:
-        linkerd.io/inject: enabled
-      securityContext:
-        runAsUser: 10001
-        runAsGroup: 10001
+{{/*      annotations:*/}}
+{{/*        linkerd.io/inject: enabled*/}}
+{{/*      securityContext:*/}}
+{{/*        runAsUser: 10001*/}}
+{{/*        runAsGroup: 10001*/}}
