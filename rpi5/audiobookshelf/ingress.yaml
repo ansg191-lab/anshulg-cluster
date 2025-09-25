@@ -21,3 +21,33 @@ spec:
       - main: audiobookshelf.internal
         sans:
           - abs.internal
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: audiobookshelf
+spec:
+  ingressClassName: tailscale
+  defaultBackend:
+    service:
+      name: audiobookshelf
+      port:
+        number: 80
+  tls:
+    - hosts:
+        - audiobookshelf
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: abs
+spec:
+  ingressClassName: tailscale
+  defaultBackend:
+    service:
+      name: audiobookshelf
+      port:
+        number: 80
+  tls:
+    - hosts:
+        - abs
