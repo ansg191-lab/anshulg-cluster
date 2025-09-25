@@ -18,3 +18,18 @@ spec:
     secretName: firefox-cert-tls
     domains:
       - main: firefox.internal
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: firefox
+spec:
+  ingressClassName: tailscale
+  defaultBackend:
+    service:
+      name: firefox
+      port:
+        number: 80
+  tls:
+    - hosts:
+        - firefox
