@@ -36,6 +36,9 @@ metadata:
 spec:
   statefulSet:
     pod:
+      tailscaleInitContainer:
+        securityContext:
+          privileged: true
       annotations:
         linkerd.io/inject: enabled
       securityContext:
