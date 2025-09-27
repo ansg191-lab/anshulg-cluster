@@ -46,6 +46,12 @@
     },
     {
       "matchPackageNames": [
+        "lscr.io/linuxserver/firefox"
+      ],
+      "allowedVersions": "!/^\\d{4}\\.\\d+\\.\\d+$/"
+    },
+    {
+      "matchPackageNames": [
         "intel-device-plugins-gpu",
         "intel-device-plugins-operator"
       ],
