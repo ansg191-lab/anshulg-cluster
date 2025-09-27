@@ -2,7 +2,7 @@
 google-cloud-cli
 libsasl2-modules
 nftables
-postgresql
+postgresql-17
 postfix
 python3-gpg
 unattended-upgrades
