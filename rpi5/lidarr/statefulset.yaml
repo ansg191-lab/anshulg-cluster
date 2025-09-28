@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: lidarr
+  labels:
+    app: lidarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lidarr
+  serviceName: lidarr
+  template:
+    metadata:
+      name: lidarr
+      annotations:
+        linkerd.io/inject: enabled
+      labels:
+        app: lidarr
+    spec:
+      containers:
+        - name: lidarr
+#          image: lscr.io/linuxserver/lidarr:2.14.4-nightly@sha256:e89a0320042f3ddc6e5a826a02bcda66ccdb32aa0322608d11af511b9fe0da74
+#          image: blampe/lidarr:lidarr-plugins-2.13.3.4692@sha256:057c95383134f157ef9b88457b9395f44c5853299fb3b5ab89678dfacd4f14d3
+          image: blampe/lidarr:latest@sha256:484ebcd7731764e62101b1714479665ba1afe1737c9dec9b6424cb3a3a060b85
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PUID
+              value: "2013"
+            - name: PGID
+              value: "3002"
+            - name: TZ
+              value: "America/Los_Angeles"
+          ports:
+            - containerPort: 8686
+              protocol: TCP
+              name: http
+          volumeMounts:
+            - mountPath: /config
+              name: config
+            - mountPath: /data
+              name: data
+            - mountPath: /seedbox
+              name: seedbox
+      restartPolicy: Always
+      securityContext:
+        fsGroup: 3002
+      volumes:
+        - name: data
+          hostPath:
+            path: /data
+        - name: seedbox
+          hostPath:
+            path: /seedbox
+      nodeSelector:
+        kubernetes.io/hostname: odroid-h4
+  volumeClaimTemplates:
+    - metadata:
+        name: config
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
