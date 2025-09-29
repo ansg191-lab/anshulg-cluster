@@ -18,3 +18,18 @@ spec:
     secretName: lidarr-cert-tls
     domains:
       - main: lidarr.internal
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: lidarr
+spec:
+  ingressClassName: tailscale
+  defaultBackend:
+    service:
+      name: lidarr
+      port:
+        number: 80
+  tls:
+    - hosts:
+        - lidarr
