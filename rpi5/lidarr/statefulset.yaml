@@ -22,7 +22,7 @@ spec:
         - name: lidarr
 #          image: lscr.io/linuxserver/lidarr:2.14.4-nightly@sha256:e89a0320042f3ddc6e5a826a02bcda66ccdb32aa0322608d11af511b9fe0da74
 #          image: blampe/lidarr:lidarr-plugins-2.13.3.4692@sha256:057c95383134f157ef9b88457b9395f44c5853299fb3b5ab89678dfacd4f14d3
-          image: blampe/lidarr:latest@sha256:484ebcd7731764e62101b1714479665ba1afe1737c9dec9b6424cb3a3a060b85
+          image: blampe/lidarr:latest@sha256:b76944d3481152e37016122e20a414acbdfa1e28af75b7096d93abb6256c1e48
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID
