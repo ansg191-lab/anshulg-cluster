@@ -1,0 +1,20 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: navidrome
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`navidrome.internal`)
+      middlewares:
+        - name: security-headers
+          namespace: kube-system
+      services:
+        - name: navidrome
+          port: 80
+  tls:
+    secretName: navidrome-cert-tls
+    domains:
+      - main: navidrome.internal

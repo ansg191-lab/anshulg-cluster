@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: navidrome
+  labels:
+    app: navidrome
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: navidrome
+  serviceName: navidrome
+  template:
+    metadata:
+      name: navidrome
+      annotations:
+        linkerd.io/inject: enabled
+      labels:
+        app: navidrome
+    spec:
+      containers:
+        - name: navidrome
+          image: deluan/navidrome:0.58.0@sha256:2ae037d464de9f802d047165a13b1c9dc2bdbb14920a317ae4aef1233adc0a3c
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: ND_MUSICFOLDER
+              value: /music
+            - name: ND_DATAFOLDER
+              value: /data
+          ports:
+            - containerPort: 4533
+              protocol: TCP
+              name: http
+          volumeMounts:
+            - mountPath: /data
+              name: data
+            - mountPath: /music
+              name: music
+          securityContext:
+            runAsUser: 2014
+            runAsGroup: 3002
+            runAsNonRoot: false
+            privileged: false
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+      restartPolicy: Always
+      securityContext:
+        fsGroup: 3002
+      volumes:
+        - name: music
+          hostPath:
+            path: /data/Music
+      nodeSelector:
+        kubernetes.io/hostname: beelink
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
