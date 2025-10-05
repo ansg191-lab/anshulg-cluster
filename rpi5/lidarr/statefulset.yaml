@@ -31,6 +31,15 @@ spec:
               value: "3002"
             - name: TZ
               value: "America/Los_Angeles"
+            - name: DOCKER_MODS
+              value: "linuxserver/mods:universal-package-install"
+            - name: INSTALL_PIP_PACKAGES
+              value: "git+https://github.com/beetbox/beets.git|git+https://github.com/spinfast319/gazelle-origin@master|git+https://github.com/MxMarx/beets-originquery|pyacoustid|beetcamp|pylast|python3-discogs-client"
+            - name: INSTALL_PACKAGES
+              value: "git|ffmpeg|flac|imagemagick|vim"
+          envFrom:
+            - secretRef:
+                name: secrets
           ports:
             - containerPort: 8686
               protocol: TCP
@@ -42,6 +51,8 @@ spec:
               name: data
             - mountPath: /seedbox
               name: seedbox
+            - mountPath: /beets
+              name: beets
       restartPolicy: Always
       securityContext:
         fsGroup: 3002
@@ -57,6 +68,13 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: config
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
+    - metadata:
+        name: beets
       spec:
         accessModes: [ "ReadWriteOnce" ]
         resources:
