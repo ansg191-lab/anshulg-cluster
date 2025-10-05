@@ -51,7 +51,7 @@ spec:
       volumes:
         - name: music
           hostPath:
-            path: /data/Music
+            path: /data/Music2
       nodeSelector:
         kubernetes.io/hostname: beelink
   volumeClaimTemplates:
