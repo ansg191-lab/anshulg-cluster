@@ -36,6 +36,7 @@ spec:
               name: data
             - mountPath: /music
               name: music
+              readOnly: true
           securityContext:
             runAsUser: 2014
             runAsGroup: 3002
@@ -45,6 +46,16 @@ spec:
             capabilities:
               drop:
                 - ALL
+          readinessProbe:
+            httpGet:
+              port: http
+              path: /app
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "256Mi"
+            limits:
+              memory: "1Gi"
       restartPolicy: Always
       securityContext:
         fsGroup: 3002
@@ -52,8 +63,6 @@ spec:
         - name: music
           hostPath:
             path: /data/Music2
-      nodeSelector:
-        kubernetes.io/hostname: beelink
   volumeClaimTemplates:
     - metadata:
         name: data
