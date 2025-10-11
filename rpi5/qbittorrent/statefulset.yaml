@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: qbittorrent
+  labels:
+    app: qbittorrent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qbittorrent
+  serviceName: qbittorrent
+  template:
+    metadata:
+      name: qbittorrent
+      labels:
+        app: qbittorrent
+    spec:
+      containers:
+        - name: openvpn
+          image: debian:13.1-slim
+          imagePullPolicy: IfNotPresent
+          args:
+            - "/bin/sh"
+            - "/entrypoint.sh"
+          env:
+            - name: CLUSTER_DNS_IP
+              value: "10.43.0.10"
+          volumeMounts:
+            - mountPath: /dev/net/tun
+              name: tuntap
+            - mountPath: /config
+              name: ovpn-config
+            - mountPath: /auth
+              name: ovpn-auth
+            - mountPath: /entrypoint.sh
+              name: ovpn-script
+              subPath: entrypoint.sh
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
+          readinessProbe:
+            exec: { command: [ "/bin/sh","-c","ip link show tun0 >/dev/null 2>&1" ] }
+            initialDelaySeconds: 30
+            periodSeconds: 5
+        - name: qbittorrent
+          image: linuxserver/qbittorrent:5.1.2@sha256:032801369ba08f6a40e852f5334671c413c38036847927e1cf14b66784f74adb
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PUID
+              value: "2015"
+            - name: PGID
+              value: "3002"
+            - name: TZ
+              value: "America/Los_Angeles"
+            - name: WEBUI_PORT
+              value: "8080"
+            - name: TORRENTING_PORT
+              value: "14041"
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+              name: http
+          volumeMounts:
+            - mountPath: /config
+              name: config
+            - mountPath: /data
+              name: data
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - |
+                    for i in $(seq 1 60); do ip link show tun0 >/dev/null 2>&1 && exit 0; sleep 1; done; echo 'VPN not ready'; exit 1;
+      restartPolicy: Always
+      securityContext:
+        fsGroup: 3002
+      volumes:
+        - name: data
+          hostPath:
+            path: /data
+        - name: tuntap
+          hostPath:
+            path: /dev/net/tun
+            type: CharDevice
+        - name: ovpn-config
+          secret:
+            secretName: ovpn-config
+        - name: ovpn-auth
+          secret:
+            secretName: ovpn-auth
+        - name: ovpn-script
+          configMap:
+            name: ovpn-script
+            defaultMode: 0755
+      nodeSelector:
+        kubernetes.io/hostname: odroid-h4
+  volumeClaimTemplates:
+    - metadata:
+        name: config
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi

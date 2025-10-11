@@ -1,0 +1,26 @@
+apiVersion: v1
+data:
+  entrypoint.sh: "#!/usr/bin/env sh\n#\n# Copyright (c) 2025. Anshul Gupta\n# All
+    rights reserved.\n#\n\nset -e\n\necho \"Installing OpenVPN and dependencies...\"\napt-get
+    update && apt-get install -y --no-install-recommends openvpn iproute2 iptables
+    ca-certificates\n\n# Create authentication file\necho \"Setting up OpenVPN credentials...\"\nif
+    [ -f /auth/username ] && [ -f /auth/password ]; then\n\tprintf \"%s\\n%s\\n\"
+    \"$(cat /auth/username)\" \"$(cat /auth/password)\" > /credentials\n\tchmod 600
+    /credentials\nfi\n\n# Start OpenVPN\necho \"Starting OpenVPN...\"\nopenvpn --config
+    /config/client.ovpn --pull --script-security 2 --daemon\n\n# Wait for tun0 to
+    appear\necho \"Waiting for tun0 interface...\"\nfor _i in $(seq 1 60); do\n\tip
+    link show tun0 >/dev/null 2>&1 && break\n\tsleep 1\ndone\nip link show tun0 >/dev/null
+    2>&1 || { echo \"tun0 not up\"; exit 1; }\n\n# Basic leak protection: drop outbound
+    if not via tun0 (allow established & DNS as needed)\necho \"Starting leak protection...\"\niptables
+    -P OUTPUT DROP\niptables -A OUTPUT -o lo -j ACCEPT\niptables -A OUTPUT -m state
+    --state ESTABLISHED,RELATED -j ACCEPT\n# Allow DNS to VPN DNS (pushed) will be
+    covered by ESTABLISHED; allow cluster DNS if needed:\niptables -A OUTPUT -d \"$CLUSTER_DNS_IP\"
+    -p udp --dport 53 -j ACCEPT\niptables -A OUTPUT -d \"$CLUSTER_DNS_IP\" -p udp
+    --dport 53 -j ACCEPT\niptables -A OUTPUT -o tun0 -j ACCEPT\n\n# Allow traffic
+    to k8s internal services\nip route add 10.43.0.0/16 via 10.42.0.1 dev eth0\n\n#
+    Keep the container alive and expose logs if OpenVPN dies\necho \"Container setup
+    complete. Running forever...\"\ntail -F /var/log/* /dev/null\n"
+kind: ConfigMap
+metadata:
+  name: ovpn-script
+  namespace: qbittorrent
