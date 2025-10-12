@@ -15,7 +15,7 @@ END_MARKER='<< END ADDED BY setup.sh >>'
 # renovate: datasource=github-releases depName=restic/restic
 RESTIC_VERSION="0.18.1"
 # renovate: datasource=github-releases depName=creativeprojects/resticprofile
-RESTICPROFILE_VERSION="0.31.0"
+RESTICPROFILE_VERSION="0.32.0"
 
 OP_SERVICE_ACCOUNT_TOKEN=$(cat "1password.txt")
 export OP_SERVICE_ACCOUNT_TOKEN
