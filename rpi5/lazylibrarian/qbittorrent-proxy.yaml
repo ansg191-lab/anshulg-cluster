@@ -55,7 +55,7 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: nginxinc/nginx-unprivileged:1.29.2@sha256:abdc43cf1bf52b0a435e5c1f57f030afb0cc09134c169ddce0d1eab0e9e7ac7a
+          image: nginxinc/nginx-unprivileged:1.29.2@sha256:51d61dce5a452a3b4d0996147cc16fb3fc5386f21bbcf076bb54939be519bb20
           ports:
             - containerPort: 8080
           envFrom:
