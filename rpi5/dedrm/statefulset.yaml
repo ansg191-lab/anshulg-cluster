@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: dedrm
+  labels:
+    app: dedrm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dedrm
+  serviceName: dedrm
+  template:
+    metadata:
+      name: dedrm
+      labels:
+        app: dedrm
+    spec:
+      containers:
+        - name: dedrm
+          image: xmoforf/windows:latest
+          imagePullPolicy: Always
+          envFrom:
+            - secretRef:
+                name: secret
+          ports:
+            - containerPort: 8006
+              protocol: TCP
+              name: http
+          volumeMounts:
+            - mountPath: /storage
+              name: storage
+            - mountPath: /shared
+              name: shared
+            - mountPath: /dev/kvm
+              name: kvm
+            - mountPath: /dev/net/tun
+              name: tun
+          securityContext:
+            capabilities:
+              add: ["NET_ADMIN"]
+            privileged: true
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 120
+      volumes:
+        - name: kvm
+          hostPath:
+            path: /dev/kvm
+        - name: tun
+          hostPath:
+            path: /dev/net/tun
+      nodeSelector:
+        kubernetes.io/hostname: odroid-h4
+  volumeClaimTemplates:
+    - metadata:
+        name: storage
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
+    - metadata:
+        name: shared
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
