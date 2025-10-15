@@ -27,6 +27,9 @@ spec:
               value: /music
             - name: ND_DATAFOLDER
               value: /data
+          envFrom:
+            - secretRef:
+                name: env
           ports:
             - containerPort: 4533
               protocol: TCP
