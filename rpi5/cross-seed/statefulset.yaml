@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: cross-seed
+  labels:
+    app: cross-seed
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cross-seed
+  serviceName: cross-seed
+  template:
+    metadata:
+      name: cross-seed
+      labels:
+        app: cross-seed
+    spec:
+      containers:
+        - name: cross-seed
+          image: ghcr.io/cross-seed/cross-seed:6.13.5@sha256:5582e38109145faf6203c844d61d2187368329bde7019a310d3922fef82d8fbf
+          imagePullPolicy: IfNotPresent
+          args: ["daemon"]
+          ports:
+            - containerPort: 2468
+              protocol: TCP
+              name: http
+          volumeMounts:
+            - mountPath: /config
+              name: config
+            - mountPath: /data
+              name: data
+          securityContext:
+            privileged: false
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 2016
+            runAsGroup: 3002
+            capabilities:
+              drop:
+                - ALL
+          readinessProbe:
+            httpGet:
+              port: http
+              path: /api/ping
+      restartPolicy: Always
+      securityContext:
+        fsGroup: 3002
+      volumes:
+        - name: data
+          hostPath:
+            path: /data
+      nodeSelector:
+        kubernetes.io/hostname: beelink
+  volumeClaimTemplates:
+    - metadata:
+        name: config
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi

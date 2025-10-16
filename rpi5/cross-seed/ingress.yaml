@@ -1,0 +1,20 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: cross-seed
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`cross-seed.internal`)
+      middlewares:
+        - name: security-headers
+          namespace: kube-system
+      services:
+        - name: cross-seed
+          port: 80
+  tls:
+    secretName: cross-seed-cert-tls
+    domains:
+      - main: cross-seed.internal
