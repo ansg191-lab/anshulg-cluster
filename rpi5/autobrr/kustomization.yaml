@@ -1,0 +1,43 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../kustomize/base
+  - ../../kustomize/workloads/statefulset
+
+components:
+  - ../../kustomize/components/ingress
+  - ../../kustomize/components/security-context
+
+namePrefix: autobrr-
+labels:
+  - pairs:
+      app.kubernetes.io/name: autobrr
+    includeSelectors: true
+
+images:
+  - name: busybox
+    newName: ghcr.io/autobrr/autobrr
+    newTag: v1.68.0@sha256:0d61a307f3569853fe876dd8a4baf3a3065ff4cde342d13e33aa108db6129f3f
+
+configMapGenerator:
+  - name: domain-config
+    literals:
+      - DOMAIN=autobrr.internal
+  - name: env-config
+    literals:
+      - TZ=America/Los_Angeles
+  - name: scripts
+    files:
+      - freespace.sh=scripts/freespace.sh
+
+patches:
+  - target:
+      kind: StatefulSet
+    path: patch-statefulset.yaml
+  - target:
+      kind: StatefulSet
+    path: patch-statefulset2.yaml
+  - target:
+      kind: Service
+    path: patch-service.yaml

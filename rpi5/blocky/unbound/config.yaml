@@ -5,6 +5,7 @@ data:
         local-data: "abs.internal. A 192.168.1.100"
         local-data: "audiobookshelf.internal. A 192.168.1.100"
         local-data: "audioserve.internal. A 192.168.1.100"
+        local-data: "autobrr.internal. A 192.168.1.100"
         local-data: "argocd.internal. A 192.168.1.100"
         local-data: "bazarr.internal. A 192.168.1.100"
         local-data: "blocky.internal. A 192.168.1.100"

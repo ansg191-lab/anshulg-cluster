@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: autobrr
+  labels:
+    anshulg.com/ca: "true"
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: autobrr
+  namespace: argocd
+spec:
+  destination:
+    server: {{ .Values.spec.destination.server }}
+    namespace: autobrr
+  project: default
+  source:
+    repoURL: {{ .Values.spec.source.repoURL }}
+    targetRevision: {{ .Values.spec.source.branch }}
+    path: rpi5/autobrr

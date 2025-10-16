@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: empty
+spec:
+  template:
+    spec:
+      containers:
+        - name: app
+          envFrom:
+            - configMapRef:
+                name: env-config
+          volumeMounts:
+            - mountPath: /config
+              name: data
+            - mountPath: /scripts
+              name: scripts
+            - mountPath: /data
+              name: data2
+            - mountPath: /etc/ssl/certs/ca-certificates.crt
+              name: ca-certs
+              subPath: ca.crt
+            - mountPath: /tmp
+              name: tmp
+          readinessProbe:
+            httpGet:
+              port: 7474
+              path: /
+      volumes:
+        - name: ca-certs
+          configMap:
+            name: anshulg-ca
+        - name: scripts
+          configMap:
+            name: scripts
+            defaultMode: 0755
+        - name: data2
+          hostPath:
+            path: /data
+        - name: tmp
+          emptyDir: {}
