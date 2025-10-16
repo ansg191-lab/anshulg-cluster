@@ -37,8 +37,6 @@ spec:
               name: config
             - mountPath: /data
               name: data
-            - mountPath: /downloads
-              name: downloads
           startupProbe:
             tcpSocket:
               port: 5299
@@ -51,35 +49,6 @@ spec:
           livenessProbe:
             tcpSocket:
               port: 5299
-        - name: rclone
-          image: rclone/rclone:1.71.1@sha256:d5971950c2b370fb04dd3292541b5bda6d9103143fd7e345aeb435a399388afc
-          imagePullPolicy: IfNotPresent
-          command:
-            - /bin/sh
-            - -c
-            - |
-              while true; do
-                echo "Starting rclone sync..."
-                rclone copy -v --progress remote:torrents/qbittorrent/books /downloads
-                echo "Sync complete. Sleeping for 30 seconds..."
-                echo
-                sleep 30
-              done
-          volumeMounts:
-            - mountPath: /config/rclone/rclone.conf
-              name: rclone-config
-              subPath: rclone.conf
-            - mountPath: /downloads
-              name: downloads
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 2003
-            runAsGroup: 3002
-            privileged: false
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-                - ALL
       securityContext:
         fsGroup: 3002
       restartPolicy: Always
@@ -87,9 +56,6 @@ spec:
         - name: data
           hostPath:
             path: /data
-        - name: rclone-config
-          secret:
-            secretName: rclone-config
   volumeClaimTemplates:
     - metadata:
         name: config
@@ -98,10 +64,3 @@ spec:
         resources:
           requests:
             storage: 1Gi
-    - metadata:
-        name: downloads
-      spec:
-        accessModes: [ "ReadWriteOnce" ]
-        resources:
-          requests:
-            storage: 10Gi
