@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: beets
+  labels:
+    app: beets
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: beets
+  template:
+    metadata:
+      name: beets
+      labels:
+        app: beets
+    spec:
+      containers:
+        - name: beets
+          image: ghcr.io/ansg191-lab/containers/beets:v2.4.0.1@sha256:6fef4458aec14b989bc37749ca93fa35582b7a05173d32bb87a0f45cd3ee0962
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - secretRef:
+                name: env
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "Started beets container"
+              exec tail -f /dev/null
+          securityContext:
+            runAsUser: 2017
+            runAsGroup: 3002
+            privileged: false
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - mountPath: /music
+              name: music
+            - mountPath: /seedbox
+              name: seedbox
+            - mountPath: /.config/beets/config.yaml
+              name: config
+              subPath: config.yaml
+      restartPolicy: Always
+      securityContext:
+        fsGroup: 3002
+      volumes:
+        - name: music
+          hostPath:
+            path: /data/Music2
+        - name: seedbox
+          hostPath:
+            path: /seedbox
+        - name: config
+          secret:
+            secretName: config
+      nodeSelector:
+        kubernetes.io/hostname: odroid-h4
