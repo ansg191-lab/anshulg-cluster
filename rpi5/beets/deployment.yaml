@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: beets
   labels:
@@ -40,10 +40,35 @@ spec:
             - mountPath: /music
               name: music
             - mountPath: /seedbox
-              name: seedbox
+              name: data
             - mountPath: /.config/beets/config.yaml
               name: config
               subPath: config.yaml
+        - name: lftp
+          image: debian:13.1-slim@sha256:1caf1c703c8f7e15dcf2e7769b35000c764e6f50e4d7401c355fb0248f3ddfdb
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - secretRef:
+                name: env
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "Started lftp container"
+              set -e
+              exec tail -f /dev/null
+#              apt-get update && apt-get install -y lftp
+#              setpriv --reuid 2017 --regid 3002 --clear-groups lftp -u $LFTP_USER,$LFTP_PASS $LFTP_HOST -e "
+#              set ssl:verify-certificate false;
+#              set net:connection-limit 32;
+#              set mirror:use-pget-n 16;
+#              set mirror:parallel-transfer-count 4;
+#              mirror --continue $LFTP_REMOTE_DIR /seedbox;
+#              bye;
+#              "
+          volumeMounts:
+            - mountPath: /seedbox
+              name: data
       restartPolicy: Always
       securityContext:
         fsGroup: 3002
@@ -51,11 +76,16 @@ spec:
         - name: music
           hostPath:
             path: /data/Music2
-        - name: seedbox
-          hostPath:
-            path: /seedbox
         - name: config
           secret:
             secretName: config
       nodeSelector:
         kubernetes.io/hostname: odroid-h4
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
