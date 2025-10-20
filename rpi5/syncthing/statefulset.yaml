@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: syncthing
+  labels:
+    app: syncthing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: syncthing
+  serviceName: syncthing
+  template:
+    metadata:
+      name: syncthing
+      labels:
+        app: syncthing
+    spec:
+      containers:
+        - name: syncthing
+          image: lscr.io/linuxserver/syncthing:2.0.10@sha256:a3f2eb7c61cae5d19605b726a9cd5f8a7b602f529df504edce99b46f42c91647
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PUID
+              value: "2018"
+            - name: PGID
+              value: "3002"
+            - name: TZ
+              value: "America/Los_Angeles"
+          ports:
+            - containerPort: 8384
+              protocol: TCP
+              name: http
+          volumeMounts:
+            - mountPath: /config
+              name: config
+            - mountPath: /data
+              name: data
+      restartPolicy: Always
+      volumes:
+        - name: data
+          hostPath:
+            path: /data
+      securityContext:
+        fsGroup: 3002
+      nodeSelector:
+        kubernetes.io/hostname: odroid-h4
+  volumeClaimTemplates:
+    - metadata:
+        name: config
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi

@@ -1,0 +1,20 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: syncthing
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`syncthing.internal`)
+      middlewares:
+        - name: security-headers
+          namespace: kube-system
+      services:
+        - name: syncthing
+          port: 80
+  tls:
+    secretName: syncthing-cert-tls
+    domains:
+      - main: syncthing.internal
