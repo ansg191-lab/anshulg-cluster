@@ -16,6 +16,12 @@ sudo firewall-cmd --permanent --add-service=https
 sudo firewall-cmd --permanent --add-service=ldaps
 sudo firewall-cmd --permanent --add-port=443/udp
 sudo firewall-cmd --reload
+
+# Add update script to cron
+sudo cp update-lists.sh /etc/cron.daily/update-lists.sh
+sudo chmod +x /etc/cron.daily/update-lists.sh
+sudo /etc/cron.daily/update-lists.sh
+
 echo "::endgroup::"
 
 # Setup fail2ban
