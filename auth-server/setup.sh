@@ -10,13 +10,11 @@ sudo systemctl enable firewalld
 sudo systemctl start firewalld
 
 # Allow SSH and HTTP/HTTPS
-#sudo firewall-cmd --permanent --add-service=ssh
+sudo firewall-cmd --permanent --add-service=ssh
 sudo firewall-cmd --permanent --add-service=http
 sudo firewall-cmd --permanent --add-service=https
 sudo firewall-cmd --permanent --add-service=ldaps
 sudo firewall-cmd --permanent --add-port=443/udp
-sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="68.0.0.0/12" service name="ssh" accept'
-sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" service name="ssh" drop'
 sudo firewall-cmd --reload
 echo "::endgroup::"
 
