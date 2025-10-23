@@ -27,6 +27,10 @@ function load_github() {
     curl -fsSL "https://api.github.com/meta" | jq -r '.actions[] | select(test(":") | not)' >> "$TMPFILE"
 }
 
+function load_google() {
+    curl -fsSL https://www.gstatic.com/ipranges/cloud.json | jq -r '.prefixes[] | select(.scope == "us-west2" and .ipv4Prefix != null) | .ipv4Prefix' >> "$TMPFILE"
+}
+
 function load_cidr() {
 	cat /home/anshulgupta/cidr.txt >> "$TMPFILE"
 }
@@ -55,6 +59,7 @@ function add_rule() {
 trap cleanup EXIT
 assert_sudo
 load_github
+load_google
 load_cidr
 create_ipset
 add_rule
