@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: beets
-          image: ghcr.io/ansg191-lab/containers/beets:v2.4.0.3@sha256:7f6d0c70d134b9420bd6e386e06d2749ef397b18969993a490aa0e3c3d6a8294
+          image: ghcr.io/ansg191-lab/containers/beets:v2.4.0.4@sha256:142e1c84c4e52226da00dd560ce09274f717a4c8a5850f581af244748a15f89a
           imagePullPolicy: IfNotPresent
           envFrom:
             - secretRef:
