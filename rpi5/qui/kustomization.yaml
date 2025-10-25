@@ -1,0 +1,42 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../kustomize/base
+  - ../../kustomize/workloads/statefulset
+  - secrets.yaml
+
+components:
+  - ../../kustomize/components/ingress
+  - ../../kustomize/components/direct-ingress
+  - ../../kustomize/components/security-context
+  - ../../kustomize/components/tailscale
+
+namePrefix: qui-
+labels:
+  - pairs:
+      app.kubernetes.io/name: qui
+    includeSelectors: true
+
+images:
+  - name: busybox
+    newName: ghcr.io/autobrr/qui
+    newTag: v1.5.0@sha256:393055be10e7b11b893f665c02b936cf50529ed1dbd6166ad1177bf36e1a68cb
+
+configMapGenerator:
+  - name: domain-config
+    literals:
+      - DOMAIN=qui.internal
+      - DIRECT_DOMAIN=qui.anshulg.direct
+      - TS_HOST=qui
+
+patches:
+  - target:
+      kind: StatefulSet
+    path: patch-statefulset.yaml
+  - target:
+      kind: StatefulSet
+    path: patch-statefulset2.yaml
+  - target:
+      kind: Service
+    path: patch-service.yaml
