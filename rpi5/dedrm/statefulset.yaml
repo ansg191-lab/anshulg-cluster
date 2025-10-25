@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: dedrm
-          image: xmoforf/windows:latest@sha256:3e7467367237d9a11a645054f90e180bc335668148dd51aa1ed6aa3652910ffc
+          image: xmoforf/windows:latest@sha256:8f6fc9e9b6829396bd9f48ea31632829e6021167081ff57cf0eb981853557eb7
           imagePullPolicy: Always
           envFrom:
             - secretRef:
