@@ -3,6 +3,19 @@
 set -eu
 sudo zypper refresh
 
+# Install 1password CLI
+echo "::group::Installing 1Password CLI"
+ARCH="amd64"; \
+    OP_VERSION="v$(curl https://app-updates.agilebits.com/check/1/0/CLI2/en/2.0.0/N -s | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+')"; \
+    curl -sSfo op.zip \
+    https://cache.agilebits.com/dist/1P/op2/pkg/"$OP_VERSION"/op_linux_"$ARCH"_"$OP_VERSION".zip \
+    && sudo unzip -od /usr/local/bin/ op.zip \
+    && rm op.zip
+
+OP_SERVICE_ACCOUNT_TOKEN=$(cat "1password.txt")
+export OP_SERVICE_ACCOUNT_TOKEN
+echo "::endgroup::"
+
 # Setup firewall
 echo "::group::Setting up firewall"
 sudo zypper install -y firewalld
@@ -20,7 +33,7 @@ sudo firewall-cmd --reload
 # Add update script to cron
 sudo cp update-lists.sh /etc/cron.daily/update-lists.sh
 sudo chmod +x /etc/cron.daily/update-lists.sh
-sudo /etc/cron.daily/update-lists.sh
+#sudo /etc/cron.daily/update-lists.sh
 
 echo "::endgroup::"
 
