@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: firefox
-          image: linuxserver/firefox:1.2404.1@sha256:8b00cd593a26c40637c1f29f109de0fd6ae128613c6c4f84014e2f8dddd66d57
+          image: linuxserver/firefox:1143.0.4@sha256:155c3248146125e78c8c25bf9e29038dce00c59673d614afcc1a4169a9a59d45
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID
