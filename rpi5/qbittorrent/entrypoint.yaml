@@ -16,11 +16,10 @@ data:
     --state ESTABLISHED,RELATED -j ACCEPT\n# Allow DNS to VPN DNS (pushed) will be
     covered by ESTABLISHED; allow cluster DNS if needed:\niptables -A OUTPUT -d \"$CLUSTER_DNS_IP\"
     -p udp --dport 53 -j ACCEPT\niptables -A OUTPUT -d \"$CLUSTER_DNS_IP\" -p udp
-    --dport 53 -j ACCEPT\n# NEW: allow cluster pod + service networks\niptables -A
-    OUTPUT -d 10.43.0.0/16 -o eth0 -j ACCEPT\niptables -A OUTPUT -o tun0 -j ACCEPT\n\n#
-    Allow traffic to k8s internal services\nip route add 10.43.0.0/16 via 10.42.0.1
-    dev eth0\n\n# Keep the container alive and expose logs if OpenVPN dies\necho \"Container
-    setup complete. Running forever...\"\ntail -F /var/log/* /dev/null\n"
+    --dport 53 -j ACCEPT\niptables -A OUTPUT -o tun0 -j ACCEPT\n\n# Allow traffic
+    to k8s internal services\nip route add 10.43.0.0/16 via 10.42.0.1 dev eth0\n\n#
+    Keep the container alive and expose logs if OpenVPN dies\necho \"Container setup
+    complete. Running forever...\"\ntail -F /var/log/* /dev/null\n"
 kind: ConfigMap
 metadata:
   name: ovpn-script
