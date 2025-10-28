@@ -36,6 +36,8 @@ iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 # Allow DNS to VPN DNS (pushed) will be covered by ESTABLISHED; allow cluster DNS if needed:
 iptables -A OUTPUT -d "$CLUSTER_DNS_IP" -p udp --dport 53 -j ACCEPT
 iptables -A OUTPUT -d "$CLUSTER_DNS_IP" -p udp --dport 53 -j ACCEPT
+# NEW: allow cluster pod + service networks
+iptables -A OUTPUT -d 10.43.0.0/16 -o eth0 -j ACCEPT
 iptables -A OUTPUT -o tun0 -j ACCEPT
 
 # Allow traffic to k8s internal services
