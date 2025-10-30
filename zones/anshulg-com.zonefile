@@ -30,8 +30,6 @@ anshulg.com. 86400 IN MX 10 in1-smtp.messagingengine.com.
 anshulg.com. 86400 IN MX 20 in2-smtp.messagingengine.com.
 *.anshulg.com. 86400 IN MX 10 in1-smtp.messagingengine.com.
 *.anshulg.com. 86400 IN MX 20 in2-smtp.messagingengine.com.
-git.anshulg.com. 86400 IN MX 10 in1-smtp.messagingengine.com.
-git.anshulg.com. 86400 IN MX 20 in2-smtp.messagingengine.com.
 k8s.anshulg.com. 86400 IN MX 10 in1-smtp.messagingengine.com.
 k8s.anshulg.com. 86400 IN MX 20 in2-smtp.messagingengine.com.
 rpi5.anshulg.com. 86400 IN MX 10 in1-smtp.messagingengine.com.
@@ -44,7 +42,6 @@ fm3._domainkey.anshulg.com. 300 IN CNAME fm3.anshulg.com.dkim.fmhosted.com.
 
 ;; SPF Record
 anshulg.com. 300 IN TXT "v=spf1 include:spf.messagingengine.com -all"
-git.anshulg.com. 300 IN TXT "v=spf1 include:spf.messagingengine.com -all"
 k8s.anshulg.com. 300 IN TXT "v=spf1 include:spf.messagingengine.com -all"
 rpi5.anshulg.com. 300 IN TXT "v=spf1 include:spf.messagingengine.com -all"
 
@@ -96,13 +93,6 @@ _gh-ansg191-lab-o.anshulg.com. 300 IN TXT "6f94005a5c"
 anshulg.com. 300 IN TXT "abuseipdb-verification=PSX0gk1m"
 
 ;; SSHFP Records
-git.anshulg.com. 60 IN SSHFP 1 1 b8e79866783cee9f2f8075bc9e4abdf021ac7dc2
-git.anshulg.com. 60 IN SSHFP 1 2 dd269c3a8f5e03333adcc9d7c7e4586a8b411c28fbe108e92597d77fcefd5801
-git.anshulg.com. 60 IN SSHFP 3 1 f3079593001ac043d9363bea63b5be0b0b04c4ab
-git.anshulg.com. 60 IN SSHFP 3 2 38c632181f3695647cba61d7e63381853672d79ece9863752c3a593d0cd09907
-git.anshulg.com. 60 IN SSHFP 4 1 ad425d4ec5ba34bfd62a563b9239d2d31dca9e14
-git.anshulg.com. 60 IN SSHFP 4 2 910e30f3143e3f5c5fbfac1ef5fd976a193c25e8476db80e44e1f50a95e086db
-
 auth.anshulg.com. 60 IN SSHFP 1 1 b1be8643a002ffa0f3bca3f55ee6d145b1c4aa19
 auth.anshulg.com. 60 IN SSHFP 1 2 1b4af34be465038e8c2b44d1e4c25fdaa522acc7477b1766d18ea2c1dcd183dd
 auth.anshulg.com. 60 IN SSHFP 3 1 902b118e78be8b58fcb4f8d934114e2844548ad8
@@ -131,10 +121,6 @@ anshulg.com. 86400 IN HTTPS 1 . alpn= h3,h2
 ;; Auth Server
 auth.anshulg.com. 60 IN A 34.94.107.30
 ldap.auth.anshulg.com. 60 IN A 34.94.107.30
-
-;; Git Server
-git.anshulg.com. 60 IN A 35.236.59.43
-git.anshulg.com. 60 IN AAAA 2600:1900:4120:716d:0:3:0:0
 
 ;; OPENPGPKEY Record
 c56df4e560c60827f8f239cb5e80577581b094be4478086e14cb8988._openpgpkey.anshulg.com. IN OPENPGPKEY (
