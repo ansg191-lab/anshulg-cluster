@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: mam-point-spender
+  labels:
+    app: mam-point-spender
+spec:
+  schedule: "18 13 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: mam-point-spender
+              image: ghcr.io/ansg191-lab/containers/mam-point-spender:v2.1.1@sha256:b4616d3ca288225bf6f72d2b3bf4fe93f10e99e86044d9047b191b6f51f5b748
+              imagePullPolicy: IfNotPresent
+              envFrom:
+                - configMapRef:
+                    name: env
+                - secretRef:
+                    name: secret
+              volumeMounts:
+                - mountPath: /tmp
+                  name: workdir
+              securityContext:
+                runAsNonRoot: true
+                runAsUser: 10001
+                runAsGroup: 10001
+                privileged: false
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                readOnlyRootFilesystem: true
+          restartPolicy: OnFailure
+          volumes:
+            - name: workdir
+              persistentVolumeClaim:
+                claimName: mam-point-spender-workdir

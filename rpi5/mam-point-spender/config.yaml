@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: env
+data:
+  MAM_BUFFER: "55000"
+  MAM_VIP: "1"
+  MAM_WEDGEHOURS: "0"
+  MAM_WORKDIR: "/tmp"
