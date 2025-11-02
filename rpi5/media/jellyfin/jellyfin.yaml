@@ -46,14 +46,14 @@ spec:
             limits:
               memory: 4Gi
               gpu.intel.com/i915: "1"
-          livenessProbe:
-            httpGet:
-              port: 8096
-              path: /health
-            initialDelaySeconds: 60
-            periodSeconds: 30
-            timeoutSeconds: 5
-            failureThreshold: 3
+#          livenessProbe:
+#            httpGet:
+#              port: 8096
+#              path: /health
+#            initialDelaySeconds: 60
+#            periodSeconds: 30
+#            timeoutSeconds: 5
+#            failureThreshold: 3
           readinessProbe:
             httpGet:
               port: 8096
