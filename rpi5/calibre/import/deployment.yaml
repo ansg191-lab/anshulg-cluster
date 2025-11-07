@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: import-watch
+  labels:
+    app: import-watch
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: import-watch
+  template:
+    metadata:
+      name: import-watch
+      labels:
+        app: import-watch
+    spec:
+      containers:
+        - name: import-watch
+          image: nginx
+          imagePullPolicy: IfNotPresent
+          command:
+            - "/entrypoint.sh"
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          volumeMounts:
+            - mountPath: "/entrypoint.sh"
+              name: script
+              subPath: entrypoint.sh
+            - mountPath: "/import"
+              name: import
+      restartPolicy: Always
+      nodeSelector:
+        kubernetes.io/hostname: odroid-h4
+      volumes:
+        - name: script
+          configMap:
+            name: script
+            defaultMode: 0755
+        - name: import
+          hostPath:
+            path: "/data/BookImport"

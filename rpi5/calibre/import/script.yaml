@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: script
+data:
+  entrypoint.sh: |
+    #!/usr/bin/env sh
+    WATCH_DIR="${WATCH_DIR:-/import}"
+    CALIBRE_DIR="$WATCH_DIR/calibre"
+    BOOKLORE_DIR="$WATCH_DIR/booklore"
+
+    set -e
+
+    # Check if inotifywait is installed
+    if ! command -v inotifywait >/dev/null 2>&1; then
+        echo "inotifywait is not installed. Installing inotify-tools..."
+        apt-get update && apt-get install -y inotify-tools
+    fi
+
+    inotifywait -m -e create --format "%f" "$WATCH_DIR" | while read file; do
+        cp "$WATCH_DIR/$file" "$CALIBRE_DIR/"
+        cp "$WATCH_DIR/$file" "$BOOKLORE_DIR/"
+        echo "Copied $file to import directories."
+        rm "$WATCH_DIR/$file"
+    done
