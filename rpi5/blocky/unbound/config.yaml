@@ -8,6 +8,7 @@ data:
         local-data: "autobrr.internal. A 192.168.1.100"
         local-data: "argocd.internal. A 192.168.1.100"
         local-data: "bazarr.internal. A 192.168.1.100"
+        local-data: "booklore.internal. A 192.168.1.100"
         local-data: "blocky.internal. A 192.168.1.100"
         local-data: "bookshelf.internal. A 192.168.1.100"
         local-data: "calibre.internal. A 192.168.1.100"

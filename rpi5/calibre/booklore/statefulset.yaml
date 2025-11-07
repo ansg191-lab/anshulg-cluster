@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: booklore
+  labels:
+    app: booklore
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: booklore
+  serviceName: booklore
+  template:
+    metadata:
+      name: booklore
+      annotations:
+        reloader.stakater.com/auto: "true"
+      labels:
+        app: booklore
+    spec:
+      containers:
+        - name: booklore
+          image: ghcr.io/booklore-app/booklore:v1.10.0@sha256:fcd3241103794e3c7e26d0d85b3de292af95b253aa177025c6eaaaa5a5c5f842
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: USER_ID
+              value: "2019"
+            - name: GROUP_ID
+              value: "3002"
+            - name: TZ
+              value: "America/Los_Angeles"
+            - name: BOOKLORE_PORT
+              value: "6060"
+          envFrom:
+            - secretRef:
+                name: booklore-web-env
+          ports:
+            - containerPort: 6060
+              protocol: TCP
+              name: http
+          volumeMounts:
+            - mountPath: /app/data
+              name: data
+            - mountPath: /books
+              name: books
+            - mountPath: /bookdrop
+              name: ingest
+          readinessProbe:
+            httpGet:
+              port: 6060
+              path: /
+          livenessProbe:
+            tcpSocket:
+              port: 6060
+            initialDelaySeconds: 30
+      restartPolicy: Always
+      securityContext:
+        fsGroup: 3002
+      volumes:
+        - name: books
+          hostPath:
+            path: "/data/Books"
+        - name: ingest
+          hostPath:
+            path: "/data/BookImport/booklore"
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi

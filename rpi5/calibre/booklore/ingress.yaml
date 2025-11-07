@@ -1,0 +1,35 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: booklore
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`booklore.internal`)
+      middlewares:
+        - name: security-headers
+          namespace: kube-system
+      services:
+        - name: booklore
+          port: 80
+  tls:
+    secretName: booklore-cert-tls
+    domains:
+      - main: booklore.internal
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: booklore
+spec:
+  ingressClassName: tailscale
+  defaultBackend:
+    service:
+      name: booklore
+      port:
+        number: 80
+  tls:
+    - hosts:
+        - booklore

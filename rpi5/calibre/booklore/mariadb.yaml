@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mariadb
+  labels:
+    app: mariadb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mariadb
+  serviceName: mariadb
+  template:
+    metadata:
+      name: mariadb
+      labels:
+        app: mariadb
+    spec:
+      containers:
+        - name: booklore
+          image: lscr.io/linuxserver/mariadb:11.4.8
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PUID
+              value: "10001"
+            - name: PGID
+              value: "10001"
+            - name: TZ
+              value: "America/Los_Angeles"
+          envFrom:
+            - secretRef:
+                name: db-env
+          ports:
+            - containerPort: 3306
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /config
+              name: data
+          readinessProbe:
+            exec:
+              command:
+                - "mariadb-admin"
+                - "ping"
+                - "-h"
+                - "localhost"
+          livenessProbe:
+            tcpSocket:
+              port: 3306
+            initialDelaySeconds: 30
+      restartPolicy: Always
+      securityContext:
+        fsGroup: 10001
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
