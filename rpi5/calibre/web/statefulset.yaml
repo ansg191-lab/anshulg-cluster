@@ -66,7 +66,7 @@ spec:
             path: "/data/Calibre Library"
         - name: ingest
           hostPath:
-            path: "/data/BookImport"
+            path: "/data/BookImport/calibre"
         - name: ca
           configMap:
             name: anshulg-ca
