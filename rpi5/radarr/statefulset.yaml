@@ -38,8 +38,8 @@ spec:
               name: config
             - mountPath: /data
               name: data
-            - mountPath: /seedbox
-              name: seedbox
+#            - mountPath: /seedbox
+#              name: seedbox
             - mountPath: /etc/ssl/certs/ca-certificates.crt
               name: ca
               subPath: ca.crt
@@ -74,9 +74,9 @@ spec:
         - name: ca
           configMap:
             name: anshulg-ca
-        - name: seedbox
-          hostPath:
-            path: /seedbox
+#        - name: seedbox
+#          hostPath:
+#            path: /seedbox
   volumeClaimTemplates:
     - metadata:
         name: config
