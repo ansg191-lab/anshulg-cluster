@@ -8,19 +8,18 @@ metadata:
 spec:
   project: default
   source:
-    chart: valkey
-    repoURL: https://charts.bitnami.com/bitnami
-    targetRevision: 3.0.31
+    repoURL: https://github.com/ansg191/valkey-helm.git
+    targetRevision: clusterIP
+    path: valkey
     helm:
       values: |
         auth:
           enabled: false
-        primary:
-          service:
-            type: ClusterIP
-            clusterIP: 10.43.0.13
+        service:
+          type: ClusterIP
+          clusterIP: 10.43.0.13
   destination:
     server: https://kubernetes.default.svc
     namespace: blocky
-  syncPolicy:
-    automated: {}
+#  syncPolicy:
+#    automated: {}
