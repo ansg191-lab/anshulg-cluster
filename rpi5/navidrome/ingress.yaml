@@ -18,3 +18,18 @@ spec:
     secretName: navidrome-cert-tls
     domains:
       - main: navidrome.internal
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: navidrome
+spec:
+  ingressClassName: tailscale
+  defaultBackend:
+    service:
+      name: navidrome
+      port:
+        number: 80
+  tls:
+    - hosts:
+        - navidrome
