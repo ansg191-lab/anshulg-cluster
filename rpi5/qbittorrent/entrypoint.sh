@@ -34,8 +34,13 @@ iptables -P OUTPUT DROP
 iptables -A OUTPUT -o lo -j ACCEPT
 iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 # Allow DNS to VPN DNS (pushed) will be covered by ESTABLISHED; allow cluster DNS if needed:
+iptables -A OUTPUT -d "$CLUSTER_DNS_IP" -p tcp --dport 53 -j ACCEPT
 iptables -A OUTPUT -d "$CLUSTER_DNS_IP" -p udp --dport 53 -j ACCEPT
-iptables -A OUTPUT -d "$CLUSTER_DNS_IP" -p udp --dport 53 -j ACCEPT
+
+# Allow k8s internal traffic
+iptables -A OUTPUT -o eth0 -d 10.43.0.0/16 -j ACCEPT
+
+# Allow all traffic via tun0
 iptables -A OUTPUT -o tun0 -j ACCEPT
 
 # Allow traffic to k8s internal services
@@ -43,4 +48,4 @@ ip route add 10.43.0.0/16 via 10.42.0.1 dev eth0
 
 # Keep the container alive and expose logs if OpenVPN dies
 echo "Container setup complete. Running forever..."
-tail -F /var/log/* /dev/null
+exec tail -F /var/log/* /dev/null
