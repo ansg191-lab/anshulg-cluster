@@ -30,6 +30,7 @@ ip link show tun0 >/dev/null 2>&1 || { echo "tun0 not up"; exit 1; }
 
 # Basic leak protection: drop outbound if not via tun0 (allow established & DNS as needed)
 echo "Starting leak protection..."
+set -x
 iptables -P OUTPUT DROP
 iptables -A OUTPUT -o lo -j ACCEPT
 iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
@@ -42,6 +43,7 @@ iptables -A OUTPUT -o eth0 -d 10.43.0.0/16 -j ACCEPT
 
 # Allow all traffic via tun0
 iptables -A OUTPUT -o tun0 -j ACCEPT
+set +x
 
 # Allow traffic to k8s internal services
 ip route add 10.43.0.0/16 via 10.42.0.1 dev eth0
