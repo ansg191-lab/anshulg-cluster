@@ -1,0 +1,14 @@
+apiVersion: v1
+data:
+  wait_for_vpn.sh: "#!/usr/bin/env sh\n#\n# Copyright (c) 2025. Anshul Gupta\n# All
+    rights reserved.\n#\n\necho \"**** Waiting for VPN Connection ****\"\n\nfor i
+    in $(seq 1 60); do\n\tif ip addr show dev tun0 > /dev/null 2>&1; then\n\t\techo
+    \"VPN is up, starting qBittorrent...\"\n\t\tbreak\n\telse\n\t\techo \"Waiting
+    for VPN to connect... ($i/60)\"\n\t\tsleep 1\n\tfi\ndone\n\nif ! ip addr show
+    dev tun0 > /dev/null 2>&1; then\n\techo \"VPN connection failed to establish within
+    the timeout period.\"\n\texit 1\nfi\n\nIP_ADDR=$(curl -s https://icanhazip.com)\necho
+    \"Detected IP Address: $IP_ADDR\"\n\necho \"**** VPN Connection Established ****\"\n"
+kind: ConfigMap
+metadata:
+  name: qbt-script
+  namespace: qbittorrent

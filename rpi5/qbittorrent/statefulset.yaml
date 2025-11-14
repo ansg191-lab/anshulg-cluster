@@ -67,14 +67,9 @@ spec:
               name: config
             - mountPath: /data
               name: data
-          lifecycle:
-            postStart:
-              exec:
-                command:
-                  - /bin/sh
-                  - -c
-                  - |
-                    for i in $(seq 1 60); do ip link show tun0 >/dev/null 2>&1 && exit 0; sleep 1; done; echo 'VPN not ready'; exit 1;
+            - mountPath: /custom-cont-init.d
+              name: qbt-script
+              readOnly: true
       restartPolicy: Always
       securityContext:
         fsGroup: 3002
@@ -95,6 +90,10 @@ spec:
         - name: ovpn-script
           configMap:
             name: ovpn-script
+            defaultMode: 0755
+        - name: qbt-script
+          configMap:
+            name: qbt-script
             defaultMode: 0755
       nodeSelector:
         kubernetes.io/hostname: odroid-h4

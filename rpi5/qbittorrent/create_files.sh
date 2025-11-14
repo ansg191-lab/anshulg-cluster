@@ -6,3 +6,4 @@
 
 kubectl create secret generic -n qbittorrent ovpn-config --from-file=rpi5/qbittorrent/client.ovpn --dry-run=client -o yaml > rpi5/qbittorrent/ovpn.unencrypted.yaml
 kubectl create configmap -n qbittorrent ovpn-script --from-file=rpi5/qbittorrent/entrypoint.sh --dry-run=client -o yaml > rpi5/qbittorrent/entrypoint.yaml
+kubectl create configmap -n qbittorrent qbt-script --from-file=rpi5/qbittorrent/wait_for_vpn.sh --dry-run=client -o yaml > rpi5/qbittorrent/qbt-script.yaml
