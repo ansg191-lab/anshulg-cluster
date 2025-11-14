@@ -7,7 +7,7 @@
 set -e
 
 echo "Installing OpenVPN and dependencies..."
-apt-get update && apt-get install -y --no-install-recommends openvpn iproute2 iptables ca-certificates
+apt-get update && apt-get install -y --no-install-recommends openvpn iproute2 iptables ca-certificates bsdextrautils
 
 # Create authentication file
 echo "Setting up OpenVPN credentials..."
@@ -52,6 +52,9 @@ set +x
 
 # Allow traffic to k8s internal services
 ip route add 10.43.0.0/16 via 10.42.0.1 dev eth0
+
+echo "IP Routes:"
+ip route show | column -t
 
 # Keep the container alive and expose logs if OpenVPN dies
 echo "Container setup complete. Running forever..."
