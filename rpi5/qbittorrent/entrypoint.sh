@@ -30,6 +30,8 @@ ip link show tun0 >/dev/null 2>&1 || { echo "tun0 not up"; exit 1; }
 
 # Basic leak protection: drop outbound if not via tun0 (allow established & DNS as needed)
 echo "Starting leak protection..."
+VPN_SERVER_IP=$(grep '^remote ' /config/client.ovpn | awk '{print $2}' | head -n1)
+
 set -x
 iptables -P OUTPUT DROP
 iptables -A OUTPUT -o lo -j ACCEPT
@@ -37,6 +39,9 @@ iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 # Allow DNS to VPN DNS (pushed) will be covered by ESTABLISHED; allow cluster DNS if needed:
 iptables -A OUTPUT -d "$CLUSTER_DNS_IP" -p tcp --dport 53 -j ACCEPT
 iptables -A OUTPUT -d "$CLUSTER_DNS_IP" -p udp --dport 53 -j ACCEPT
+
+# Allow traffic to VPN server
+iptables -A OUTPUT -o eth0 -d "$VPN_SERVER_IP" -j ACCEPT
 
 # Allow k8s internal traffic
 iptables -A OUTPUT -o eth0 -d 10.43.0.0/16 -j ACCEPT
