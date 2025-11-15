@@ -34,6 +34,7 @@ data:
         local-data: "overleaf.internal. A 192.168.1.100"
         local-data: "overseerr.internal. A 192.168.1.100"
         local-data: "paperless.internal. A 192.168.1.100"
+        local-data: "patchmon.internal. A 192.168.1.100"
         local-data: "plex.internal. A 192.168.1.100"
         local-data: "prowlarr.internal. A 192.168.1.100"
         local-data: "qbittorrent.internal. A 192.168.1.100"

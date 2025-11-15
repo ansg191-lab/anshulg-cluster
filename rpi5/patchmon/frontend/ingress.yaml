@@ -1,0 +1,20 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: patchmon
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`patchmon.internal`)
+      middlewares:
+        - name: security-headers
+          namespace: kube-system
+      services:
+        - name: patchmon-frontend
+          port: 80
+  tls:
+    secretName: patchmon-cert-tls
+    domains:
+      - main: patchmon.internal

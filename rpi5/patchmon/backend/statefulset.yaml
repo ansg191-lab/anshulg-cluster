@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: patchmon-backend
+  labels:
+    app: patchmon-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: patchmon-backend
+  serviceName: patchmon-backend
+  template:
+    metadata:
+      name: patchmon-backend
+      labels:
+        app: patchmon-backend
+    spec:
+      containers:
+        - name: patchmon-backend
+          image: ghcr.io/patchmon/patchmon-backend:1.3.3@sha256:d40252680795d95995a894615ff276b47f14f6e7756eee3c846d1ed7e71f1258
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3001
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: patchmon-backend-env
+            - secretRef:
+                name: patchmon-backend-secrets
+          volumeMounts:
+            - mountPath: /app/agents
+              name: agent-files
+      restartPolicy: Always
+  volumeClaimTemplates:
+    - metadata:
+        name: agent-files
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
