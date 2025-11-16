@@ -4,7 +4,7 @@ metadata:
   name: paperless-config
 data:
   PAPERLESS_PORT: "8000"
-  PAPERLESS_REDIS: "redis://paperless-redis-master:6379"
+  PAPERLESS_REDIS: "redis://paperless-redis-valkey:6379"
   PAPERLESS_TIKA_ENABLED: "1"
   PAPERLESS_TIKA_ENDPOINT: "http://tika"
   PAPERLESS_TIKA_GOTENBERG_ENDPOINT: "http://gotenberg"
