@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: empty
+spec:
+  template:
+    spec:
+      containers:
+        - name: app
+          envFrom:
+            - configMapRef:
+                name: env-config
+          volumeMounts:
+            - mountPath: /opt/fasten/db
+              name: data
+            - mountPath: /opt/fasten/cache
+              name: cache
+            - mountPath: /opt/fasten/certs/shared
+              name: certs
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /
+          livenessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 15
+      volumes:
+        - name: cache
+          emptyDir: {}
