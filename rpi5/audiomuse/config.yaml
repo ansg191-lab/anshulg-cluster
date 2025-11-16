@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: audiomuse-ai-config
+data:
+  MEDIASERVER_TYPE: "navidrome"
+  NAVIDROME_URL: "http://navidrome.navidrome.svc.cluster.local/"
+  POSTGRES_HOST: "192.168.1.9"
+  POSTGRES_PORT: "5432"
+  REDIS_URL: "redis://audiomuse-valkey:6379/0"
+  TEMP_DIR: "/app/temp_audio"

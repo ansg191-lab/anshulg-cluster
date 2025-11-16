@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: audiomuse
+  labels:
+    app: audiomuse
+    component: flask
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: audiomuse
+      component: flask
+  template:
+    metadata:
+      name: audiomuse
+      labels:
+        app: audiomuse
+        component: flask
+    spec:
+      containers:
+        - name: audiomuse
+          image: ghcr.io/neptunehub/audiomuse-ai:0.7.10-beta@sha256:d7acb3e5a849312490c970b67b73b8a26d68865b587d1462b939b3142342065b
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+              protocol: TCP
+              name: http
+          envFrom:
+            - secretRef:
+                name: navidrome-credentials
+            - secretRef:
+                name: postgres-credentials
+            - secretRef:
+                name: mistral-api-credentials
+            - configMapRef:
+                name: audiomuse-ai-config
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - mountPath: /app/temp_audio
+              name: app-temp-audio
+      restartPolicy: Always
+      volumes:
+        - name: app-temp-audio
+          emptyDir: {}
