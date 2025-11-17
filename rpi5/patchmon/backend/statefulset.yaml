@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: patchmon-backend
-          image: ghcr.io/patchmon/patchmon-backend:1.3.3@sha256:d40252680795d95995a894615ff276b47f14f6e7756eee3c846d1ed7e71f1258
+          image: ghcr.io/patchmon/patchmon-backend:1.3.4@sha256:c85e136d8a9ed9cf594142b7e3ddad7dfb4d60f0602ea45eb68f65cf2e8e952a
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3001
