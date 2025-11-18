@@ -18,6 +18,7 @@ fi
 
 # Start OpenVPN
 echo "Starting OpenVPN..."
+mkdir -p /var/log/openvpn
 openvpn --config /config/client.ovpn --pull --script-security 2 --daemon
 
 # Wait for tun0 to appear
@@ -58,4 +59,4 @@ ip route show | column -t
 
 # Keep the container alive and expose logs if OpenVPN dies
 echo "Container setup complete. Running forever..."
-exec tail -F /var/log/* /dev/null
+exec tail -F /var/log/* /var/log/openvpn/* /dev/null
