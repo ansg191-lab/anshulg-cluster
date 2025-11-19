@@ -18,7 +18,7 @@ labels:
 images:
   - name: busybox
     newName: linuxserver/prowlarr
-    newTag: 2.3.1-nightly@sha256:accc3b060148505273a069d52c45ca3e55f2f98bd7a41dcd32834cd45c85b199
+    newTag: 2.3.1-nightly@sha256:fcf701bce7dc271d5b7376fd7da77b5a3ae18e612e7aaa1d63be57b45f21d502
 
 configMapGenerator:
   - name: domain-config
