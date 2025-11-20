@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: booklore
-          image: lscr.io/linuxserver/mariadb:11.4.8
+          image: lscr.io/linuxserver/mariadb:11.4.8@sha256:195b6be2d3e2dd0744a54ba2542a136c572b3375bc7f019e37a505da5da3022b
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID
