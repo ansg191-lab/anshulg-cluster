@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qbt-exporter
+  labels:
+    app: qbt-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qbt-exporter
+  template:
+    metadata:
+      name: qbt-exporter
+      labels:
+        app: qbt-exporter
+    spec:
+      containers:
+        - name: qbt-exporter
+          image: ghcr.io/martabal/qbittorrent-exporter:v1.12.1@sha256:4a48b884ea70e7f33ebb57c19303060a1a3b1e47ef7ea78eaeee60a86ae4c96f
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: exporter-config
+            - secretRef:
+                name: exporter-auth
+          ports:
+            - containerPort: 8090
+              protocol: TCP
+              name: http
+          securityContext:
+            runAsUser: 10001
+            runAsGroup: 10001
+            runAsNonRoot: true
+            privileged: false
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+      restartPolicy: Always
