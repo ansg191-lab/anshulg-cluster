@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: import-watch
-          image: nginx
+          image: debian:13.2-slim@sha256:18764e98673c3baf1a6f8d960b5b5a1ec69092049522abac4e24a7726425b016
           imagePullPolicy: IfNotPresent
           command:
             - "/entrypoint.sh"
