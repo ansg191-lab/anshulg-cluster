@@ -34,6 +34,8 @@ echo "Starting leak protection..."
 VPN_SERVER_IP=$(grep '^remote ' /config/client.ovpn | awk '{print $2}' | head -n1)
 
 set -x
+iptables -P INPUT ACCEPT
+iptables -P FORWARD DROP
 iptables -P OUTPUT DROP
 iptables -A OUTPUT -o lo -j ACCEPT
 iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
@@ -49,6 +51,11 @@ iptables -A OUTPUT -o eth0 -d 10.43.0.0/16 -j ACCEPT
 
 # Allow all traffic via tun0
 iptables -A OUTPUT -o tun0 -j ACCEPT
+
+# Reject all other outbound traffic if tun0 is down
+iptables -A OUTPUT -p udp -j REJECT --reject-with icmp-port-unreachable
+iptables -A OUTPUT -p tcp -j REJECT --reject-with tcp-reset
+iptables -A OUTPUT -j REJECT --reject-with icmp-port-unreachable
 set +x
 
 # Allow traffic to k8s internal services

@@ -14,18 +14,21 @@ data:
     not up\"; exit 1; }\n\n# Basic leak protection: drop outbound if not via tun0
     (allow established & DNS as needed)\necho \"Starting leak protection...\"\nVPN_SERVER_IP=$(grep
     '^remote ' /config/client.ovpn | awk '{print $2}' | head -n1)\n\nset -x\niptables
-    -P OUTPUT DROP\niptables -A OUTPUT -o lo -j ACCEPT\niptables -A OUTPUT -m state
-    --state ESTABLISHED,RELATED -j ACCEPT\n# Allow DNS to VPN DNS (pushed) will be
-    covered by ESTABLISHED; allow cluster DNS if needed:\niptables -A OUTPUT -d \"$CLUSTER_DNS_IP\"
-    -p tcp --dport 53 -j ACCEPT\niptables -A OUTPUT -d \"$CLUSTER_DNS_IP\" -p udp
-    --dport 53 -j ACCEPT\n\n# Allow traffic to VPN server\niptables -A OUTPUT -o eth0
-    -d \"$VPN_SERVER_IP\" -j ACCEPT\n\n# Allow k8s internal traffic\niptables -A OUTPUT
-    -o eth0 -d 10.43.0.0/16 -j ACCEPT\n\n# Allow all traffic via tun0\niptables -A
-    OUTPUT -o tun0 -j ACCEPT\nset +x\n\n# Allow traffic to k8s internal services\nip
-    route add 10.43.0.0/16 via 10.42.0.1 dev eth0\n\necho \"IP Routes:\"\nip route
-    show | column -t\n\n# Keep the container alive and expose logs if OpenVPN dies\necho
-    \"Container setup complete. Running forever...\"\nexec tail -F /var/log/* /var/log/openvpn/*
-    /dev/null\n"
+    -P INPUT ACCEPT\niptables -P FORWARD DROP\niptables -P OUTPUT DROP\niptables -A
+    OUTPUT -o lo -j ACCEPT\niptables -A OUTPUT -m state --state ESTABLISHED,RELATED
+    -j ACCEPT\n# Allow DNS to VPN DNS (pushed) will be covered by ESTABLISHED; allow
+    cluster DNS if needed:\niptables -A OUTPUT -d \"$CLUSTER_DNS_IP\" -p tcp --dport
+    53 -j ACCEPT\niptables -A OUTPUT -d \"$CLUSTER_DNS_IP\" -p udp --dport 53 -j ACCEPT\n\n#
+    Allow traffic to VPN server\niptables -A OUTPUT -o eth0 -d \"$VPN_SERVER_IP\"
+    -j ACCEPT\n\n# Allow k8s internal traffic\niptables -A OUTPUT -o eth0 -d 10.43.0.0/16
+    -j ACCEPT\n\n# Allow all traffic via tun0\niptables -A OUTPUT -o tun0 -j ACCEPT\n\n#
+    Reject all other outbound traffic if tun0 is down\niptables -A OUTPUT -p udp -j
+    REJECT --reject-with icmp-port-unreachable\niptables -A OUTPUT -p tcp -j REJECT
+    --reject-with tcp-reset\niptables -A OUTPUT -j REJECT --reject-with icmp-port-unreachable\nset
+    +x\n\n# Allow traffic to k8s internal services\nip route add 10.43.0.0/16 via
+    10.42.0.1 dev eth0\n\necho \"IP Routes:\"\nip route show | column -t\n\n# Keep
+    the container alive and expose logs if OpenVPN dies\necho \"Container setup complete.
+    Running forever...\"\nexec tail -F /var/log/* /var/log/openvpn/* /dev/null\n"
 kind: ConfigMap
 metadata:
   name: ovpn-script
