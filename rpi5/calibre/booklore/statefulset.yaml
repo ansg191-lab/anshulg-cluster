@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: booklore
-          image: ghcr.io/booklore-app/booklore:v1.11.0@sha256:bdfcb7cb9ee85010c41ca2a9dba462a15c811c04cd6d54707baf12483e2e7396
+          image: ghcr.io/booklore-app/booklore:v1.13.2@sha256:a0372a56177518bd426a9c81c6a4d1f4436136f85f619394bcacb5e31061f844
           imagePullPolicy: IfNotPresent
           env:
             - name: USER_ID
