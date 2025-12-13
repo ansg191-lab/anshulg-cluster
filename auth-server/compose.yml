@@ -2,7 +2,7 @@ version: "2"
 
 services:
   kanidm:
-    image: docker.io/kanidm/server:1.8.4@sha256:dcfff22406e277985f1fe15f3ad1eebf5a525fd9841026272a75d483643d0cba
+    image: docker.io/kanidm/server:1.8.5@sha256:55af50cf02909ff8f62d3a083870e697a47658c2dac94598dc5dbeb7de5955f3
 
     ports:
       - "127.0.0.1:8443:8443"
