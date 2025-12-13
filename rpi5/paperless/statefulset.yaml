@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: paperless
-          image: ghcr.io/paperless-ngx/paperless-ngx:2.19.6@sha256:719a4e4c4314b417646b00e58bfbfbe55e4cb59017a2dec1533e96d8deb66ec1
+          image: ghcr.io/paperless-ngx/paperless-ngx:2.20.2@sha256:8cbd8ce3ef1857bd144026a7e7192d0889188352b5271631e42ff069ccceeb74
           imagePullPolicy: IfNotPresent
           env:
             - name: PAPERLESS_DBHOST
