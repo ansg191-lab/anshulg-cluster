@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: qbit-manage
+  labels:
+    app: qbit-manage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qbit-manage
+  serviceName: qbit-manage
+  template:
+    metadata:
+      name: qbit-manage
+      labels:
+        app: qbit-manage
+    spec:
+      containers:
+        - name: qbit-manage
+          image: ghcr.io/stuffanthings/qbit_manage:v4.6.5@sha256:4f36632a138b4e5aeab3b765b7f389087bfb140c80dbbec1343eca74dc351245
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: qbt-manage-env
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+              name: http
+          volumeMounts:
+            - mountPath: /config
+              name: config
+            - mountPath: /data
+              name: data
+          securityContext:
+            runAsUser: 2020
+            runAsGroup: 3002
+      restartPolicy: Always
+      securityContext:
+        fsGroup: 3002
+      volumes:
+        - name: data
+          hostPath:
+            path: /data
+  volumeClaimTemplates:
+    - metadata:
+        name: config
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi

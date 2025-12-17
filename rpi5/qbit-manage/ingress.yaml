@@ -1,0 +1,20 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: qbit-manage
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`qbit-manage.internal`)
+      middlewares:
+        - name: security-headers
+          namespace: kube-system
+      services:
+        - name: qbit-manage
+          port: 80
+  tls:
+    secretName: qbit-manage-cert-tls
+    domains:
+      - main: qbit-manage.internal
