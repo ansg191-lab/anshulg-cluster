@@ -8,7 +8,7 @@ spec:
   source:
     chart: datadog-operator
     repoURL: https://helm.datadoghq.com
-    targetRevision: 2.13.1
+    targetRevision: 2.16.0
   destination:
     server: https://kubernetes.default.svc
     namespace: datadog
