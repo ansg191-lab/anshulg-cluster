@@ -59,6 +59,18 @@ data:
         replace_existing_custom_formats: true
         custom_formats:
           - trash_ids:
+              - c53085ddbd027d9624b320627748612f # DV HDR10+
+              - b974a6cd08c1066250f1f177d7aa1225 # HDR10+
+            assign_scores_to:
+              - name: Default
+                score: 1520
+          - trash_ids:
+              - e23edd2482476e595fb990b12e7c609c # DV HDR10
+              - dfb86d5941bc9075d6af23b09c2aeecd # HDR10
+            assign_scores_to:
+              - name: Default
+                score: 1510
+          - trash_ids:
               # Unwanted
               - b8cd450cbfa689c0259a01d9e29ba3d6 # 3D
               - cae4ca30163749b891686f95532519bd # AV1
@@ -83,14 +95,14 @@ data:
               - af94e0fe497124d1f9ce732069ec8c3b # WEB Tier 03
               # HDR Formats
               - 58d6a88f13e2db7f5059c41047876f00 # DV
-              - e23edd2482476e595fb990b12e7c609c # DV HDR10
-              - c53085ddbd027d9624b320627748612f # DV HDR10+
+              # - e23edd2482476e595fb990b12e7c609c # DV HDR10
+              # - c53085ddbd027d9624b320627748612f # DV HDR10+
               - 55d53828b9d81cbe20b02efd00aa0efd # DV HLG
               - a3e19f8f627608af0211acd02bf89735 # DV SDR
               - e61e28db95d22bedcadf030b8f156d96 # HDR
               - 2a4d9069cc1fe3242ff9bdaebed239bb # HDR (undefined)
-              - dfb86d5941bc9075d6af23b09c2aeecd # HDR10
-              - b974a6cd08c1066250f1f177d7aa1225 # HDR10+
+              # - dfb86d5941bc9075d6af23b09c2aeecd # HDR10
+              # - b974a6cd08c1066250f1f177d7aa1225 # HDR10+
               - 9364dd386c9b4a1100dde8264690add7 # HLG
               - 08d6d8834ad9ec87b1dc7ec8148e7a1f # PQ
               # Audio Channels

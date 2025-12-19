@@ -21,7 +21,7 @@ spec:
               args:
                 - sync
               volumeMounts:
-                - mountPath: /tmp
+                - mountPath: /config
                   name: tmp
                 - mountPath: /config/recyclarr.yml
                   name: config
@@ -39,7 +39,7 @@ spec:
                     - ALL
                 allowPrivilegeEscalation: false
                 privileged: false
-                readOnlyRootFilesystem: true
+                readOnlyRootFilesystem: false
           volumes:
             - name: tmp
               emptyDir:
