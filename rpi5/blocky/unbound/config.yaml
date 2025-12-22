@@ -54,6 +54,8 @@ data:
         local-data: "lazylibrarian.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
         local-data: "navidrome.internal. A 192.168.3.1"
         local-data: "navidrome.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
+        local-data: "notifiarr.internal. A 192.168.3.1"
+        local-data: "notifiarr.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
         local-data: "nzbget.internal. A 192.168.3.1"
         local-data: "nzbget.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
         local-data: "nzbhydra.internal. A 192.168.3.1"

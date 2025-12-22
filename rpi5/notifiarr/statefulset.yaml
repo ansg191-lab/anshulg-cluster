@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: notifiarr
+  labels:
+    app: notifiarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notifiarr
+  serviceName: notifiarr
+  template:
+    metadata:
+      name: notifiarr
+      labels:
+        app: notifiarr
+    spec:
+      containers:
+        - name: notifiarr
+          image: golift/notifiarr:0.9.1@sha256:be0ca2d4a2d1d758af39316867473b49faa990204b003366c6baaba97e21e520
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5454
+              protocol: TCP
+              name: http
+          volumeMounts:
+            - mountPath: /config
+              name: data
+      restartPolicy: Always
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
