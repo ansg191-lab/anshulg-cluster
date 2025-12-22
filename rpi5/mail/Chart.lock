@@ -1,6 +1,6 @@
 dependencies:
 - name: mail
   repository: https://bokysan.github.io/docker-postfix/
-  version: v4.4.0
-digest: sha256:2262fe9eadcfed2c3f1a8977b55a2633beb4bd3dc709e9c7890589b753c0b8d8
-generated: "2025-05-02T17:44:05.251417-07:00"
+  version: v5.0.1
+digest: sha256:7e3bbea4d5a3da6797fcb5aede678e6d89de9f328a1a27411c0f7bc2635ea7d9
+generated: "2025-12-22T10:11:52.504403308Z"
