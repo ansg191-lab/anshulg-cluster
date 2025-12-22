@@ -33,10 +33,11 @@ data:
                   - WEBRip-1080p
               - name: Remux-1080p
           - name: Default
+            min_format_score: 550
             upgrade:
               allowed: true
               until_quality: Remux-2160p
-              until_score: 6000
+              until_score: 10000
             qualities:
               # 2160p
               - name: Remux-2160p
@@ -67,9 +68,9 @@ data:
               # SD + CAM
               - name: SDTV
               - name: DVD
-              - name: TELECINE
-              - name: TELESYNC
-              - name: CAM
+              # - name: TELECINE
+              # - name: TELESYNC
+              # - name: CAM
         delete_old_custom_formats: true
         replace_existing_custom_formats: true
         custom_formats:
@@ -170,7 +171,7 @@ data:
               - 2899d84dc9372de3408e6d8cc18e9666 # x264
             assign_scores_to:
               - name: SQP5
-                score: -10000
+                score: 0
           - trash_ids:
               - fb392fb0d61a010ae38e49ceaa24a1ef # 2160p
             assign_scores_to:
@@ -188,7 +189,8 @@ data:
               - e204b80c87be9497a8a6eaff48f72905 # LQ (Release Title)
               - 712d74cd88bceb883ee32f773656b1f5 # Sing-Along Versions
               - bfd8eb01832d646a0a89c4deb46f8564 # Upscaled
-              - dc98083864ea246d05a42df0d05f81cc # x265 (HD)
+              # - dc98083864ea246d05a42df0d05f81cc # x265 (HD)
+              - 839bea857ed2c0a8e084f3cbdbd65ecb # x265 (no HDR/DV)
               # [No Category]
               # - 5153ec7413d9dae44e24275589b5e944 # BHDStudio
               # - e098247bc6652dd88c76644b275260ed # FLUX
