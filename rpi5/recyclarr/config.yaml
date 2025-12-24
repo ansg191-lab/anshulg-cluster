@@ -309,7 +309,7 @@ data:
             upgrade:
               allowed: true
               until_quality: Bluray-2160p Remux
-              until_score: 6000
+              until_score: 10000
             qualities:
               # 2160p
               - name: Bluray-2160p Remux
