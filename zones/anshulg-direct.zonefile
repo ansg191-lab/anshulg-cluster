@@ -20,5 +20,7 @@ anshulg.direct. 60 IN A 192.168.3.1
 anshulg.direct. 60 IN AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6
 
 rpi4.anshulg.direct. 60 IN A 192.168.1.9
+rpi4.anshulg.direct. 60 IN AAAA fd30:e1bf:9b4f:0:4dea:3df3:e6e4:a90a
+
 *.anshulg.direct. 60 IN A 192.168.3.1
 *.anshulg.direct. 60 IN AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6
