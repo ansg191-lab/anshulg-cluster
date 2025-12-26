@@ -8,12 +8,113 @@ set -Eeuo pipefail
 trap 'echo "Error on line $LINENO"; exit 1' ERR
 
 REPO="${REPO:-ansg191-lab/anshulg-cluster}"
-TOKEN="${TOKEN:-}"
+GITHUB_APP_ID="${GITHUB_APP_ID:-}"
+GITHUB_APP_INSTALLATION_ID="${GITHUB_APP_INSTALLATION_ID:-}"
+GITHUB_APP_PRIVATE_KEY_FILE="${GITHUB_APP_PRIVATE_KEY_FILE:-}"
 ZONEFILE_PATH="${ZONEFILE_PATH:-zones/anshulg-com.zonefile}"
 RECORD="${RECORD:-vpn.anshulg.com.}"
 BASE_BRANCH="${BASE_BRANCH:-main}"
 
+_GH_INSTALL_TOKEN=""
+
 err() { echo "ERROR: $*" >&2; exit 1; }
+
+require_github_app_env() {
+	[[ -n "${GITHUB_APP_ID}" ]] || err "GITHUB_APP_ID is empty"
+	[[ -n "${GITHUB_APP_INSTALLATION_ID}" ]] || err "GITHUB_APP_INSTALLATION_ID is empty"
+	[[ -n "${GITHUB_APP_PRIVATE_KEY_FILE}" ]] || err "GITHUB_APP_PRIVATE_KEY_FILE is empty"
+	[[ -f "${GITHUB_APP_PRIVATE_KEY_FILE}" ]] || err "Private key file not found: ${GITHUB_APP_PRIVATE_KEY_FILE}"
+}
+
+github_api_raw() {
+	# Usage: github_api_raw METHOD PATH [curl_args...]
+	local method="$1"; shift
+	local path="$1"; shift
+
+	local tmp status
+	tmp="$(mktemp)"
+	status="$(
+	curl -sS -o "$tmp" -w "%{http_code}" -X "$method" \
+	-H "Accept: application/vnd.github+json" \
+	-H "X-GitHub-Api-Version: 2022-11-28" \
+	"https://api.github.com${path}" \
+	"$@"
+	)"
+
+	if [[ "$status" != 2* ]]; then
+		echo "GitHub API error: ${method} ${path} -> HTTP ${status}" >&2
+		cat "$tmp" >&2
+		rm -f "$tmp"
+		exit 1
+	fi
+
+	cat "$tmp"
+	rm -f "$tmp"
+}
+
+b64url() {
+	# base64url encode stdin (no padding)
+	openssl base64 -A | tr '+/' '-_' | tr -d '='
+}
+
+make_github_app_jwt() {
+	# Creates a JWT for GitHub App authentication (valid for ~10 minutes)
+	require_github_app_env
+
+	local now iat exp header payload signing_input sig
+	now="$(date +%s)"
+	iat="$((now - 60))"
+	exp="$((now + 540))" # 9 minutes to stay under GitHub's 10-minute max
+
+	header='{"alg":"RS256","typ":"JWT"}'
+	payload="$(jq -nc --arg iss "${GITHUB_APP_ID}" --argjson iat "${iat}" --argjson exp "${exp}" '{iss:$iss, iat:$iat, exp:$exp}')"
+
+	signing_input="$(printf '%s' "${header}" | b64url).$(printf '%s' "${payload}" | b64url)"
+	sig="$(printf '%s' "${signing_input}" \
+		| openssl dgst -sha256 -sign "${GITHUB_APP_PRIVATE_KEY_FILE}" -binary \
+		| b64url
+	)"
+
+	printf '%s.%s' "${signing_input}" "${sig}"
+}
+
+get_installation_token() {
+	# Returns a cached installation token, otherwise fetches a new one.
+	require_github_app_env
+
+    if [[ -n "${_GH_INSTALL_TOKEN}" ]]; then
+      echo "${_GH_INSTALL_TOKEN}"
+      return 0
+    fi
+
+	local jwt resp token
+	jwt="$(make_github_app_jwt)"
+
+	resp="$(
+		github_api_raw POST "/app/installations/${GITHUB_APP_INSTALLATION_ID}/access_tokens" \
+			-H "Authorization: Bearer ${jwt}" \
+			-H "Content-Type: application/json" \
+			-d '{}' \
+	)"
+
+	token="$(echo "${resp}" | jq -r '.token')"
+	[[ -n "${token}" && "${token}" != "null" ]] || err "Failed to obtain installation token"
+	_GH_INSTALL_TOKEN="${token}"
+	echo "${_GH_INSTALL_TOKEN}"
+}
+
+github_api() {
+	# Usage: github_api METHOD PATH [curl_args...]
+	local method="$1"; shift
+	local path="$1"; shift
+
+	local token
+	token="$(get_installation_token)"
+
+	github_api_raw "$method" "$path" \
+		-H "Authorization: Bearer ${token}" \
+		"$@"
+}
 
 get_public_ip() {
 	ip="$(curl -4fsS https://api.ipify.org || true)"
@@ -25,35 +126,6 @@ get_public_ip() {
 	fi
 	[[ "${ip}" =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]] || err "Could not determine public IPv4 (got: '${ip}')"
 	echo "${ip}"
-}
-
-github_api() {
-  # Usage: github_api METHOD PATH [curl_args...]
-  local method="$1"; shift
-  local path="$1"; shift
-
-  [[ -n "${TOKEN}" ]] || err "TOKEN is empty (GitHub token required)"
-
-  local tmp status
-  tmp="$(mktemp)"
-  status="$(
-	curl -sS -o "$tmp" -w "%{http_code}" -X "$method" \
-	  -H "Accept: application/vnd.github+json" \
-	  -H "Authorization: Bearer ${TOKEN}" \
-	  -H "X-GitHub-Api-Version: 2022-11-28" \
-	  "https://api.github.com${path}" \
-	  "$@"
-  )"
-
-  if [[ "$status" != 2* ]]; then
-	echo "GitHub API error: ${method} ${path} -> HTTP ${status}" >&2
-	cat "$tmp" >&2
-	rm -f "$tmp"
-	exit 1
-  fi
-
-  cat "$tmp"
-  rm -f "$tmp"
 }
 
 get_zonefile() {
