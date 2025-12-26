@@ -97,7 +97,7 @@ update_zonefile_ip() {
 get_ref_sha() {
 	# e.g. refs/heads/ddns
 	local ref="$1"
-	github_apib GET "/repos/${REPO}/git/ref/${ref}" | jq -r '.object.sha'
+	github_api GET "/repos/${REPO}/git/ref/${ref}" | jq -r '.object.sha'
 }
 
 get_file_sha_on_branch() {
