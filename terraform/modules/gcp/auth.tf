@@ -61,14 +61,14 @@ resource "google_compute_address" "kanidm" {
 }
 
 # Firewall rule for kanidm Instance
-# Allow HTTP, HTTPS, and LDAPS traffic
-resource "google_compute_firewall" "kanidm" {
-  name    = "kanidm-firewall"
+# Allow HTTTP/3 & LDAPS traffic
+resource "google_compute_firewall" "kanidm-global" {
+  name    = "kanidm-global-firewall"
   network = "default"
 
   allow {
     protocol = "tcp"
-    ports    = ["80", "443", "636"]
+    ports    = ["636"]
   }
 
   allow {
@@ -78,6 +78,37 @@ resource "google_compute_firewall" "kanidm" {
 
   source_ranges = ["0.0.0.0/0"]
   target_tags   = ["kanidm"]
+}
+
+# Allow SSH traffic from specific IPs
+resource "google_compute_firewall" "kanidm-ssh" {
+  name    = "kanidm-ssh-firewall"
+  network = "default"
+
+  allow {
+    protocol = "tcp"
+    ports = ["22"]
+  }
+
+  priority = 1000
+  source_ranges = [
+    "72.219.136.19/32", # Cox
+    "169.235.0.0/16"    # UCR
+  ]
+  target_tags = ["kanidm"]
+}
+resource "google_compute_firewall" "kanidm-ssh-deny" {
+  name    = "kanidm-ssh-deny-firewall"
+  network = "default"
+
+  deny {
+    protocol = "tcp"
+    ports = ["22"]
+  }
+
+  priority = 1001
+  source_ranges = ["0.0.0.0/0"]
+  target_tags = ["kanidm"]
 }
 
 # Add DNS record for kanidm Instance
