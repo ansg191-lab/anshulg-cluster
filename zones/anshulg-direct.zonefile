@@ -15,12 +15,63 @@ anshulg.direct. 21600 IN NS ns-cloud-c3.googledomains.com.
 anshulg.direct. 21600 IN NS ns-cloud-c4.googledomains.com.
 
 ;; A Records
+
 ;; Route to RPI5 K8S Load Balancer
 anshulg.direct. 60 IN A 192.168.3.1
 anshulg.direct. 60 IN AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6
 
+abs.anshulg.direct. 60 IN A 192.168.3.1
+abs.anshulg.direct. 60 IN AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6
+
+audiobookshelf.anshulg.direct. 60 IN A 192.168.3.1
+audiobookshelf.anshulg.direct. 60 IN AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6
+
+audioserve.anshulg.direct. 60 IN A 192.168.3.1
+audioserve.anshulg.direct. 60 IN AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6
+
+immich.anshulg.direct. 60 IN A 192.168.3.1
+immich.anshulg.direct. 60 IN AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6
+
+jellyfin.anshulg.direct. 60 IN A 192.168.3.1
+jellyfin.anshulg.direct. 60 IN AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6
+
+jellyseer.anshulg.direct. 60 IN A 192.168.3.1
+jellyseer.anshulg.direct. 60 IN AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6
+
+ollama.anshulg.direct. 60 IN A 192.168.3.1
+ollama.anshulg.direct. 60 IN AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6
+
+opengist.anshulg.direct. 60 IN A 192.168.3.1
+opengist.anshulg.direct. 60 IN AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6
+
+paperless.anshulg.direct. 60 IN A 192.168.3.1
+paperless.anshulg.direct. 60 IN AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6
+
+patchmon.anshulg.direct. 60 IN A 192.168.3.1
+patchmon.anshulg.direct. 60 IN AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6
+
+qui.anshulg.direct. 60 IN A 192.168.3.1
+qui.anshulg.direct. 60 IN AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6
+
+irc.anshulg.direct. 60 IN A 192.168.3.1
+irc.anshulg.direct. 60 IN AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6
+
+teslaboard.anshulg.direct. 60 IN A 192.168.3.1
+teslaboard.anshulg.direct. 60 IN AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6
+
+;; Other Internal Servers
+
 rpi4.anshulg.direct. 60 IN A 192.168.1.9
 rpi4.anshulg.direct. 60 IN AAAA fd30:e1bf:9b4f:0:2086:42ff:feba:6dc7
 
-*.anshulg.direct. 60 IN A 192.168.3.1
-*.anshulg.direct. 60 IN AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6
+gateway.anshulg.direct. 60 IN A 192.168.3.1
+gateway.anshulg.direct. 60 IN AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6
+
+rpi5.anshulg.direct. 60 IN A 192.168.1.39
+rpi5.anshulg.direct. 60 IN AAAA fd30:e1bf:9b4f:0:2ecf:67ff:fe19:67ab
+
+odroid-h4.anshulg.direct. 60 IN A 192.168.1.52
+odroid-h4.anshulg.direct. 60 IN AAAA fd30:e1bf:9b4f:0:21e:6ff:fe45:5de0
+
+beelink.anshulg.direct. 60 IN A 192.168.1.48
+beelink.anshulg.direct. 60 IN AAAA fd30:e1bf:9b4f:0:eaff:1eff:fed1:9dfe
