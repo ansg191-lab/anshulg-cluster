@@ -66,10 +66,10 @@ resource "google_compute_firewall" "kanidm-global" {
   name    = "kanidm-global-firewall"
   network = "default"
 
-  allow {
-    protocol = "tcp"
-    ports    = ["636"]
-  }
+  # allow {
+  #   protocol = "tcp"
+  #   ports    = ["636"]
+  # }
 
   allow {
     protocol = "udp"
