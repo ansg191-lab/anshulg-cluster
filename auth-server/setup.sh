@@ -16,50 +16,6 @@ OP_SERVICE_ACCOUNT_TOKEN=$(cat "1password.txt")
 export OP_SERVICE_ACCOUNT_TOKEN
 echo "::endgroup::"
 
-# Setup firewall
-echo "::group::Setting up firewall"
-sudo zypper install -y firewalld
-sudo systemctl enable firewalld
-sudo systemctl start firewalld
-
-# Allow SSH and HTTP/HTTPS
-sudo firewall-cmd --permanent --add-service=ssh
-sudo firewall-cmd --permanent --add-service=http
-sudo firewall-cmd --permanent --add-service=https
-sudo firewall-cmd --permanent --add-service=ldaps
-sudo firewall-cmd --permanent --add-port=443/udp
-sudo firewall-cmd --reload
-
-# Add update script to cron
-sudo cp update-lists.sh /etc/cron.daily/update-lists.sh
-sudo chmod +x /etc/cron.daily/update-lists.sh
-#sudo /etc/cron.daily/update-lists.sh
-
-echo "::endgroup::"
-
-# Setup fail2ban
-echo "::group::Setting up fail2ban"
-sudo zypper install -y fail2ban
-sudo systemctl enable fail2ban
-sudo systemctl start fail2ban
-
-sudo mkdir -p /etc/fail2ban/jail.d
-sudo tee /etc/fail2ban/jail.d/customization.local > /dev/null <<EOF
-[sshd]
-enabled = true
-bantime = 1w
-findtime = 1d
-
-[DEFAULT]
-banaction = firewallcmd-rich-rules[actiontype=<multiport>]
-banaction_allports = firewallcmd-rich-rules[actiontype=<allports>]
-
-action = %(action_)s
-EOF
-sudo chmod 644 /etc/fail2ban/jail.d/customization.local
-sudo systemctl restart fail2ban
-echo "::endgroup::"
-
 # Install docker
 echo "::group::Installing Docker"
 sudo zypper install -y docker docker-compose
