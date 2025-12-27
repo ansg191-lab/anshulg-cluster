@@ -167,6 +167,12 @@ resource "google_project_iam_member" "gh-action-dns-admin" {
   member  = "serviceAccount:${google_service_account.github-action.email}"
 }
 
+resource "google_project_iam_member" "gh-action-firewalls" {
+  project = data.google_project.default.id
+  role    = "roles/compute.securityAdmin"
+  member  = "serviceAccount:${google_service_account.github-action.email}"
+}
+
 # endregion Deployment
 
 # region Backups
