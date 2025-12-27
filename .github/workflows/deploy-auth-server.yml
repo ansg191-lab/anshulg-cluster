@@ -53,6 +53,41 @@ jobs:
           perl-version: "5.38"
           install-modules-with: cpanm
 
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3.0.0
+        with:
+          credentials_json: ${{ secrets.GCLOUD_CREDENTIALS }}
+
+      - name: Set up Google Cloud CLI
+        uses: google-github-actions/setup-gcloud@aa5489c8933f4cc7a4f7d45035b3b1440c9c10db # v3.0.1
+        with:
+          project_id: anshulg-cluster
+
+      - name: Get runner IP
+        id: get_ip
+        run: |
+          set -euo pipefail
+          ip=$(curl -s https://api.ipify.org)
+          echo "ip=$ip" >> "$GITHUB_OUTPUT"
+
+      - name: Whitelist runner IP in GCP
+        id: fw_add
+        env:
+          RUNNER_IP: ${{ steps.get_ip.outputs.ip }}
+        run: |
+          set -euo pipefail
+          RULE_NAME="gh-ssh-allow-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          echo "rule_name=$RULE_NAME" >> "$GITHUB_OUTPUT"
+
+          gcloud compute firewall-rules create "$RULE_NAME" \
+            --network="default" \
+            --direction=INGRESS \
+            --priority=100 \
+            --action=ALLOW \
+            --rules=tcp:22 \
+            --source-ranges="${RUNNER_IP}/32" \
+            --target-tags="kanidm"
+
       - uses: webfactory/ssh-agent@a6f90b1f127823b31d4d4a8d96047790581349bd # v0.9.1
         with:
           ssh-private-key: ${{ secrets.GOOGLE_SSH_KEY }}
@@ -64,3 +99,12 @@ jobs:
 
       - name: Run deployment script
         run: ./x.pl deploy auth
+
+      - name: Remove runner IP from GCP
+        if: always()
+        run: |
+          set -euo pipefail
+          RULE_NAME="${{ steps.fw_add.outputs.rule_name }}"
+          if [ -n "$RULE_NAME" ]; then
+            gcloud compute firewall-rules delete "$RULE_NAME" --quiet || true
+          fi
