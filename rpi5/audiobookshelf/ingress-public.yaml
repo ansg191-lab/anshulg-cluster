@@ -8,6 +8,8 @@ spec:
   dnsNames:
     - audiobookshelf.anshulg.direct
     - abs.anshulg.direct
+    - audiobookshelf
+    - abs
   duration: 2160h0m0s
   renewBefore: 720h0m0s
   privateKey:
@@ -36,7 +38,7 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`audiobookshelf.anshulg.direct`) || Host(`abs.anshulg.direct`)
+      match: Host(`audiobookshelf.anshulg.direct`) || Host(`abs.anshulg.direct`) || Host(`audiobookshelf`) || Host(`abs`)
       services:
         - name: audiobookshelf
           port: 80
@@ -48,3 +50,5 @@ spec:
       - main: audiobookshelf.anshulg.direct
         sans:
           - abs.anshulg.direct
+          - audiobookshelf
+          - abs

@@ -7,6 +7,7 @@ spec:
   commonName: paperless.anshulg.direct
   dnsNames:
     - paperless.anshulg.direct
+    - paperless
   duration: 2160h0m0s
   renewBefore: 720h0m0s
   privateKey:
@@ -35,7 +36,7 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`paperless.anshulg.direct`)
+      match: Host(`paperless.anshulg.direct`) || Host(`paperless`)
       services:
         - name: paperless
           port: 80
@@ -43,3 +44,5 @@ spec:
     secretName: paperless-public-cert-tls
     domains:
       - main: paperless.anshulg.direct
+        sans:
+          - paperless
