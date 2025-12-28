@@ -123,7 +123,7 @@ auth.anshulg.com. 60 IN A 34.94.107.30
 ldap.auth.anshulg.com. 60 IN A 34.94.107.30
 
 ;; VPN Server
-vpn.anshulg.com. 60 IN A 72.219.136.19
+vpn.anshulg.com. 60 IN CNAME anshul-vpn.duckdns.org.
 backup.vpn.anshulg.com. 60 IN CNAME gq8ada5.glddns.com.
 
 ;; OPENPGPKEY Record
