@@ -28,6 +28,8 @@ data:
         local-data: "web.calibre.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
         local-data: "cross-seed.internal. A 192.168.3.1"
         local-data: "cross-seed.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
+        local-data: "crosswatch.internal. A 192.168.3.1"
+        local-data: "crosswatch.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
         local-data: "dashboard.blocky.internal. A 192.168.3.1"
         local-data: "dashboard.blocky.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
         local-data: "dedrm.internal. A 192.168.3.1"
