@@ -20,6 +20,7 @@ anshulg.direct. 21600 IN NS ns-cloud-c4.googledomains.com.
 abs.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
 audiobookshelf.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
 audioserve.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
+crosswatch.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
 immich.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
 jellyfin.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
 jellyseer.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
