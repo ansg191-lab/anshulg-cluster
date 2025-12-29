@@ -31,6 +31,7 @@ patchmon.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
 qui.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
 irc.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
 teslaboard.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
+yamtrack.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
 
 ;; Other Internal Servers
 
