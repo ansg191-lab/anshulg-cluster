@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yamtrack
+  labels:
+    app: yamtrack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: yamtrack
+  template:
+    metadata:
+      name: yamtrack
+      labels:
+        app: yamtrack
+    spec:
+      containers:
+        - name: yamtrack
+          image: ghcr.io/fuzzygrim/yamtrack:0.24.11@sha256:0cf6cfbaf160248636e5116cbdd587dd8060d91c976dbf44e8d0b565456ad8ff
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+              protocol: TCP
+              name: http
+          envFrom:
+            - configMapRef:
+                name: env
+            - secretRef:
+                name: secret-env
+      restartPolicy: Always
