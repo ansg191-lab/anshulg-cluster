@@ -28,4 +28,9 @@ spec:
                 name: env
             - secretRef:
                 name: secret-env
+          readinessProbe:
+            httpGet:
+              port: http
+              path: /health/
+            timeoutSeconds: 5
       restartPolicy: Always
