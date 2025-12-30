@@ -10,7 +10,6 @@ resources:
 components:
   - ../../kustomize/components/ingress
   - ../../kustomize/components/direct-ingress
-  - ../../kustomize/components/security-context
 
 namePrefix: yamtrack-
 namespace: yamtrack
@@ -32,7 +31,7 @@ configMapGenerator:
   - name: env-config
     literals:
       - TZ=America/Los_Angeles
-      - REDIS_URL=redis://yamtrack-valkey:6379
+      - REDIS_URL=redis://yamtrack-yamtrack-valkey:6379
       - URLS=https://yamtrack.internal,https://yamtrack.anshulg.direct
       - SOCIAL_PROVIDERS=allauth.socialaccount.providers.openid_connect
       - SOCIALACCOUNT_ONLY=True
