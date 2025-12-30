@@ -1,0 +1,20 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: yamtrack
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`yamtrack.internal`)
+      middlewares:
+        - name: security-headers
+          namespace: kube-system
+      services:
+        - name: yamtrack
+          port: 80
+  tls:
+    secretName: yamtrack-cert-tls
+    domains:
+      - main: yamtrack.internal

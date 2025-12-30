@@ -8,9 +8,6 @@ spec:
   routes:
     - kind: Rule
       match: Host(`PLACEHOLDER_DOMAIN`)
-      middlewares:
-        - name: security-headers
-          namespace: kube-system
       services:
         - name: svc
           port: 80
