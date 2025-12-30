@@ -8,8 +8,8 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/ansg191/valkey-helm.git
-    targetRevision: clusterIP
+    repoURL: https://github.com/valkey-io/valkey-helm.git
+    targetRevision: valkey-0.9.2
     path: valkey
     helm:
       values: |
