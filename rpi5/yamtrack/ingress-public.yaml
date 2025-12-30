@@ -29,7 +29,7 @@ spec:
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
-  name: paperless-public
+  name: yamtrack-public
 spec:
   entryPoints:
     - websecure

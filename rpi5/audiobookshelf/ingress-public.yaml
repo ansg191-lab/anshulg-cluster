@@ -30,7 +30,7 @@ spec:
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
-  name: paperless-public
+  name: audiobookshelf-public
 spec:
   entryPoints:
     - websecure
