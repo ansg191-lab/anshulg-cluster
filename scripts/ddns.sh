@@ -31,12 +31,12 @@ get_ipv4() {
 }
 
 get_ipv6() {
-	INTERFACE="$(ip -6 route list | grep default | awk '{for(i=1;i<=NF;i++) if($i=="dev"){print $(i+1); exit}}')"
+	INTERFACE="$(ip -6 route list default | awk '{for(i=1;i<=NF;i++) if($i=="dev"){print $(i+1); exit}}')"
 
 	ip -6 addr show dev "$INTERFACE" scope global \
-		| grep 'ff:fe' \
-		| grep -Ev 'temporary|deprecated|fd|fc' \
-		| awk '{print $2}' \
+		| grep inet6 \
+		| grep -Ev 'deprecated|temporary' \
+		| awk '$2 !~ /^f(d|c)/ { print $2 }' \
 		| cut -d/ -f1
 }
 
