@@ -4,6 +4,7 @@ resource "google_compute_instance" "kanidm" {
   machine_type = var.kanidm_machine_type
   zone         = var.auth_zone
 
+  labels                    = var.common_labels
   allow_stopping_for_update = true
 
   boot_disk {
@@ -39,7 +40,8 @@ resource "google_compute_instance" "kanidm" {
 # Service account for kanidm Instance
 resource "google_service_account" "kanidm" {
   account_id   = "kanidm"
-  display_name = "Kanidm Service Account"
+  display_name = "KanIDM Authentication Server"
+  description  = "Service account for KanIDM authentication server instance with Private CA certificate access"
 }
 
 # Allow kanidm Instance to retrieve CA certificate
@@ -58,13 +60,16 @@ resource "google_compute_address" "kanidm" {
   address_type = "EXTERNAL"
   ip_version   = "IPV4"
   network_tier = "PREMIUM"
+
+  labels = var.common_labels
 }
 
 # Firewall rule for kanidm Instance
 # Allow HTTTP/3 & LDAPS traffic
 resource "google_compute_firewall" "kanidm-global" {
-  name    = "kanidm-global-firewall"
-  network = "default"
+  name        = "kanidm-global-firewall"
+  network     = "default"
+  description = "Allow LDAPS (636/tcp) and HTTP/3 QUIC (443/udp) traffic to KanIDM server from anywhere"
 
   allow {
     protocol = "tcp"
@@ -82,8 +87,9 @@ resource "google_compute_firewall" "kanidm-global" {
 
 # Allow SSH traffic from specific IPs
 resource "google_compute_firewall" "kanidm-ssh" {
-  name    = "kanidm-ssh-firewall"
-  network = "default"
+  name        = "kanidm-ssh-firewall"
+  network     = "default"
+  description = "Allow SSH (22/tcp) to KanIDM server from whitelisted IPs (Cox ISP, UCR network)"
 
   allow {
     protocol = "tcp"
@@ -95,17 +101,18 @@ resource "google_compute_firewall" "kanidm-ssh" {
   target_tags   = ["kanidm"]
 }
 resource "google_compute_firewall" "kanidm-ssh-deny" {
-  name    = "kanidm-ssh-deny-firewall"
-  network = "default"
+  name        = "kanidm-ssh-deny-firewall"
+  network     = "default"
+  description = "Deny SSH (22/tcp) to KanIDM server from all other sources (default-deny)"
 
   deny {
     protocol = "tcp"
     ports = ["22"]
   }
 
-  priority = 1001
+  priority      = 1001
   source_ranges = ["0.0.0.0/0"]
-  target_tags = ["kanidm"]
+  target_tags   = ["kanidm"]
 }
 # endregion Networking
 
@@ -114,7 +121,8 @@ resource "google_compute_firewall" "kanidm-ssh-deny" {
 # Create Service Account for Github Action Deployment
 resource "google_service_account" "github-action" {
   account_id   = "github-action-anshulg"
-  display_name = "Github Action Service Account for anshulg-cluster"
+  display_name = "GitHub Actions Deployment"
+  description  = "Service account for GitHub Actions to deploy auth-server (SSH, firewall, DNS access)"
 }
 
 # Allow Github Action Service Account to ssh into kanidm Instance

@@ -7,7 +7,9 @@ data "google_dns_managed_zone" "direct" {
 
 # Service account for cert-manager
 resource "google_service_account" "dns01-solver" {
-  account_id = "dns01-solver"
+  account_id   = "dns01-solver"
+  display_name = "cert-manager DNS-01 Solver"
+  description  = "Service account for cert-manager to solve DNS-01 ACME challenges (anshulg.direct zone)"
 }
 
 # Give the service account the ability to manage the DNS zone

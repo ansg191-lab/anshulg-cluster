@@ -6,6 +6,8 @@ resource "google_storage_bucket" "gke-backup-bucket" {
 	location      = var.bucket_location
 	force_destroy = false
 
+	labels = var.common_labels
+
 	uniform_bucket_level_access = true
 	storage_class               = var.bucket_storage_class
 	public_access_prevention    = "enforced"
@@ -22,13 +24,17 @@ resource "google_storage_bucket" "debian-apt-repo" {
 	location      = var.bucket_location
 	force_destroy = false
 
+	labels = var.common_labels
+
 	uniform_bucket_level_access = false
 	storage_class               = var.bucket_storage_class
 	public_access_prevention    = "enforced"
 }
 
 resource "google_service_account" "debian-apt-repo" {
-	account_id = "debian-apt-repo"
+	account_id   = "debian-apt-repo"
+	display_name = "Debian APT Repository Manager"
+	description  = "Service account for managing Debian APT repository bucket (legacy ACL access)"
 }
 
 resource "google_storage_bucket_iam_member" "debian-apt-repo-bucket" {

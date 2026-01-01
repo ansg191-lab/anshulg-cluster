@@ -2,6 +2,9 @@ resource "google_privateca_ca_pool" "default" {
   name     = var.ca_pool_name
   location = var.primary_region
   tier     = var.ca_pool_tier
+
+  labels = var.common_labels
+
   publishing_options {
     publish_ca_cert = true
     publish_crl     = false
@@ -13,6 +16,9 @@ resource "google_privateca_certificate_authority" "default" {
   location                 = var.primary_region
   certificate_authority_id = var.ca_name
   deletion_protection      = true
+
+  labels = var.common_labels
+
   config {
     subject_config {
       subject {
@@ -54,15 +60,21 @@ resource "google_privateca_certificate_authority" "default" {
 }
 
 resource "google_service_account" "sa-google-cas-issuer" {
-  account_id = "sa-google-cas-issuer"
+  account_id   = "sa-google-cas-issuer"
+  display_name = "GKE cert-manager Private CA Issuer"
+  description  = "Service account for cert-manager to issue certificates from Private CA (GKE cluster)"
 }
 
 resource "google_service_account" "rpi4-postgres-cas-issuer" {
-  account_id = "rpi4-postgres-cas-issuer"
+  account_id   = "rpi4-postgres-cas-issuer"
+  display_name = "RPI4 PostgreSQL Private CA Issuer"
+  description  = "Service account for PostgreSQL database server to issue TLS certificates from Private CA"
 }
 
 resource "google_service_account" "rpi5-cas-issuer" {
-  account_id = "rpi5-cas-issuer"
+  account_id   = "rpi5-cas-issuer"
+  display_name = "RPI5 cert-manager Private CA Issuer"
+  description  = "Service account for cert-manager to issue certificates from Private CA (RPI5 cluster)"
 }
 
 resource "google_privateca_ca_pool_iam_binding" "sa-google-cas-issuer" {
