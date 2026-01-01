@@ -120,7 +120,9 @@ openpgpkey.anshulg.com. 300 IN CNAME wkd.keys.openpgp.org.
 
 ;; Auth Server
 auth.anshulg.com. 60 IN A 34.94.107.30
+auth.anshulg.com. 60 IN AAAA 2600:1900:4120:716d:0:4::
 ldap.auth.anshulg.com. 60 IN A 34.94.107.30
+ldap.auth.anshulg.com. 60 IN AAAA 2600:1900:4120:716d:0:4::
 
 ;; VPN Server
 vpn.anshulg.com. 60 IN CNAME anshul-vpn.duckdns.org.
