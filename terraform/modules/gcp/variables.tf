@@ -65,7 +65,7 @@ variable "kanidm_disk_type" {
 variable "kanidm_image" {
   description = "OS image for KanIDM instance"
   type        = string
-  default     = "projects/opensuse-cloud/global/images/opensuse-leap-15-6-v20241004-x86-64"
+  default     = "projects/opensuse-cloud/global/images/opensuse-leap-15-6-v20251017-x86-64"
 }
 
 variable "kanidm_ssh_allowed_ips" {

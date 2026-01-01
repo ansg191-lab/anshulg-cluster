@@ -20,6 +20,11 @@ output "kanidm_static_ip" {
   value       = google_compute_address.kanidm.address
 }
 
+output "kanidm_static_ipv6" {
+  description = "The static IPv6 address of the KanIDM instance"
+  value       = google_compute_address.kanidm-ipv6.address
+}
+
 # Service Account Outputs
 output "service_accounts" {
   description = "Service account emails by purpose"

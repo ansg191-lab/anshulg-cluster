@@ -17,11 +17,23 @@ resource "google_compute_instance" "kanidm" {
   }
 
   network_interface {
-    network = "default"
+    network    = "default"
+    subnetwork = data.google_compute_subnetwork.default-la.id
+    stack_type = "IPV4_IPV6"
+
+    # IPv4 access config
     access_config {
       network_tier           = "PREMIUM"
       nat_ip                 = google_compute_address.kanidm.address
       public_ptr_domain_name = "auth.${data.google_dns_managed_zone.default.dns_name}"
+    }
+
+    # IPv6 access config
+    ipv6_access_config {
+      network_tier                = "PREMIUM"
+      external_ipv6               = google_compute_address.kanidm-ipv6.address
+      external_ipv6_prefix_length = 96
+      public_ptr_domain_name      = "auth.${data.google_dns_managed_zone.default.dns_name}"
     }
   }
 
@@ -64,12 +76,25 @@ resource "google_compute_address" "kanidm" {
   labels = var.common_labels
 }
 
-# Firewall rule for kanidm Instance
+# Static IPv6 Address for kanidm Instance
+resource "google_compute_address" "kanidm-ipv6" {
+  name               = "kanidm-static-ipv6"
+  region             = var.auth_region
+  address_type       = "EXTERNAL"
+  ip_version         = "IPV6"
+  network_tier       = "PREMIUM"
+  subnetwork         = data.google_compute_subnetwork.default-la.id
+  ipv6_endpoint_type = "VM"
+
+  labels = var.common_labels
+}
+
+# Firewall rule for kanidm Instance (IPv4)
 # Allow HTTTP/3 & LDAPS traffic
 resource "google_compute_firewall" "kanidm-global" {
   name        = "kanidm-global-firewall"
   network     = "default"
-  description = "Allow LDAPS (636/tcp) and HTTP/3 QUIC (443/udp) traffic to KanIDM server from anywhere"
+  description = "Allow LDAPS (636/tcp) and HTTP/3 QUIC (443/udp) traffic to KanIDM server from anywhere (IPv4)"
 
   allow {
     protocol = "tcp"
@@ -82,6 +107,27 @@ resource "google_compute_firewall" "kanidm-global" {
   }
 
   source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["kanidm"]
+}
+
+# Firewall rule for kanidm Instance (IPv6)
+# Allow HTTTP/3 & LDAPS traffic
+resource "google_compute_firewall" "kanidm-global-ipv6" {
+  name        = "kanidm-global-firewall-ipv6"
+  network     = "default"
+  description = "Allow LDAPS (636/tcp) and HTTP/3 QUIC (443/udp) traffic to KanIDM server from anywhere (IPv6)"
+
+  allow {
+    protocol = "tcp"
+    ports    = ["636"]
+  }
+
+  allow {
+    protocol = "udp"
+    ports    = ["443"]
+  }
+
+  source_ranges = ["::/0"]
   target_tags   = ["kanidm"]
 }
 
@@ -103,15 +149,31 @@ resource "google_compute_firewall" "kanidm-ssh" {
 resource "google_compute_firewall" "kanidm-ssh-deny" {
   name        = "kanidm-ssh-deny-firewall"
   network     = "default"
-  description = "Deny SSH (22/tcp) to KanIDM server from all other sources (default-deny)"
+  description = "Deny SSH (22/tcp) to KanIDM server from all other sources (default-deny) - IPv4"
 
   deny {
     protocol = "tcp"
-    ports = ["22"]
+    ports    = ["22"]
   }
 
   priority      = 1001
   source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["kanidm"]
+}
+
+# Deny SSH from all IPv6 sources
+resource "google_compute_firewall" "kanidm-ssh-deny-ipv6" {
+  name        = "kanidm-ssh-deny-firewall-ipv6"
+  network     = "default"
+  description = "Deny SSH (22/tcp) to KanIDM server from all other sources (default-deny) - IPv6"
+
+  deny {
+    protocol = "tcp"
+    ports    = ["22"]
+  }
+
+  priority      = 1001
+  source_ranges = ["::/0"]
   target_tags   = ["kanidm"]
 }
 # endregion Networking
