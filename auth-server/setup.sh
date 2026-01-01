@@ -1,41 +1,84 @@
 #!/usr/bin/env bash
+#
+# Copyright (c) 2025. Anshul Gupta
+# All rights reserved.
+#
 
 set -eu
-sudo zypper refresh
 
-# Install 1password CLI
-echo "::group::Installing 1Password CLI"
-ARCH="amd64"; \
-    OP_VERSION="v$(curl https://app-updates.agilebits.com/check/1/0/CLI2/en/2.0.0/N -s | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+')"; \
-    curl -sSfo op.zip \
-    https://cache.agilebits.com/dist/1P/op2/pkg/"$OP_VERSION"/op_linux_"$ARCH"_"$OP_VERSION".zip \
-    && sudo unzip -od /usr/local/bin/ op.zip \
-    && rm op.zip
+GREEN='\033[0;32m'
+LOCK='\xF0\x9F\x94\x90'
+NC='\033[0m'
 
-OP_SERVICE_ACCOUNT_TOKEN=$(cat "1password.txt")
-export OP_SERVICE_ACCOUNT_TOKEN
-echo "::endgroup::"
+log() {
+    echo -e "${GREEN}${LOCK} $1${NC}"
+}
 
-# Install docker
-echo "::group::Installing Docker"
-sudo zypper install -y docker docker-compose
-sudo systemctl enable docker
-sudo systemctl start docker
-echo "::endgroup::"
+cleanup() {
+	log "Cleaning up..."
 
-# Install CA certificates
-echo "::group::Installing CA certificates"
-sudo zypper install -y ca-certificates
-sudo wget -O /home/anshulgupta/ca.crt http://privateca-content-64cbe468-0000-233e-beaa-14223bc3fa9e.storage.googleapis.com/c745acb2f145f7f9e343/ca.crt
-sudo chmod 644 /home/anshulgupta/ca.crt
-sudo cp /home/anshulgupta/ca.crt /etc/pki/trust/anchors/AnshulGuptaRootCA.crt
-sudo cp /home/anshulgupta/ca.crt /etc/caddy/AnshulGuptaRootCA.crt
-sudo update-ca-certificates
-echo "::endgroup::"
+	# Cleanup root
+	log "Cleaning up root..."
+	rm -rf root
 
-# Install gcloud CLI
-echo "::group::Installing Google Cloud CLI"
-sudo tee /etc/zypp/repos.d/google-cloud-sdk.repo << EOM
+	log "Done."
+}
+
+copy_root() {
+	log "Copy root files..."
+
+	# Install rsync if not installed
+	if ! command -v rsync &> /dev/null; then
+		log "rsync could not be found. Installing it..."
+		zypper install -y rsync
+	fi
+
+	log "Setting permissions..."
+	chown -R root:root root/etc
+	chown -R anshulgupta:users root/home
+
+	log "Copying files..."
+	rsync -a --verbose root/ /
+}
+
+install_packages() {
+	log "Installing required packages..."
+	zypper refresh
+
+	# Install packages if not already installed
+	xargs zypper install -y < packages.txt
+}
+
+install_ca() {
+	log "Installing CA certificates..."
+
+	# Only download if not already present
+	if [ ! -f /home/anshulgupta/ca.crt ]; then
+		wget -O /home/anshulgupta/ca.crt http://privateca-content-64cbe468-0000-233e-beaa-14223bc3fa9e.storage.googleapis.com/c745acb2f145f7f9e343/ca.crt
+		chmod 644 /home/anshulgupta/ca.crt
+	fi
+
+	# Copy to trust anchors if not already there
+	if [ ! -f /etc/pki/trust/anchors/AnshulGuptaRootCA.crt ]; then
+		cp /home/anshulgupta/ca.crt /etc/pki/trust/anchors/AnshulGuptaRootCA.crt
+	fi
+
+	# Copy to caddy directory
+	mkdir -p /etc/caddy
+	if [ ! -f /etc/caddy/AnshulGuptaRootCA.crt ]; then
+		cp /home/anshulgupta/ca.crt /etc/caddy/AnshulGuptaRootCA.crt
+	fi
+
+	update-ca-certificates
+}
+
+install_gcloud() {
+	log "Installing/updating Google Cloud CLI..."
+
+	# Add repository if not already present
+	if [ ! -f /etc/zypp/repos.d/google-cloud-sdk.repo ]; then
+		log "Adding Google Cloud CLI repository..."
+		tee /etc/zypp/repos.d/google-cloud-sdk.repo << EOM
 [google-cloud-cli]
 name=Google Cloud CLI
 baseurl=https://packages.cloud.google.com/yum/repos/cloud-sdk-el9-x86_64
@@ -44,66 +87,88 @@ gpgcheck=1
 repo_gpgcheck=0
 gpgkey=https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 EOM
-sudo zypper -n install -y google-cloud-cli
-echo "::endgroup::"
+	fi
 
-# Set data permissions
-mkdir -p data
-chmod 700 data
-chmod 600 data/server.toml
-cp server.toml data/server.toml
-chmod 400 data/server.toml
+	# Install or update gcloud CLI
+	zypper -n install -y google-cloud-cli
+}
 
-# Setup certificates
-echo "::group::Setting up certificates"
-mkdir -p certs
-cp csr.cnf certs/csr.cnf
-pushd certs
-chmod 600 csr.cnf
+setup_certs() {
+	log "Setting up certificates..."
 
-# If tls.key and tls.cert don't exist, create them
-if [ ! -e "tls.crt" ] ; then
-	echo "tls.crt and tls.key don't exist, generating certificates"
-    openssl req -newkey rsa:4096 -out csr.pem -keyout tls.key -config csr.cnf -nodes
-    gcloud privateca certificates create kandim-cert \
-        --issuer-pool default \
-        --issuer-location us-west1 \
-        --ca anshul-ca-1 \
-        --csr csr.pem \
-        --cert-output-file tls.crt \
-        --validity "P90D"
-    chmod 400 tls.crt
-    chmod 400 tls.key
-else
-    echo "tls.crt and tls.key already exist, skipping certificate generation"
-fi
-popd
+	# Ensure directories exist
+	mkdir -p /home/anshulgupta/certs
+	mkdir -p /home/anshulgupta/data
+	mkdir -p /home/anshulgupta/backups
 
-# Setup renewal script cron job
-echo "Setting up renewal script cron job"
-chmod +x renew.sh
-sudo cp renew.sh /etc/cron.monthly/renew.sh
-echo "::endgroup::"
+	# Set permissions
+	chmod 700 /home/anshulgupta/data
+	chmod 700 /home/anshulgupta/certs
 
-# Install caddy
-echo "::group::Installing Caddy"
-sudo zypper install -y caddy
-sudo systemctl enable caddy
-sudo systemctl start caddy
+	# Set server.toml permissions if it exists
+	if [ -f /home/anshulgupta/data/server.toml ]; then
+		chmod 400 /home/anshulgupta/data/server.toml
+	fi
 
-sudo cp Caddyfile /etc/caddy/Caddyfile
-sudo systemctl restart caddy
-echo "::endgroup::"
+	# Generate certificates if they don't exist
+	if [ ! -f /home/anshulgupta/certs/tls.crt ]; then
+		log "Issuing new certificate..."
+		cd /home/anshulgupta/certs
 
-# Install HAProxy
-echo "::group::Installing HAProxy"
-sudo zypper install -y haproxy
-sudo cp haproxy.cfg /etc/haproxy/haproxy.cfg
-sudo systemctl enable haproxy
-sudo systemctl restart haproxy
-echo "::endgroup::"
+		chmod 600 /home/anshulgupta/certs/tls.crt 2>/dev/null || true
+		chmod 600 /home/anshulgupta/certs/tls.key 2>/dev/null || true
 
-# Start the server
-echo "Starting Auth Server"
-mkdir -p backups
-sudo docker compose -f /home/anshulgupta/compose.yml up -d
+		openssl req -newkey rsa:4096 -out csr.pem -keyout tls.key -config csr.cnf -nodes
+		gcloud privateca certificates create kandim-cert \
+			--project anshulg-cluster \
+			--issuer-pool default \
+			--issuer-location us-west1 \
+			--ca anshul-ca-1 \
+			--csr csr.pem \
+			--cert-output-file tls.crt \
+			--validity "P90D"
+
+		chown 1000:100 tls.crt
+		chown 1000:100 tls.key
+		chmod 400 tls.crt
+		chmod 400 tls.key
+	else
+		log "Certificates already exist, skipping generation..."
+	fi
+}
+
+setup_services() {
+	log "Setting up services..."
+
+	# Enable and start docker
+	systemctl enable docker
+	systemctl start docker || systemctl restart docker
+
+	# Add anshulgupta user to docker group
+	usermod -aG docker anshulgupta || true
+
+	# Enable and start caddy
+	systemctl enable caddy
+	systemctl restart caddy
+
+	# Enable and start haproxy
+	systemctl enable haproxy
+	systemctl restart haproxy
+}
+
+start_kanidm() {
+	log "Starting Kanidm server..."
+
+	# Start or restart the docker compose service
+	cd /home/anshulgupta
+	docker compose -f /home/anshulgupta/compose.yml up -d
+}
+
+trap cleanup EXIT
+copy_root
+install_packages
+install_ca
+install_gcloud
+setup_certs
+setup_services
+start_kanidm

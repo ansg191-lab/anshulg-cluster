@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+#
+# Copyright (c) 2025. Anshul Gupta
+# All rights reserved.
+#
 
 set -eu
 
@@ -16,5 +20,5 @@ echo "Running setup script on $SERVER"
 ssh $SERVER << EOF
 set -eux
 chmod +x setup.sh
-bash setup.sh
+sudo bash setup.sh
 EOF
