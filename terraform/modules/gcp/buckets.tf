@@ -2,12 +2,12 @@
 
 # region Backup GKE Bucket
 resource "google_storage_bucket" "gke-backup-bucket" {
-	name          = "restic-backup-bucket-9r6c"
-	location      = "US"
+	name          = var.restic_bucket_name
+	location      = var.bucket_location
 	force_destroy = false
 
 	uniform_bucket_level_access = true
-	storage_class               = "STANDARD"
+	storage_class               = var.bucket_storage_class
 	public_access_prevention    = "enforced"
 
 	hierarchical_namespace {
@@ -18,12 +18,12 @@ resource "google_storage_bucket" "gke-backup-bucket" {
 
 # region Debian Apt Repository Bucket
 resource "google_storage_bucket" "debian-apt-repo" {
-	name          = "anshulg-debian-apt"
-	location      = "US"
+	name          = var.debian_apt_bucket_name
+	location      = var.bucket_location
 	force_destroy = false
 
 	uniform_bucket_level_access = false
-	storage_class               = "STANDARD"
+	storage_class               = var.bucket_storage_class
 	public_access_prevention    = "enforced"
 }
 

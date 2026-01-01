@@ -20,14 +20,6 @@ output "kanidm_static_ip" {
   value       = google_compute_address.kanidm.address
 }
 
-output "kanidm_dns_names" {
-  description = "DNS names for the KanIDM instance"
-  value = {
-    auth = google_dns_record_set.auth-ipv4.name
-    ldap = google_dns_record_set.ldap-ipv4.name
-  }
-}
-
 # Service Account Outputs
 output "service_accounts" {
   description = "Service account emails by purpose"

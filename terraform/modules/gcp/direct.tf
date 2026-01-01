@@ -2,7 +2,7 @@
 
 # DNS zone
 data "google_dns_managed_zone" "direct" {
-  name = "anshulg-direct"
+  name = var.dns_zone_anshulg_direct
 }
 
 # Service account for cert-manager

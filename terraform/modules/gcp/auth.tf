@@ -1,17 +1,17 @@
 # Kandim Server
 resource "google_compute_instance" "kanidm" {
   name         = "kanidm-instance"
-  machine_type = "n1-standard-1"
-  zone         = "us-west2-b"
+  machine_type = var.kanidm_machine_type
+  zone         = var.auth_zone
 
   allow_stopping_for_update = true
 
   boot_disk {
     auto_delete = true
     initialize_params {
-      image = "projects/opensuse-cloud/global/images/opensuse-leap-15-6-v20241004-x86-64"
-      type  = "pd-balanced"
-      size  = 20
+      image = var.kanidm_image
+      type  = var.kanidm_disk_type
+      size  = var.kanidm_disk_size
     }
   }
 
@@ -54,7 +54,7 @@ resource "google_privateca_ca_pool_iam_member" "kanidm-ca" {
 # Static IPV4 Address for kanidm Instance
 resource "google_compute_address" "kanidm" {
   name         = "kanidm-static-ip"
-  region       = "us-west2"
+  region       = var.auth_region
   address_type = "EXTERNAL"
   ip_version   = "IPV4"
   network_tier = "PREMIUM"
@@ -87,15 +87,12 @@ resource "google_compute_firewall" "kanidm-ssh" {
 
   allow {
     protocol = "tcp"
-    ports = ["22"]
+    ports    = ["22"]
   }
 
-  priority = 1000
-  source_ranges = [
-    "72.219.136.19/32", # Cox
-    "169.235.0.0/16"    # UCR
-  ]
-  target_tags = ["kanidm"]
+  priority      = 1000
+  source_ranges = var.kanidm_ssh_allowed_ips
+  target_tags   = ["kanidm"]
 }
 resource "google_compute_firewall" "kanidm-ssh-deny" {
   name    = "kanidm-ssh-deny-firewall"
@@ -110,30 +107,6 @@ resource "google_compute_firewall" "kanidm-ssh-deny" {
   source_ranges = ["0.0.0.0/0"]
   target_tags = ["kanidm"]
 }
-
-# Add DNS record for kanidm Instance
-# auth.anshulg.com
-resource "google_dns_record_set" "auth-ipv4" {
-  managed_zone = data.google_dns_managed_zone.default.name
-  name         = "auth.${data.google_dns_managed_zone.default.dns_name}"
-  type         = "A"
-  ttl          = 60
-  rrdatas = [
-    google_compute_address.kanidm.address
-  ]
-}
-
-# ldap.auth.anshulg.com
-resource "google_dns_record_set" "ldap-ipv4" {
-  managed_zone = data.google_dns_managed_zone.default.name
-  name         = "ldap.auth.${data.google_dns_managed_zone.default.dns_name}"
-  type         = "A"
-  ttl          = 60
-  rrdatas = [
-    google_compute_address.kanidm.address
-  ]
-}
-
 # endregion Networking
 
 # region Deployment
@@ -175,7 +148,7 @@ resource "google_project_iam_member" "gh-action-firewalls" {
 
 resource "google_compute_resource_policy" "scheduled_backup" {
   name   = "kanidm-scheduled-backup-policy"
-  region = "us-west2"
+  region = var.auth_region
   snapshot_schedule_policy {
     schedule {
       daily_schedule {
@@ -187,7 +160,7 @@ resource "google_compute_resource_policy" "scheduled_backup" {
       storage_locations = ["us"]
     }
     retention_policy {
-      max_retention_days    = 7
+      max_retention_days    = var.kanidm_backup_retention_days
       on_source_disk_delete = "KEEP_AUTO_SNAPSHOTS"
     }
   }

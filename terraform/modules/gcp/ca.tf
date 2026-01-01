@@ -1,7 +1,7 @@
 resource "google_privateca_ca_pool" "default" {
-  name     = "default"
-  location = "us-west1"
-  tier     = "DEVOPS"
+  name     = var.ca_pool_name
+  location = var.primary_region
+  tier     = var.ca_pool_tier
   publishing_options {
     publish_ca_cert = true
     publish_crl     = false
@@ -10,8 +10,8 @@ resource "google_privateca_ca_pool" "default" {
 
 resource "google_privateca_certificate_authority" "default" {
   pool                     = google_privateca_ca_pool.default.name
-  location                 = "us-west1"
-  certificate_authority_id = "anshul-ca-1"
+  location                 = var.primary_region
+  certificate_authority_id = var.ca_name
   deletion_protection      = true
   config {
     subject_config {
@@ -73,5 +73,5 @@ resource "google_privateca_ca_pool_iam_binding" "sa-google-cas-issuer" {
     "serviceAccount:${google_service_account.rpi4-postgres-cas-issuer.email}",
     "serviceAccount:${google_service_account.rpi5-cas-issuer.email}",
   ]
-  location = "us-west1"
+  location = var.primary_region
 }
