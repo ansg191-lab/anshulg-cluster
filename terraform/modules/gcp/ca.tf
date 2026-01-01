@@ -71,11 +71,3 @@ resource "google_privateca_ca_pool_iam_binding" "sa-google-cas-issuer" {
   ]
   location = "us-west1"
 }
-
-resource "google_service_account_iam_binding" "sa-google-cas-issuer" {
-  service_account_id = google_service_account.sa-google-cas-issuer.id
-  role               = "roles/iam.workloadIdentityUser"
-  members = [
-    "serviceAccount:${data.google_project.default.project_id}.svc.id.goog[cert-manager/cert-manager-google-cas-issuer]"
-  ]
-}
