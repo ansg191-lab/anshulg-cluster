@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Copyright (c) 2025. Anshul Gupta
+# Copyright (c) 2026. Anshul Gupta
 # All rights reserved.
 #
 
