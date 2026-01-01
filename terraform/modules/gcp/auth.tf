@@ -145,20 +145,16 @@ resource "google_service_account" "github-action" {
 }
 
 # Allow Github Action Service Account to ssh into kanidm Instance
-resource "google_project_iam_binding" "instance_admin" {
+resource "google_project_iam_member" "instance_admin" {
   project = data.google_project.default.id
   role    = "roles/compute.instanceAdmin.v1"
-  members = [
-    "serviceAccount:${google_service_account.github-action.email}",
-  ]
+  member  = "serviceAccount:${google_service_account.github-action.email}"
 }
 
-resource "google_project_iam_binding" "service_account_user" {
+resource "google_project_iam_member" "service_account_user" {
   project = data.google_project.default.id
   role    = "roles/iam.serviceAccountUser"
-  members = [
-    "serviceAccount:${google_service_account.github-action.email}",
-  ]
+  member  = "serviceAccount:${google_service_account.github-action.email}"
 }
 
 resource "google_project_iam_member" "gh-action-dns-admin" {
