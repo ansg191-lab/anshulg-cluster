@@ -1,17 +1,18 @@
 # Kandim Server
 resource "google_compute_instance" "kanidm" {
   name         = "kanidm-instance"
-  machine_type = "n1-standard-1"
-  zone         = "us-west2-b"
+  machine_type = var.kanidm_machine_type
+  zone         = var.auth_zone
 
+  labels                    = var.common_labels
   allow_stopping_for_update = true
 
   boot_disk {
     auto_delete = true
     initialize_params {
-      image = "projects/opensuse-cloud/global/images/opensuse-leap-15-6-v20241004-x86-64"
-      type  = "pd-balanced"
-      size  = 20
+      image = var.kanidm_image
+      type  = var.kanidm_disk_type
+      size  = var.kanidm_disk_size
     }
   }
 
@@ -39,7 +40,8 @@ resource "google_compute_instance" "kanidm" {
 # Service account for kanidm Instance
 resource "google_service_account" "kanidm" {
   account_id   = "kanidm"
-  display_name = "Kanidm Service Account"
+  display_name = "KanIDM Authentication Server"
+  description  = "Service account for KanIDM authentication server instance with Private CA certificate access"
 }
 
 # Allow kanidm Instance to retrieve CA certificate
@@ -54,17 +56,20 @@ resource "google_privateca_ca_pool_iam_member" "kanidm-ca" {
 # Static IPV4 Address for kanidm Instance
 resource "google_compute_address" "kanidm" {
   name         = "kanidm-static-ip"
-  region       = "us-west2"
+  region       = var.auth_region
   address_type = "EXTERNAL"
   ip_version   = "IPV4"
   network_tier = "PREMIUM"
+
+  labels = var.common_labels
 }
 
 # Firewall rule for kanidm Instance
 # Allow HTTTP/3 & LDAPS traffic
 resource "google_compute_firewall" "kanidm-global" {
-  name    = "kanidm-global-firewall"
-  network = "default"
+  name        = "kanidm-global-firewall"
+  network     = "default"
+  description = "Allow LDAPS (636/tcp) and HTTP/3 QUIC (443/udp) traffic to KanIDM server from anywhere"
 
   allow {
     protocol = "tcp"
@@ -82,58 +87,33 @@ resource "google_compute_firewall" "kanidm-global" {
 
 # Allow SSH traffic from specific IPs
 resource "google_compute_firewall" "kanidm-ssh" {
-  name    = "kanidm-ssh-firewall"
-  network = "default"
+  name        = "kanidm-ssh-firewall"
+  network     = "default"
+  description = "Allow SSH (22/tcp) to KanIDM server from whitelisted IPs (Cox ISP, UCR network)"
 
   allow {
     protocol = "tcp"
-    ports = ["22"]
+    ports    = ["22"]
   }
 
-  priority = 1000
-  source_ranges = [
-    "72.219.136.19/32", # Cox
-    "169.235.0.0/16"    # UCR
-  ]
-  target_tags = ["kanidm"]
+  priority      = 1000
+  source_ranges = var.kanidm_ssh_allowed_ips
+  target_tags   = ["kanidm"]
 }
 resource "google_compute_firewall" "kanidm-ssh-deny" {
-  name    = "kanidm-ssh-deny-firewall"
-  network = "default"
+  name        = "kanidm-ssh-deny-firewall"
+  network     = "default"
+  description = "Deny SSH (22/tcp) to KanIDM server from all other sources (default-deny)"
 
   deny {
     protocol = "tcp"
     ports = ["22"]
   }
 
-  priority = 1001
+  priority      = 1001
   source_ranges = ["0.0.0.0/0"]
-  target_tags = ["kanidm"]
+  target_tags   = ["kanidm"]
 }
-
-# Add DNS record for kanidm Instance
-# auth.anshulg.com
-resource "google_dns_record_set" "auth-ipv4" {
-  managed_zone = data.google_dns_managed_zone.default.name
-  name         = "auth.${data.google_dns_managed_zone.default.dns_name}"
-  type         = "A"
-  ttl          = 60
-  rrdatas = [
-    google_compute_address.kanidm.address
-  ]
-}
-
-# ldap.auth.anshulg.com
-resource "google_dns_record_set" "ldap-ipv4" {
-  managed_zone = data.google_dns_managed_zone.default.name
-  name         = "ldap.auth.${data.google_dns_managed_zone.default.dns_name}"
-  type         = "A"
-  ttl          = 60
-  rrdatas = [
-    google_compute_address.kanidm.address
-  ]
-}
-
 # endregion Networking
 
 # region Deployment
@@ -141,24 +121,21 @@ resource "google_dns_record_set" "ldap-ipv4" {
 # Create Service Account for Github Action Deployment
 resource "google_service_account" "github-action" {
   account_id   = "github-action-anshulg"
-  display_name = "Github Action Service Account for anshulg-cluster"
+  display_name = "GitHub Actions Deployment"
+  description  = "Service account for GitHub Actions to deploy auth-server (SSH, firewall, DNS access)"
 }
 
 # Allow Github Action Service Account to ssh into kanidm Instance
-resource "google_project_iam_binding" "instance_admin" {
+resource "google_project_iam_member" "instance_admin" {
   project = data.google_project.default.id
   role    = "roles/compute.instanceAdmin.v1"
-  members = [
-    "serviceAccount:${google_service_account.github-action.email}",
-  ]
+  member  = "serviceAccount:${google_service_account.github-action.email}"
 }
 
-resource "google_project_iam_binding" "service_account_user" {
+resource "google_project_iam_member" "service_account_user" {
   project = data.google_project.default.id
   role    = "roles/iam.serviceAccountUser"
-  members = [
-    "serviceAccount:${google_service_account.github-action.email}",
-  ]
+  member  = "serviceAccount:${google_service_account.github-action.email}"
 }
 
 resource "google_project_iam_member" "gh-action-dns-admin" {
@@ -179,7 +156,7 @@ resource "google_project_iam_member" "gh-action-firewalls" {
 
 resource "google_compute_resource_policy" "scheduled_backup" {
   name   = "kanidm-scheduled-backup-policy"
-  region = "us-west2"
+  region = var.auth_region
   snapshot_schedule_policy {
     schedule {
       daily_schedule {
@@ -191,7 +168,7 @@ resource "google_compute_resource_policy" "scheduled_backup" {
       storage_locations = ["us"]
     }
     retention_policy {
-      max_retention_days    = 7
+      max_retention_days    = var.kanidm_backup_retention_days
       on_source_disk_delete = "KEEP_AUTO_SNAPSHOTS"
     }
   }
