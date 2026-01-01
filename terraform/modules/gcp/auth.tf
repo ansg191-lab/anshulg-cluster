@@ -38,8 +38,6 @@ resource "google_compute_instance" "kanidm" {
   }
 
   tags = [
-    "http-server",
-    "https-server",
     "kanidm"
   ]
 
@@ -90,15 +88,15 @@ resource "google_compute_address" "kanidm-ipv6" {
 }
 
 # Firewall rule for kanidm Instance (IPv4)
-# Allow HTTTP/3 & LDAPS traffic
+# Allow HTTP, HTTPS, HTTP/3 & LDAPS traffic
 resource "google_compute_firewall" "kanidm-global" {
   name        = "kanidm-global-firewall"
   network     = "default"
-  description = "Allow LDAPS (636/tcp) and HTTP/3 QUIC (443/udp) traffic to KanIDM server from anywhere (IPv4)"
+  description = "Allow HTTP (80/tcp), HTTPS (443/tcp), LDAPS (636/tcp) and HTTP/3 QUIC (443/udp) traffic to KanIDM server from anywhere (IPv4)"
 
   allow {
     protocol = "tcp"
-    ports    = ["636"]
+    ports    = ["80", "443", "636"]
   }
 
   allow {
@@ -111,20 +109,34 @@ resource "google_compute_firewall" "kanidm-global" {
 }
 
 # Firewall rule for kanidm Instance (IPv6)
-# Allow HTTTP/3 & LDAPS traffic
+# Allow HTTP, HTTPS, HTTP/3 & LDAPS traffic
 resource "google_compute_firewall" "kanidm-global-ipv6" {
   name        = "kanidm-global-firewall-ipv6"
   network     = "default"
-  description = "Allow LDAPS (636/tcp) and HTTP/3 QUIC (443/udp) traffic to KanIDM server from anywhere (IPv6)"
+  description = "Allow HTTP (80/tcp), HTTPS (443/tcp), LDAPS (636/tcp) and HTTP/3 QUIC (443/udp) traffic to KanIDM server from anywhere (IPv6)"
 
   allow {
     protocol = "tcp"
-    ports    = ["636"]
+    ports    = ["80", "443", "636"]
   }
 
   allow {
     protocol = "udp"
     ports    = ["443"]
+  }
+
+  source_ranges = ["::/0"]
+  target_tags   = ["kanidm"]
+}
+
+# Allow ICMPv6 (ping6) traffic
+resource "google_compute_firewall" "kanidm-icmpv6" {
+  name        = "kanidm-icmpv6-firewall"
+  network     = "default"
+  description = "Allow ICMPv6 traffic to KanIDM server for ping (IPv6)"
+
+  allow {
+    protocol = "58"  # ICMPv6
   }
 
   source_ranges = ["::/0"]
