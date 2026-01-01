@@ -12,7 +12,7 @@ resource "google_privateca_certificate_authority" "default" {
   pool                     = google_privateca_ca_pool.default.name
   location                 = "us-west1"
   certificate_authority_id = "anshul-ca-1"
-  deletion_protection      = false
+  deletion_protection      = true
   config {
     subject_config {
       subject {
