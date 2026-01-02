@@ -33,7 +33,6 @@ resource "google_compute_instance" "kanidm" {
       network_tier                = "PREMIUM"
       external_ipv6               = google_compute_address.kanidm-ipv6.address
       external_ipv6_prefix_length = 96
-      public_ptr_domain_name      = "auth.${data.google_dns_managed_zone.default.dns_name}"
     }
   }
 
