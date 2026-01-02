@@ -31,22 +31,4 @@ resource "google_storage_bucket" "debian-apt-repo" {
 	public_access_prevention    = "enforced"
 }
 
-resource "google_service_account" "debian-apt-repo" {
-	account_id   = "debian-apt-repo"
-	display_name = "Debian APT Repository Manager"
-	description  = "Service account for managing Debian APT repository bucket (legacy ACL access)"
-}
-
-resource "google_storage_bucket_iam_member" "debian-apt-repo-bucket" {
-	bucket = google_storage_bucket.debian-apt-repo.name
-	member = "serviceAccount:${google_service_account.debian-apt-repo.email}"
-	role   = "roles/storage.legacyBucketWriter"
-}
-
-resource "google_storage_bucket_iam_member" "debian-apt-repo-object" {
-	bucket = google_storage_bucket.debian-apt-repo.name
-	member = "serviceAccount:${google_service_account.debian-apt-repo.email}"
-	role   = "roles/storage.legacyObjectOwner"
-}
-
 # endregion Debian Apt Repository Bucket

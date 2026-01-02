@@ -31,12 +31,9 @@ output "service_accounts" {
   value = {
     kanidm               = google_service_account.kanidm.email
     github_action        = google_service_account.github-action.email
-    cluster              = google_service_account.default.email
-    cas_issuer           = google_service_account.sa-google-cas-issuer.email
     rpi4_cas_issuer      = google_service_account.rpi4-postgres-cas-issuer.email
     rpi5_cas_issuer      = google_service_account.rpi5-cas-issuer.email
     dns01_solver         = google_service_account.dns01-solver.email
-    debian_apt_repo      = google_service_account.debian-apt-repo.email
   }
 }
 

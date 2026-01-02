@@ -59,12 +59,6 @@ resource "google_privateca_certificate_authority" "default" {
   lifetime = "315360000s"
 }
 
-resource "google_service_account" "sa-google-cas-issuer" {
-  account_id   = "sa-google-cas-issuer"
-  display_name = "GKE cert-manager Private CA Issuer"
-  description  = "Service account for cert-manager to issue certificates from Private CA (GKE cluster)"
-}
-
 resource "google_service_account" "rpi4-postgres-cas-issuer" {
   account_id   = "rpi4-postgres-cas-issuer"
   display_name = "RPI4 PostgreSQL Private CA Issuer"
@@ -81,7 +75,6 @@ resource "google_privateca_ca_pool_iam_binding" "sa-google-cas-issuer" {
   ca_pool = google_privateca_ca_pool.default.id
   role    = "roles/privateca.certificateRequester"
   members = [
-    "serviceAccount:${google_service_account.sa-google-cas-issuer.email}",
     "serviceAccount:${google_service_account.rpi4-postgres-cas-issuer.email}",
     "serviceAccount:${google_service_account.rpi5-cas-issuer.email}",
   ]
