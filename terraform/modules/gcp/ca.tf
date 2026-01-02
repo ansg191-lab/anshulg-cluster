@@ -71,12 +71,16 @@ resource "google_service_account" "rpi5-cas-issuer" {
   description  = "Service account for cert-manager to issue certificates from Private CA (RPI5 cluster)"
 }
 
-resource "google_privateca_ca_pool_iam_binding" "sa-google-cas-issuer" {
-  ca_pool = google_privateca_ca_pool.default.id
-  role    = "roles/privateca.certificateRequester"
-  members = [
-    "serviceAccount:${google_service_account.rpi4-postgres-cas-issuer.email}",
-    "serviceAccount:${google_service_account.rpi5-cas-issuer.email}",
-  ]
+resource "google_privateca_ca_pool_iam_member" "rpi4-cas-issuer" {
+  ca_pool  = google_privateca_ca_pool.default.id
+  role     = "roles/privateca.certificateRequester"
+  member   = "serviceAccount:${google_service_account.rpi4-postgres-cas-issuer.email}"
+  location = var.primary_region
+}
+
+resource "google_privateca_ca_pool_iam_member" "rpi5-cas-issuer" {
+  ca_pool  = google_privateca_ca_pool.default.id
+  role     = "roles/privateca.certificateRequester"
+  member   = "serviceAccount:${google_service_account.rpi5-cas-issuer.email}"
   location = var.primary_region
 }
