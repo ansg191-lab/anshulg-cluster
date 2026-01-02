@@ -39,6 +39,7 @@ copy_root() {
 
 	log "Copying files..."
 	rsync -a --verbose root/ /
+	chown root:root /
 }
 
 install_packages() {
@@ -47,6 +48,27 @@ install_packages() {
 
 	# Install packages if not already installed
 	xargs zypper install -y < packages.txt
+
+	# Install patches if any
+	log "Installing security patches..."
+	zypper patch -y
+}
+
+harden_sshd() {
+	log "Hardening SSHD configuration..."
+
+	# Backup existing sshd_config
+	cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bak
+
+	# Apply hardening settings
+	sed -i 's/^#*PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
+	sed -i 's/^#*PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config
+	sed -i 's/^#*PubkeyAuthentication.*/PubkeyAuthentication yes/' /etc/ssh/sshd_config
+	sed -i 's/^#*ChallengeResponseAuthentication.*/ChallengeResponseAuthentication no/' /etc/ssh/sshd_config
+	sed -i 's/^#*X11Forwarding.*/X11Forwarding no/' /etc/ssh/sshd_config
+
+	# Restart SSHD to apply changes
+	systemctl restart sshd
 }
 
 install_ca() {
@@ -167,6 +189,7 @@ start_kanidm() {
 trap cleanup EXIT
 copy_root
 install_packages
+harden_sshd
 install_ca
 install_gcloud
 setup_certs
