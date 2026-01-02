@@ -198,19 +198,6 @@ resource "google_service_account" "github-action" {
   description  = "Service account for GitHub Actions to deploy auth-server (SSH, firewall, DNS access)"
 }
 
-# Allow Github Action Service Account to ssh into kanidm Instance
-resource "google_project_iam_member" "instance_admin" {
-  project = data.google_project.default.id
-  role    = "roles/compute.instanceAdmin.v1"
-  member  = "serviceAccount:${google_service_account.github-action.email}"
-}
-
-resource "google_project_iam_member" "service_account_user" {
-  project = data.google_project.default.id
-  role    = "roles/iam.serviceAccountUser"
-  member  = "serviceAccount:${google_service_account.github-action.email}"
-}
-
 resource "google_dns_managed_zone_iam_member" "gh-action-dns-admin-anshulg-com" {
   managed_zone = data.google_dns_managed_zone.default.name
   role         = "roles/dns.admin"
