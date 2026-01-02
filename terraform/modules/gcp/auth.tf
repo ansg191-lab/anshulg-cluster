@@ -212,10 +212,16 @@ resource "google_project_iam_member" "service_account_user" {
   member  = "serviceAccount:${google_service_account.github-action.email}"
 }
 
-resource "google_project_iam_member" "gh-action-dns-admin" {
-  project = data.google_project.default.id
-  role    = "roles/dns.admin"
-  member  = "serviceAccount:${google_service_account.github-action.email}"
+resource "google_dns_managed_zone_iam_member" "gh-action-dns-admin-anshulg-com" {
+  managed_zone = data.google_dns_managed_zone.default.name
+  role         = "roles/dns.admin"
+  member       = "serviceAccount:${google_service_account.github-action.email}"
+}
+
+resource "google_dns_managed_zone_iam_member" "gh-action-dns-admin-anshulg-direct" {
+  managed_zone = data.google_dns_managed_zone.direct.name
+  role         = "roles/dns.admin"
+  member       = "serviceAccount:${google_service_account.github-action.email}"
 }
 
 resource "google_project_iam_member" "gh-action-firewalls" {
