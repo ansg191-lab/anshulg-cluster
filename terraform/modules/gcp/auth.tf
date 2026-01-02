@@ -57,7 +57,7 @@ resource "google_service_account" "kanidm" {
 # Allow kanidm Instance to retrieve CA certificate
 resource "google_privateca_ca_pool_iam_member" "kanidm-ca" {
   ca_pool = google_privateca_ca_pool.default.id
-  role    = "roles/privateca.certificateManager"
+  role    = "roles/privateca.certificateRequester"
   member  = "serviceAccount:${google_service_account.kanidm.email}"
 }
 
