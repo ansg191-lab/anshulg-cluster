@@ -8,7 +8,7 @@
 set -eu
 
 USER="anshulgupta"
-INSTANCE="rpi4.local"
+INSTANCE="rpi4.anshulg.direct"
 SERVER="$USER@$INSTANCE"
 
 echo "Deploying to $SERVER..."

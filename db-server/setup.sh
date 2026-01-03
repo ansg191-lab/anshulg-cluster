@@ -44,8 +44,8 @@ copy_root() {
 	fi
 
 	log "Setting permissions..."
-	chown -R root:root root/etc
-	chown -R root:root root/usr
+	chown -R root:root root
+	chown -R anshulgupta:anshulgupta root/home/anshulgupta
 
 	log "Copying files..."
 	rsync -a --verbose root/ /
