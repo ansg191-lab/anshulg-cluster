@@ -49,7 +49,7 @@ copy_root() {
 	fi
 
 	log "Setting permissions..."
-	chown -R root:root root/etc
+	chown -R root:root root
 	chown -R kanidm:kanidm root/srv/kanidm
 
 	log "Copying files..."
