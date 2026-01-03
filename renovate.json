@@ -54,7 +54,7 @@
       "matchPackageNames": [
         "linuxserver/qbittorrent"
       ],
-      "allowedVersions": "!/^\\d{2}\\.\\d{2}\\.\\d+$/"
+      "allowedVersions": "/^5\\.\\d+\\.\\d+.*$/"
     },
     {
       "matchPackageNames": [
