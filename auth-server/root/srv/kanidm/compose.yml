@@ -9,12 +9,12 @@ services:
       - "127.0.0.1:3636:3636"
 
     volumes:
-      - /home/anshulgupta/data:/data
-      - /home/anshulgupta/certs:/certs:ro
-      - /home/anshulgupta/backups:/backups
+      - /srv/kanidm/data:/data
+      - /srv/kanidm/certs:/certs:ro
+      - /srv/kanidm/backups:/backups
 
     restart: always
-    user: "1000:100"
+    user: "${KANIDM_UID}:${KANIDM_GID}"
     cap_drop:
       - ALL
     # read_only: true

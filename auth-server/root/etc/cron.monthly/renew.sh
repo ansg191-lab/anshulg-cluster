@@ -6,7 +6,7 @@
 
 set -eux
 
-cd /home/anshulgupta/certs
+cd /srv/kanidm/certs
 
 chmod 600 tls.crt || true
 chmod 600 tls.key || true
@@ -21,7 +21,7 @@ gcloud privateca certificates create kandim-cert \
     --cert-output-file tls.crt \
     --validity "P90D"
 
-chown 1000:100 tls.crt
-chown 1000:100 tls.key
+chown kanidm:kanidm tls.crt
+chown kanidm:kanidm tls.key
 chmod 400 tls.crt
-chmod 400 tls.key
+chmod 600 tls.key
