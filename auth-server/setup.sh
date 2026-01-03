@@ -199,6 +199,10 @@ setup_services() {
 	# Enable docker image prune timer
 	systemctl enable docker-image-prune.timer
 	systemctl start docker-image-prune.timer
+
+	# Enable Kanidm certificate renewal timer
+	systemctl enable kanidm-cert-renew.timer
+	systemctl start kanidm-cert-renew.timer
 }
 
 write_compose_env() {

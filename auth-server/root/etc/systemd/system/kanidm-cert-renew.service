@@ -1,0 +1,17 @@
+[Unit]
+Description=Renew Kanidm TLS certificate
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/kanidm-renew-cert.sh
+Nice=19
+IOSchedulingClass=idle
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

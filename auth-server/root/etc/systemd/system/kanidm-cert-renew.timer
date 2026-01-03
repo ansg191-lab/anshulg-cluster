@@ -1,0 +1,10 @@
+[Unit]
+Description=Run Kanidm TLS certificate renewal monthly
+
+[Timer]
+OnCalendar=monthly
+Persistent=true
+RandomizedDelaySec=1w
+
+[Install]
+WantedBy=timers.target
