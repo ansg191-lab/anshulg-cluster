@@ -179,6 +179,8 @@ setup_certs() {
 setup_services() {
 	log "Setting up services..."
 
+	systemctl daemon-reload
+
 	# Enable and start docker
 	systemctl enable docker
 	systemctl start docker || systemctl restart docker
@@ -193,6 +195,10 @@ setup_services() {
 	# Enable and start haproxy
 	systemctl enable haproxy
 	systemctl restart haproxy
+
+	# Enable docker image prune timer
+	systemctl enable docker-image-prune.timer
+	systemctl start docker-image-prune.timer
 }
 
 write_compose_env() {

@@ -1,0 +1,10 @@
+[Unit]
+Description=Run Docker image prune weekly
+
+[Timer]
+OnCalendar=Sun *-*-* 03:30:00
+Persistent=true
+RandomizedDelaySec=1h
+
+[Install]
+WantedBy=timers.target
