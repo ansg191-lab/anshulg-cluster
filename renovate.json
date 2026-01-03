@@ -52,6 +52,12 @@
     },
     {
       "matchPackageNames": [
+        "linuxserver/qbittorrent"
+      ],
+      "allowedVersions": "!/^\\d{2}\\.\\d{2}\\.\\d+$/"
+    },
+    {
+      "matchPackageNames": [
         "intel-device-plugins-gpu",
         "intel-device-plugins-operator"
       ],
