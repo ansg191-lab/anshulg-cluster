@@ -403,6 +403,14 @@ Internet → Caddy (TLS termination) → KanIDM Docker container
          GCP Private CA (internal certs)
 ```
 
+**Notable implementation details:**
+- KanIDM runs as a dedicated `kanidm` system user under `/srv/kanidm` (data, certs, backups)
+- TLS certificate issuance/renewal is handled by a systemd timer (`kanidm-cert-renew.timer`)
+- Docker image cleanup runs weekly via `docker-image-prune.timer`
+- HAProxy binds LDAPS on both IPv4 and IPv6
+- `auth.anshulg.com` and `ldap.auth.anshulg.com` publish IPv6 (AAAA) records
+- SSH hardening applied (no root login, no password auth)
+
 **Deployment:**
 ```bash
 cd auth-server
@@ -501,6 +509,11 @@ Large media management ecosystem:
 - **Backup**: Restic (to GCS)
 
 All use Traefik ingress with `.internal` (Internal CA) or `.anshulg.direct` (LetsEncrypt) domains.
+
+### Terraform & GCP Notes
+
+- Terraform now manages a dedicated `rpi5-cas-issuer` service account for cert-manager (Private CA)
+- Module outputs are exposed for IPs, buckets, and service accounts (see `terraform/outputs.tf`)
 
 ### Renovate Configuration
 
