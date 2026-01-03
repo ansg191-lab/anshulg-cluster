@@ -41,6 +41,7 @@ architecture-beta
     service server(server)[Auth Server] in docker
 
     service caddy(server)[Caddy] in instance
+    service haproxy(server)[HAProxy] in instance
 
     service privateca(disk)[Private CA] in GCP
 
@@ -48,7 +49,9 @@ architecture-beta
     service letsencrypt(internet)[LetsEncrypt]
 
     internet:R -- L:caddy
+    internet:R -- L:haproxy
     letsencrypt:T -- B:caddy
     caddy:R -- L:server
+    haproxy:R -- L:server
     privateca:L -- R:server
 ```
