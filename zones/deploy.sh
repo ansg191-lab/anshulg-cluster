@@ -6,6 +6,9 @@
 
 set -eu
 
+# Ensure we're in the zones directory
+cd "$(dirname "${BASH_SOURCE[0]}")" || exit 1
+
 # Get all zonefiles in `zones`
 for file in *.zonefile; do
 	[ -e "$file" ] || continue
@@ -22,13 +25,22 @@ for file in *.zonefile; do
 		continue
 	fi
 
+	if [[ -z "$provider" || -z "$zone" ]]; then
+		echo "File: '$file' | Invalid header (empty provider or zone)"
+		continue
+	fi
+
 	# Handle providers
 	if [[ "$provider" == "gcp" ]]; then
-		gcloud dns record-sets import "$file" --zone="$zone" --zone-file-format --delete-all-existing
+		echo "File: '$file' | Deploying to GCP zone: $zone"
+		if gcloud dns record-sets import "$file" --zone="$zone" --zone-file-format --delete-all-existing; then
+			echo "File: '$file' | Finished successfully"
+		else
+			echo "File: '$file' | ERROR: Failed to import DNS records" >&2
+			exit 1
+		fi
 	else
 		echo "File: '$file' | Unknown provider: '$provider'"
 		continue
 	fi
-
-	echo "File: '$file' | Finished"
 done
