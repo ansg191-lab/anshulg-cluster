@@ -109,6 +109,10 @@ openpgpkey.anshulg.com. 300 IN CNAME wkd.keys.openpgp.org.
 
 
 ;; A/AAAA Records
+;; Temporary records until GKE cluster is back up
+anshulg.com. 60 IN A 34.94.107.30
+anshulg.com. 60 IN AAAA 2600:1900:4120:716d:0:4::
+
 ;; Route to K8S Load Balancer
 ;; anshulg.com. 86400 IN A 34.149.245.89
 ;; anshulg.com. 86400 IN AAAA 2600:1901:0:9c14::
