@@ -12,7 +12,7 @@ chmod 600 tls.crt || true
 chmod 600 tls.key || true
 
 openssl req -newkey rsa:4096 -out csr.pem -keyout tls.key -config csr.cnf -nodes
-gcloud privateca certificates create kandim-cert \
+gcloud privateca certificates create kanidm-cert \
     --project anshulg-cluster \
     --issuer-pool default \
     --issuer-location us-west1 \

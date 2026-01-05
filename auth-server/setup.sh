@@ -61,6 +61,11 @@ install_packages() {
 	log "Installing required packages..."
 	zypper refresh
 
+	[[ -f packages.txt ]] || {
+		log "packages.txt file not found!"
+		exit 1
+	}
+
 	# Install packages if not already installed
 	xargs zypper install -y < packages.txt
 
@@ -153,11 +158,16 @@ setup_certs() {
 		log "Issuing new certificate..."
 		pushd "$KANIDM_ROOT/certs"
 
+		[[ -f "csr.cnf" ]] || {
+			log "csr.cnf file not found!"
+			exit 1
+		}
+
 		chmod 600 "tls.crt" 2>/dev/null || true
 		chmod 600 "tls.key" 2>/dev/null || true
 
 		openssl req -newkey rsa:4096 -out csr.pem -keyout tls.key -config csr.cnf -nodes
-		gcloud privateca certificates create kandim-cert \
+		gcloud privateca certificates create kanidm-cert \
 			--project anshulg-cluster \
 			--issuer-pool default \
 			--issuer-location us-west1 \
