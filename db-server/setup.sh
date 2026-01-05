@@ -147,7 +147,7 @@ setup_zeyple() {
 	# Download Zeyple
 	log "Downloading Zeyple..."
 	SHA256_SUM="6875676e50fd0c06a8eda4a1b46da701adfad767e650bb359304c1242b4e85ab"
-	wget -qO /usr/local/bin/zeyple "https://github.com/ansg191/zeyple/raw/refs/heads/signing/zeyple/zeyple.py"
+	wget -qO /usr/local/bin/zeyple "https://raw.githubusercontent.com/ansg191/zeyple/78f829692dd123417947321fa7cda93bc58ca28c/zeyple/zeyple.py"
 	if [ "$(sha256sum /usr/local/bin/zeyple | awk '{print $1}')" != "$SHA256_SUM" ]; then
 		rm /usr/local/bin/zeyple
 		log "Zeyple download failed or file is corrupted!"
