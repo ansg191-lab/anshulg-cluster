@@ -5,6 +5,7 @@ After=network-online.target
 
 [Service]
 Type=oneshot
+ExecStartPre=/usr/bin/test -x /usr/local/sbin/kanidm-renew-cert.sh
 ExecStart=/usr/local/sbin/kanidm-renew-cert.sh
 Nice=19
 IOSchedulingClass=idle

@@ -1,5 +1,5 @@
 [Unit]
-Description=Prune unused Docker images
+Description=Prune unused Docker images older than 7 days
 Requires=docker.service
 After=docker.service
 
