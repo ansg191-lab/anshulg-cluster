@@ -60,7 +60,12 @@ install_packages() {
 
 install_ca() {
 	log "Installing CA certificates..."
-	wget -O /home/anshulgupta/ca.crt http://privateca-content-64cbe468-0000-233e-beaa-14223bc3fa9e.storage.googleapis.com/c745acb2f145f7f9e343/ca.crt
+
+	[[ -f /home/anshulgupta/ca.crt ]] || {
+		log "CA Certificate not found!"
+		exit 1
+	}
+
 	chmod 644 /home/anshulgupta/ca.crt
 	cp /home/anshulgupta/ca.crt /usr/local/share/ca-certificates/anshulg.crt
 	update-ca-certificates
