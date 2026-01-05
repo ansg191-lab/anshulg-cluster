@@ -12,6 +12,8 @@ NC='\033[0m'
 START_MARKER='<< ADDED BY setup.sh >>'
 END_MARKER='<< END ADDED BY setup.sh >>'
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 # renovate: datasource=github-releases depName=restic/restic
 RESTIC_VERSION="0.18.1"
 # renovate: datasource=github-releases depName=creativeprojects/resticprofile
@@ -29,7 +31,11 @@ cleanup() {
 
 	# Cleanup root
 	log "Cleaning up root..."
-	rm -rf root
+	[[ "$SCRIPT_DIR/root" == "/root" ]] && {
+		log "Refusing to delete $SCRIPT_DIR/root"
+		exit 1
+	}
+	rm -rf "$SCRIPT_DIR/root"
 
 	log "Done."
 }
