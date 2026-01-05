@@ -127,6 +127,7 @@ setup_zeyple() {
 	fi
 
 	# Create Zeyple directories
+	mkdir -p /var/lib/zeyple/keys
 	chmod 700 /var/lib/zeyple/keys
 	chown -R zeyple: /var/lib/zeyple/keys
 
@@ -134,7 +135,13 @@ setup_zeyple() {
 
 	# Download Zeyple
 	log "Downloading Zeyple..."
+	SHA256_SUM="6875676e50fd0c06a8eda4a1b46da701adfad767e650bb359304c1242b4e85ab"
 	wget -qO /usr/local/bin/zeyple "https://github.com/ansg191/zeyple/raw/refs/heads/signing/zeyple/zeyple.py"
+	if [ "$(sha256sum /usr/local/bin/zeyple | awk '{print $1}')" != "$SHA256_SUM" ]; then
+		rm /usr/local/bin/zeyple
+		log "Zeyple download failed or file is corrupted!"
+		exit 1
+	fi
 	chmod 744 /usr/local/bin/zeyple
 	chown zeyple: /usr/local/bin/zeyple
 
@@ -170,7 +177,7 @@ setup_issuer() {
 	mkdir -p "$(dirname "$GCLOUD_SA_FILE")"
 	chmod 700 "$(dirname "$GCLOUD_SA_FILE")"
 
-	op read --out-file $GCLOUD_SA_FILE -f "op://RPI4/RPI4 Google Service Account/anshulg-cluster-rpi4-postgres-cas-issuer.json"
+	op read --out-file "$GCLOUD_SA_FILE" -f "op://RPI4/RPI4 Google Service Account/anshulg-cluster-rpi4-postgres-cas-issuer.json"
 
 	gcloud config set account rpi4-postgres-cas-issuer@anshulg-cluster.iam.gserviceaccount.com
 	gcloud auth activate-service-account rpi4-postgres-cas-issuer@anshulg-cluster.iam.gserviceaccount.com \
@@ -235,7 +242,7 @@ setup_postgres() {
 	sudo -u postgres psql -c "ALTER SYSTEM SET listen_addresses = '*';"
 
     # Find the correct PostgreSQL configuration directory
-	PG_VERSION=$(ls /etc/postgresql)
+	PG_VERSION=$(find /etc/postgresql -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | head -n1)
 	PG_CONF_DIR="/etc/postgresql/${PG_VERSION}/main"
 
 	read -r -d '' RULES <<EOF || true
