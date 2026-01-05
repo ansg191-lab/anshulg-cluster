@@ -33,6 +33,8 @@ get_ipv4() {
 get_ipv6() {
 	INTERFACE="$(ip -6 route list default | awk '{for(i=1;i<=NF;i++) if($i=="dev"){print $(i+1); exit}}')"
 
+	[[ -n "${INTERFACE}" ]] || err "Could not determine default IPv6 interface"
+
 	ip -6 addr show dev "$INTERFACE" scope global \
 		| grep inet6 \
 		| grep -Ev 'deprecated|temporary' \
@@ -53,24 +55,23 @@ duckdns_update() {
 
 	local tmp status
 	tmp="$(mktemp)"
+	trap 'rm -f "$tmp"' RETURN
+
 	status="$(curl -sS -o "$tmp" -w '%{http_code}' "$url")"
 	if [[ "${status}" != "200" ]]; then
 		echo "DuckDNS API error: Update for domain '${domain}' -> HTTP ${status}" >&2
 		cat "$tmp" >&2
 		echo
-		rm -f "$tmp"
-		exit 1
+		return 1
 	fi
 	if grep -q "KO" "$tmp"; then
 		echo "DuckDNS API error: Update for domain '${domain}'" >&2
 		cat "$tmp" >&2
 		echo
-		rm -f "$tmp"
-		exit 1
+		return 1
 	fi
 
 	cat "$tmp"
-	rm -f "$tmp"
 }
 
 ################################################################################
