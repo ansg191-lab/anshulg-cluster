@@ -73,7 +73,8 @@ variable "kanidm_ssh_allowed_ips" {
   type        = list(string)
   default = [
     "72.219.136.19/32", # Cox ISP
-    "169.235.0.0/16"    # UCR network
+    "169.235.0.0/16",   # UCR network
+    "96.41.17.70/32",   # Spectrum ISP
   ]
 }
 
