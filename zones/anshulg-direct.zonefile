@@ -36,6 +36,9 @@ yamtrack.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
 
 ;; Other Internal Servers
 
+router.anshulg.direct. 60 IN A 192.168.1.1
+router.anshulg.direct. 60 IN AAAA fd30:e1bf:9b4f::1
+
 rpi4.anshulg.direct. 60 IN A 192.168.1.9
 rpi4.anshulg.direct. 60 IN AAAA fd30:e1bf:9b4f:0:2086:42ff:feba:6dc7
 
