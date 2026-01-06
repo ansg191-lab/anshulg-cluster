@@ -206,6 +206,7 @@ setup_services() {
 	# Enable and start caddy
 	systemctl enable caddy
 	systemctl restart caddy
+	sleep 5
 	/usr/bin/caddy reload --config /etc/caddy/Caddyfile
 
 	# Enable and start haproxy
