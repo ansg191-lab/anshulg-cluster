@@ -19,5 +19,17 @@ auth.anshulg.com {
 	}
 }
 
+anshulg.com {
+	encode zstd gzip
+
+	reverse_proxy http://localhost:4321 {
+		health_uri /
+		health_interval 10s
+		health_fails 3
+		health_timeout 2s
+		health_status 200
+	}
+}
+
 # Refer to the Caddy docs for more information:
 # https://caddyserver.com/docs/caddyfile

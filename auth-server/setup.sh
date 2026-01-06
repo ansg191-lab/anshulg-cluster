@@ -11,6 +11,7 @@ LOCK='\xF0\x9F\x94\x90'
 NC='\033[0m'
 
 KANIDM_ROOT="/srv/kanidm"
+HOMEPAGE_ROOT="/srv/home"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 log() {
@@ -27,15 +28,18 @@ cleanup() {
 	log "Done."
 }
 
-create_kanidm_user() {
-	log "Ensuring kanidm system user exists..."
+create_system_user() {
+	local user=$1
+	local root=$2
 
-	if ! getent group kanidm >/dev/null 2>&1; then
-		groupadd --system kanidm
+	log "Ensuring $user system user exists..."
+
+	if ! getent group "$user" >/dev/null 2>&1; then
+		groupadd --system "$user"
 	fi
 
-	if ! id -u kanidm >/dev/null 2>&1; then
-		useradd --system --gid kanidm --home-dir "$KANIDM_ROOT" --shell /sbin/nologin kanidm
+	if ! id -u "$user" >/dev/null 2>&1; then
+		useradd --system --gid "$user" --home-dir "$root" --shell /sbin/nologin "$user"
 	fi
 }
 
@@ -50,6 +54,7 @@ copy_root() {
 
 	log "Setting permissions..."
 	chown -R root:root root
+	chown -R homepage:homepage root/srv/home
 	chown -R kanidm:kanidm root/srv/kanidm
 
 	log "Copying files..."
@@ -201,6 +206,7 @@ setup_services() {
 	# Enable and start caddy
 	systemctl enable caddy
 	systemctl restart caddy
+	/usr/bin/caddy reload --config /etc/caddy/Caddyfile
 
 	# Enable and start haproxy
 	systemctl enable haproxy
@@ -216,20 +222,23 @@ setup_services() {
 }
 
 write_compose_env() {
-	log "Writing compose environment file..."
+	local username=$1
+	local root=$2
+
+	log "Writing compose environment file for $username to $root..."
 
 	local uid gid
-	uid="$(id -u kanidm)"
-	gid="$(id -g kanidm)"
+	uid="$(id -u "$username")"
+	gid="$(id -g "$username")"
 
-	mkdir -p "$KANIDM_ROOT"
-	cat > "$KANIDM_ROOT/compose.env" << EOF
-KANIDM_UID=$uid
-KANIDM_GID=$gid
+	mkdir -p "$root"
+	cat > "$root/compose.env" << EOF
+COMPOSE_UID=$uid
+COMPOSE_GID=$gid
 EOF
 
-	chown root:root "$KANIDM_ROOT/compose.env"
-	chmod 600 "$KANIDM_ROOT/compose.env"
+	chown root:root "$root/compose.env"
+	chmod 600 "$root/compose.env"
 }
 
 start_kanidm() {
@@ -247,8 +256,30 @@ start_kanidm() {
 	popd
 }
 
+start_homepage() {
+	log "Starting homepage server..."
+
+	# Check that home.env exists
+	if [ ! -f "$HOMEPAGE_ROOT/home.env" ]; then
+		log "Error: $HOMEPAGE_ROOT/home.env file not found!"
+		exit 1
+	fi
+
+	# Start or restart the docker compose service
+	pushd "$HOMEPAGE_ROOT"
+	if [ -f "$HOMEPAGE_ROOT/compose.env" ]; then
+		set -a
+		# shellcheck disable=SC1091
+		. "$HOMEPAGE_ROOT/compose.env"
+		set +a
+	fi
+	docker compose -f "$HOMEPAGE_ROOT/compose.yml" up -d
+	popd
+}
+
 trap cleanup EXIT
-create_kanidm_user
+create_system_user kanidm "$KANIDM_ROOT"
+create_system_user homepage "$HOMEPAGE_ROOT"
 copy_root
 install_packages
 harden_sshd
@@ -256,5 +287,7 @@ install_ca
 install_gcloud
 setup_certs
 setup_services
-write_compose_env
+write_compose_env kanidm "$KANIDM_ROOT"
 start_kanidm
+write_compose_env homepage "$HOMEPAGE_ROOT"
+start_homepage

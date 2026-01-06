@@ -14,7 +14,7 @@ services:
       - /srv/kanidm/backups:/backups
 
     restart: always
-    user: "${KANIDM_UID}:${KANIDM_GID}"
+    user: "${COMPOSE_UID}:${COMPOSE_GID}"
     cap_drop:
       - ALL
     # read_only: true
