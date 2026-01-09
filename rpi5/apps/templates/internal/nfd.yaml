@@ -11,8 +11,8 @@ metadata:
 spec:
   project: internal
   source:
-    path: .
-    repoURL: oci://registry.k8s.io/nfd/charts/node-feature-discovery
+    chart: node-feature-discovery
+    repoURL: registry.k8s.io/nfd/charts
     targetRevision: 0.18.3
   destination:
     server: {{ .Values.spec.destination.server }}

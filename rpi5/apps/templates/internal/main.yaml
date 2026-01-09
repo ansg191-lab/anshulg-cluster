@@ -13,7 +13,7 @@ spec:
     - https://bitnami-labs.github.io/sealed-secrets
     - https://charts.jetstack.io
     - https://helm.datadoghq.com
-    - oci://registry.k8s.io/nfd/charts/node-feature-discovery
+    - registry.k8s.io/nfd/charts
     - https://intel.github.io/helm-charts/
     - https://1password.github.io/connect-helm-charts/
     - https://charts.deliveryhero.io/
