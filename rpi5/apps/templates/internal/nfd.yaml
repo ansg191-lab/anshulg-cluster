@@ -11,8 +11,8 @@ metadata:
 spec:
   project: internal
   source:
-    chart: node-feature-discovery
-    repoURL: https://kubernetes-sigs.github.io/node-feature-discovery/charts
+    path: .
+    repoURL: oci://registry.k8s.io/nfd/charts/node-feature-discovery
     targetRevision: 0.18.3
   destination:
     server: {{ .Values.spec.destination.server }}
