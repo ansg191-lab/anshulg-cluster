@@ -11,7 +11,7 @@ spec:
             - name: HIJACK_OUT
               value: "1"
             - name: RECEIVER_SERVER_URL
-              value: "http://nonexistant:1234"
+              value: "http://beets-import.beets.svc.cluster.local"
           envFrom:
             - secretRef:
                 name: qui-secrets
