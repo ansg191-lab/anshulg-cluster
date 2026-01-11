@@ -7,13 +7,29 @@ spec:
     spec:
       containers:
         - name: app
+          env:
+            - name: HIJACK_OUT
+              value: "1"
+            - name: RECEIVER_SERVER_URL
+              value: "http://nonexistant:1234"
           envFrom:
             - secretRef:
                 name: qui-secrets
           volumeMounts:
             - mountPath: /config
               name: data
+            - mountPath: /sender
+              name: beets-sender
+              # Doesn't work right now
+              # See https://github.com/kubernetes/kubernetes/issues/134894
+              # subPath: usr/local/bin/sender
+              readOnly: true
           readinessProbe:
             httpGet:
               port: 7476
               path: /health
+      volumes:
+        - name: beets-sender
+          image:
+            reference: ghcr.io/ansg191/torrent-beets-importer/sender:main
+            pullPolicy: Always
