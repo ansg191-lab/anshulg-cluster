@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: empty
+spec:
+  template:
+    spec:
+      securityContext:
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+      containers:
+        - name: app
+          envFrom:
+            - configMapRef:
+                name: env-config
+            - secretRef:
+                name: n8n-secrets
+          securityContext:
+            readOnlyRootFilesystem: false
+          volumeMounts:
+            - mountPath: /data
+              name: data
+            - mountPath: /etc/ssl/certs/ca-certificates.crt
+              name: ca-certs
+              subPath: ca.crt
+            - mountPath: /tmp
+              name: tmp
+          readinessProbe:
+            httpGet:
+              port: 5678
+              path: /healthz
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              port: 5678
+              path: /healthz
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 1Gi
+      volumes:
+        - name: ca-certs
+          configMap:
+            name: anshulg-ca
+        - name: tmp
+          emptyDir: {}

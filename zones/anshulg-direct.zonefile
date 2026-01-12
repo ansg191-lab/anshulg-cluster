@@ -24,6 +24,7 @@ crosswatch.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
 immich.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
 jellyfin.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
 jellyseer.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
+n8n.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
 navidrome.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
 ollama.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
 opengist.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.

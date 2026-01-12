@@ -1,0 +1,57 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../kustomize/base
+  - ../../kustomize/workloads/statefulset
+  - secrets.yaml
+
+components:
+  - ../../kustomize/components/ingress
+  - ../../kustomize/components/direct-ingress
+  - ../../kustomize/components/security-context
+
+namePrefix: n8n-
+labels:
+  - pairs:
+      app.kubernetes.io/name: n8n
+    includeSelectors: true
+
+images:
+  - name: busybox
+    newName: n8nio/n8n
+    newTag: 2.4.0@sha256:55864da7c574d641e42552ad6e9ef40ae3207109028600e6d8a8e9a3eed1a071
+
+configMapGenerator:
+  - name: domain-config
+    literals:
+      - DOMAIN=n8n.internal
+      - DIRECT_DOMAIN=n8n.anshulg.direct
+  - name: env-config
+    literals:
+      - TZ=America/Los_Angeles
+      - N8N_USER_FOLDER=/data
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=https
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+      - N8N_RUNNERS_ENABLED=true
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=rpi4.anshulg.direct
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_DATABASE=n8n
+      - DB_POSTGRESDB_USER=n8n
+      - DB_POSTGRESDB_SCHEMA=public
+      - DB_POSTGRESDB_SSL_ENABLED=true
+      - DB_POSTGRESDB_SSL_REJECT_UNAUTHORIZED=false
+      - DB_POSTGRESDB_SSL_CA=/etc/ssl/certs/ca-certificates.crt
+
+patches:
+  - target:
+      kind: StatefulSet
+    path: patch-statefulset.yaml
+  - target:
+      kind: StatefulSet
+    path: patch-statefulset2.yaml
+  - target:
+      kind: Service
+    path: patch-service.yaml
