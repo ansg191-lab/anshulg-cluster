@@ -35,6 +35,7 @@ configMapGenerator:
       - N8N_PROTOCOL=https
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
       - N8N_RUNNERS_ENABLED=true
+      - N8N_RESTRICT_FILE_ACCESS_TO=/data/.n8n-files
       - DB_TYPE=postgresdb
       - DB_POSTGRESDB_HOST=rpi4.anshulg.direct
       - DB_POSTGRESDB_PORT=5432
