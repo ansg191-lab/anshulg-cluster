@@ -42,6 +42,7 @@ data:
               # 2160p
               - name: Remux-2160p
               - name: Bluray-2160p
+              - name: Remux-1080p
               - name: WEB 2160p
                 qualities:
                   - WEBRip-2160p
@@ -49,7 +50,6 @@ data:
               - name: HDTV-2160p
 
               # 1080p
-              - name: Remux-1080p
               - name: Bluray-1080p
               - name: WEB 1080p
                 qualities:
@@ -314,6 +314,7 @@ data:
               # 2160p
               - name: Bluray-2160p Remux
               - name: Bluray-2160p
+              - name: Bluray-1080p Remux
               - name: WEB 2160p
                 qualities:
                   - WEBRip-2160p
@@ -321,7 +322,6 @@ data:
               - name: HDTV-2160p
 
               # 1080p
-              - name: Bluray-1080p Remux
               - name: Bluray-1080p
               - name: WEB 1080p
                 qualities:
