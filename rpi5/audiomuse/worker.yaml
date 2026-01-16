@@ -32,6 +32,8 @@ spec:
                 name: postgres-credentials
             - secretRef:
                 name: mistral-api-credentials
+            - secretRef:
+                name: openai-api-credentials
             - configMapRef:
                 name: audiomuse-ai-config
           resources:
