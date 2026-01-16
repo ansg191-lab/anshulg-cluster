@@ -9,4 +9,5 @@ data:
   POSTGRES_PORT: "5432"
   REDIS_URL: "redis://audiomuse-valkey:6379/0"
   TEMP_DIR: "/app/temp_audio"
-  AI_MODEL_PROVIDER: "OpenAI"
+  AI_MODEL_PROVIDER: "GEMINI"
+  AI_REQUEST_TIMEOUT_SECONDS: "600"

@@ -35,6 +35,8 @@ spec:
                 name: mistral-api-credentials
             - secretRef:
                 name: openai-api-credentials
+            - secretRef:
+                name: gemini-api-credentials
             - configMapRef:
                 name: audiomuse-ai-config
           securityContext:
