@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: calibre
-          image: linuxserver/calibre:8.16.2@sha256:357c1ad6ec14474f0ae97397187d9e4affcb9e9fb572d884d63a8754cde0fd59
+          image: linuxserver/calibre:8.16.2@sha256:a9113e79e9ea0e0add35671d6568ac01ddd94438e52215b8c1bb5819cb93d4f6
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID
