@@ -28,5 +28,5 @@ dependencies:
     version: 4.3.6
     repository: https://kellnr.github.io/helm
   - name: postgresql
-    version: 18.2.0
+    version: 18.2.3
     repository: https://charts.bitnami.com/bitnami
