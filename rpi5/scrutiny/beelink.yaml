@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: beelink
-          image: ghcr.io/starosdev/scrutiny:1.15.7-collector@sha256:8f76e9b4d393313d2ef6d327406ab687a4fc683dc7364c4b17aca78df3d70806
+          image: ghcr.io/starosdev/scrutiny:1.15.8-collector@sha256:08d49bde1177491cefd7f59067fabca53eb781d9bb3914ad7eced238a08cf18f
           imagePullPolicy: IfNotPresent
           securityContext:
             privileged: true
