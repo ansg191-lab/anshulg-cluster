@@ -510,6 +510,75 @@ Large media management ecosystem:
 
 All use Traefik ingress with `.internal` (Internal CA) or `.anshulg.direct` (LetsEncrypt) domains.
 
+### Intel GPU Device Plugins (rpi5)
+
+The rpi5 cluster uses Intel GPU device plugins for hardware transcoding in Jellyfin. This is managed by two ArgoCD applications:
+
+**Components:**
+- **dp-operator** (`intel-device-plugins-operator`): Controller that manages device plugin CRDs
+- **intel-gpu** (`intel-device-plugins-gpu`): Creates GpuDevicePlugin CR for GPU access
+
+**Architecture:**
+```
+ArgoCD Applications (rpi5/apps/templates/internal/nfd.yaml)
+    ↓
+dp-operator (Controller + Webhook)
+    ↓
+GpuDevicePlugin CR → DaemonSet → GPU Plugin Pods
+    ↓
+Nodes advertise gpu.intel.com/i915 resource
+```
+
+**Important: Coordinated Upgrades Required**
+
+The operator includes a validation webhook that enforces version compatibility. The webhook rejects GpuDevicePlugin CRs with image versions lower than the operator version.
+
+**Upgrade Procedure:**
+
+1. **Check current versions:**
+   ```bash
+   kubectl get deployment -n inteldeviceplugins-system inteldeviceplugins-controller-manager -o jsonpath='{.spec.template.spec.containers[0].image}'
+   kubectl get gpudeviceplugin gpudeviceplugin-sample -n inteldeviceplugins-system -o jsonpath='{.spec.image}'
+   ```
+
+2. **If webhook blocks sync** (chicken-and-egg problem):
+   ```bash
+   # Delete webhook temporarily
+   kubectl delete validatingwebhookconfiguration inteldeviceplugins-validating-webhook-configuration
+
+   # Sync intel-gpu first (updates the CR)
+   argocd app sync intel-gpu --force
+
+   # Then sync dp-operator (recreates webhook)
+   argocd app sync dp-operator --force
+   ```
+
+3. **Verify GPU availability:**
+   ```bash
+   kubectl get nodes -o custom-columns='NAME:.metadata.name,GPU:.status.allocatable.gpu\.intel\.com/i915'
+   ```
+
+**Renovate Configuration:**
+
+Both charts are grouped together in `renovate.json` to ensure coordinated updates:
+```json
+{
+  "matchPackageNames": [
+    "intel-device-plugins-gpu",
+    "intel-device-plugins-operator"
+  ],
+  "groupName": "intel-device-plugins"
+}
+```
+
+**Troubleshooting:**
+
+- **GPU not showing on node**: Check if GPU plugin pod is running, delete pod to force re-registration
+- **Webhook rejection errors**: Version mismatch between operator and CR; follow upgrade procedure above
+- **ArgoCD sync failing**: Check `argocd app get intel-gpu` for webhook rejection errors
+
+**Reference:** [Post-mortem from Jan 2026 Jellyfin incident](https://www.notion.so/2f3457a43cb681759a48d13884b7800b) documented version mismatch issues.
+
 ### Terraform & GCP Notes
 
 - Terraform now manages a dedicated `rpi5-cas-issuer` service account for cert-manager (Private CA)
@@ -524,4 +593,9 @@ Automated updates for:
 - Terraform modules
 - Perl dependencies
 
-Auto-merge enabled for patch/digest updates. Check `.github/renovate.json` for custom rules.
+**Package Groupings** (to ensure coordinated updates):
+- `intel-device-plugins`: Groups `intel-device-plugins-gpu` and `intel-device-plugins-operator`
+- `teslamate`: Groups TeslaMate and Grafana images
+- `linkerd`: Groups all Linkerd chart components
+
+Auto-merge enabled for patch/digest updates. Check `renovate.json` for custom rules.
