@@ -259,6 +259,7 @@ setup_postgres() {
 	read -r -d '' RULES <<EOF || true
 # Allow connections from the local network
 host	all		all		192.168.0.0/16		scram-sha-256
+host	all		all		fd30:e1bf:9b4f::/48	scram-sha-256
 EOF
 
 	# Add rules to pg_hba.conf to allow connections from the local network
