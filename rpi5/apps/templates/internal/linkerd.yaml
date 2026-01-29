@@ -18,7 +18,7 @@ spec:
   source:
     chart: linkerd-crds
     repoURL: https://helm.linkerd.io/edge
-    targetRevision: 2026.1.3
+    targetRevision: 2026.1.4
     helm:
       values: |
         installGatewayAPI: false
@@ -129,7 +129,7 @@ spec:
   source:
     chart: linkerd-control-plane
     repoURL: https://helm.linkerd.io/edge
-    targetRevision: 2026.1.3
+    targetRevision: 2026.1.4
     helm:
       values: |
         identity:
@@ -159,7 +159,7 @@ spec:
   source:
     chart: linkerd-viz
     repoURL: https://helm.linkerd.io/edge
-    targetRevision: 2026.1.3
+    targetRevision: 2026.1.4
   destination:
     server: {{ .Values.spec.destination.server }}
     namespace: linkerd-viz
@@ -182,7 +182,7 @@ spec:
   source:
     chart: linkerd2-cni
     repoURL: https://helm.linkerd.io/edge
-    targetRevision: 2026.1.3
+    targetRevision: 2026.1.4
     helm:
       parameters:
         - name: repairController.enabled
