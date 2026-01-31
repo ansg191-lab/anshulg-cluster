@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: scrutiny
-          image: ghcr.io/starosdev/scrutiny:1.17.2-web@sha256:16841413a20afd257035cca2ce72e762d088be15bbda685cc7211f0217054029
+          image: ghcr.io/starosdev/scrutiny:1.19.2-web@sha256:c11c1834cf2e8cc8a065d5d1936112710b421d49941a6373b9d65385c629feaa
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
