@@ -1,0 +1,31 @@
+{{- if .Values.ingressRoute.enabled -}}
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "archestra.fullname" . }}
+spec:
+  {{- with .Values.ingressRoute.entryPoints }}
+  entryPoints:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- range .Values.ingressRoute.hosts }}
+  routes:
+    - kind: Rule
+      match: Host(`{{ . }}`)
+      {{- with $.Values.ingressRoute.middlewares }}
+      middlewares:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      services:
+        - name: archestra-archestra-platform
+          port: 3000
+  {{- end }}
+  {{- if .Values.ingressRoute.tls.enabled }}
+  tls:
+    secretName: {{ include "archestra.fullname" . }}-tls
+    domains:
+      {{- range .Values.ingressRoute.hosts }}
+      - main: {{ . }}
+      {{- end }}
+  {{- end }}
+{{- end }}

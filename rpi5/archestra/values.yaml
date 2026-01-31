@@ -1,0 +1,43 @@
+# Default values for archestra.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# This is to override the chart name.
+nameOverride: ""
+fullnameOverride: ""
+
+# Traefik IngressRoute options
+ingressRoute:
+  enabled: true
+  entryPoints:
+    - websecure
+  hosts:
+    - archestra.internal
+  middlewares:
+    - name: security-headers
+      namespace: traefik
+  tls:
+    enabled: true
+    duration: 2160h0m0s
+    renewBefore: 720h0m0s
+    privateKey:
+      algorithm: ECDSA
+      size: 384
+      rotationPolicy: Always
+    issuerRef:
+      kind: ClusterIssuer
+      name: rpi5-ca
+
+archestra-platform:
+  postgresql:
+    enabled: false
+
+  archestra:
+    env:
+      HOSTNAME: "0.0.0.0"
+    envFrom:
+      - secretRef:
+         name: archestra-secrets
+
+    ingress:
+      enabled: true
