@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: archestra
+spec:
+  selector:
+    app: archestra
+  ports:
+    - name: backend
+      port: 9000
+      protocol: TCP
+      targetPort: backend
+    - name: metrics
+      port: 9050
+      protocol: TCP
+      targetPort: metrics
+    - name: frontend
+      port: 3000
+      protocol: TCP
+      targetPort: frontend
+  type: ClusterIP
