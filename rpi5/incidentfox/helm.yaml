@@ -1,0 +1,166 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: incidentfox-helm
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/incidentfox/incidentfox
+    targetRevision: main
+    path: charts/incidentfox
+    helm:
+      values: |
+        namespace: incidentfox
+
+        global:
+          imagePullPolicy: IfNotPresent
+          imagePullSecrets: []
+          database:
+            databaseUrlSecretName: incidentfox-database-url
+            databaseUrlSecretKey: DATABASE_URL
+          configService:
+            url: "http://incidentfox-config-service.incidentfox.svc.cluster.local:8080"
+            orgId: "anshulg"
+
+        # Disable AWS ALB ingress - we use Traefik IngressRoute
+        ingress:
+          enabled: false
+
+        # Disable External Secrets - we use Sealed Secrets
+        externalSecrets:
+          enabled: false
+
+        services:
+          configService:
+            enabled: true
+            image: "incidentfox/config-service:latest"
+            replicas: 1
+            servicePort: 8080
+            resources:
+              requests:
+                cpu: "50m"
+                memory: "128Mi"
+              limits:
+                cpu: "500m"
+                memory: "512Mi"
+            pdb:
+              enabled: false
+            hpa:
+              enabled: false
+            adminAuthMode: token
+            teamAuthMode: token
+            oidc:
+              enabled: false
+
+          agent:
+            enabled: true
+            image: "incidentfox/agent:latest"
+            replicas: 1
+            servicePort: 8080
+            terminationGracePeriodSeconds: 60
+            serviceAccount:
+              create: true
+              name: incidentfox-agent
+              annotations: {}
+            tracing:
+              enabled: false
+            resources:
+              requests:
+                cpu: "100m"
+                memory: "256Mi"
+              limits:
+                cpu: "1000m"
+                memory: "1Gi"
+            pdb:
+              enabled: false
+            hpa:
+              enabled: false
+            staticTeamToken:
+              enabled: false
+            cleanup:
+              enabled: true
+              schedule: "*/5 * * * *"
+              maxAgeSeconds: 600
+
+          orchestrator:
+            enabled: true
+            image: "incidentfox/orchestrator:latest"
+            replicas: 1
+            servicePort: 8070
+            resources:
+              requests:
+                cpu: "50m"
+                memory: "128Mi"
+              limits:
+                cpu: "500m"
+                memory: "512Mi"
+            pdb:
+              enabled: false
+            hpa:
+              enabled: false
+            adminAuthCacheTtlSeconds: 15
+            requireAdminStar: true
+            slack:
+              agentMaxTurns: 50
+              agentTimeoutSeconds: 180
+
+          webUi:
+            enabled: true
+            image: "incidentfox/web-ui:latest"
+            replicas: 1
+            servicePort: 3000
+            raptorApiUrl: ""
+            resources:
+              requests:
+                cpu: "50m"
+                memory: "128Mi"
+              limits:
+                cpu: "500m"
+                memory: "512Mi"
+            pdb:
+              enabled: false
+            hpa:
+              enabled: false
+            cookieSecure: true
+            oidc:
+              enabled: false
+            slack:
+              enabled: false
+
+          dependencyService:
+            enabled: true
+            image: "incidentfox/dependency-service:latest"
+            replicas: 1
+            servicePort: 8085
+            logLevel: "INFO"
+            resources:
+              requests:
+                cpu: "50m"
+                memory: "128Mi"
+              limits:
+                cpu: "250m"
+                memory: "256Mi"
+            newRelic:
+              enabled: false
+            pdb:
+              enabled: false
+            hpa:
+              enabled: false
+
+          # Disable optional services for rpi5
+          aiPipelineApi:
+            enabled: false
+          knowledgeBase:
+            enabled: false
+          ultimateRag:
+            enabled: false
+          k8sGateway:
+            enabled: false
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: incidentfox
+#  syncPolicy:
+#    automated:
+#      prune: true
+#      selfHeal: true
