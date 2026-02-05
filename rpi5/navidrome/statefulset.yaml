@@ -27,6 +27,12 @@ spec:
               value: /music
             - name: ND_DATAFOLDER
               value: /data
+            - name: ND_PLUGINS_ENABLED
+              value: "true"
+            - name: ND_PLUGINS_AUTORELOAD
+              value: "true"
+            - name: ND_AGENTS
+              value: "audiomuseai,lastfm,spotify,deezer"
           envFrom:
             - secretRef:
                 name: env
