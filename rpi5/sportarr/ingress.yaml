@@ -1,0 +1,20 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: sportarr
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`sportarr.internal`)
+      middlewares:
+        - name: security-headers
+          namespace: kube-system
+      services:
+        - name: sportarr
+          port: 80
+  tls:
+    secretName: sportarr-cert-tls
+    domains:
+      - main: sportarr.internal

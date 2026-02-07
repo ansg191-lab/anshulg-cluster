@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: sportarr
+  labels:
+    app: sportarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sportarr
+  serviceName: sportarr
+  template:
+    metadata:
+      name: sportarr
+      labels:
+        app: sportarr
+    spec:
+      containers:
+        - name: sportarr
+          image: sportarr/sportarr:4.0.983.1057@sha256:7c64041d46067c6560796d236857ce1b268a6ba1cfe86c3320042a9d1406fdb3
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PUID
+              value: "2021"
+            - name: PGID
+              value: "3002"
+            - name: TZ
+              value: "America/Los_Angeles"
+          ports:
+            - containerPort: 1867
+              protocol: TCP
+              name: http
+          volumeMounts:
+            - mountPath: /config
+              name: config
+            - mountPath: /data
+              name: data
+          #resources:
+          #  requests:
+          #    cpu: 250m
+          #    memory: 500Mi
+          #  limits:
+          #    memory: 1Gi
+          #livenessProbe:
+          #  httpGet:
+          #    port: http
+          #    path: /ping
+          #  initialDelaySeconds: 30
+          #  periodSeconds: 30
+          #  timeoutSeconds: 5
+          #  failureThreshold: 3
+          #readinessProbe:
+          #  httpGet:
+          #    port: http
+          #    path: /ping
+          #  periodSeconds: 10
+          #  timeoutSeconds: 5
+          #  failureThreshold: 3
+      restartPolicy: Always
+      securityContext:
+        fsGroup: 3002
+      volumes:
+        - name: data
+          hostPath:
+            path: /data
+  volumeClaimTemplates:
+    - metadata:
+        name: config
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi

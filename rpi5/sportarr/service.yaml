@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sportarr
+spec:
+  selector:
+    app: sportarr
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: http
+  type: ClusterIP
