@@ -1,0 +1,528 @@
+# This is to override the chart name.
+nameOverride: ""
+fullnameOverride: ""
+
+# Traefik IngressRoute options
+ingressRoute:
+  enabled: true
+  entryPoints:
+    - websecure
+  hosts:
+    - openclaw.internal
+  middlewares:
+    - name: security-headers
+      namespace: traefik
+  tls:
+    enabled: true
+    duration: 2160h0m0s
+    renewBefore: 720h0m0s
+    privateKey:
+      algorithm: ECDSA
+      size: 384
+      rotationPolicy: Always
+    issuerRef:
+      kind: ClusterIssuer
+      name: rpi5-ca
+
+# Copied from:
+# https://github.com/serhanekicii/openclaw-helm/blob/2c2c2c0d7743abe847a5ee9a592c31af68b32bcf/charts/openclaw/values.yaml
+# ===========================================================================
+# OpenClaw Helm Chart Values
+#
+# IMPORTANT ARCHITECTURE NOTES:
+# - OpenClaw is NOT horizontally scalable
+# - Deploy as a SINGLE INSTANCE only
+# - Do NOT increase replica count
+#
+# -- Config mode: `merge` preserves runtime changes, `overwrite` for strict GitOps
+configMode: merge
+
+app-template:
+  defaultPodOptions:
+    # -- Pod security context
+    securityContext:
+      fsGroup: 1000
+      fsGroupChangePolicy: OnRootMismatch
+
+  controllers:
+    main:
+      # -- Number of replicas (must be 1, OpenClaw doesn't support horizontal scaling)
+      replicas: 1
+      # -- Deployment strategy
+      strategy: Recreate
+
+      initContainers:
+        # Init container handles config setup with merge/overwrite modes.
+        # Uses OpenClaw image for Node.js runtime (required for merge mode).
+        # Runs as root to chown files to app user (UID 1000).
+        init-config:
+          image:
+            repository: ghcr.io/openclaw/openclaw
+            tag: "2026.2.3"
+          command:
+            - sh
+            - -c
+            - |
+              log() { echo "[$(date -Iseconds)] [init-config] $*"; }
+
+              log "Starting config initialization"
+              mkdir -p /home/node/.openclaw
+              CONFIG_MODE="${CONFIG_MODE:-merge}"
+
+              if [ "$CONFIG_MODE" = "merge" ] && [ -f /home/node/.openclaw/openclaw.json ]; then
+                log "Mode: merge - merging Helm config with existing config"
+                node -e "
+                  const fs = require('fs');
+                  const existing = JSON.parse(fs.readFileSync('/home/node/.openclaw/openclaw.json', 'utf8'));
+                  const helm = JSON.parse(fs.readFileSync('/config/openclaw.json', 'utf8'));
+                  const deepMerge = (target, source) => {
+                    for (const key of Object.keys(source)) {
+                      if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+                        target[key] = target[key] || {};
+                        deepMerge(target[key], source[key]);
+                      } else {
+                        target[key] = source[key];
+                      }
+                    }
+                    return target;
+                  };
+                  const merged = deepMerge(existing, helm);
+                  fs.writeFileSync('/home/node/.openclaw/openclaw.json', JSON.stringify(merged, null, 2));
+                "
+                log "Config merged successfully"
+              else
+                log "Mode: overwrite - copying Helm config (fresh install or overwrite mode)"
+                cp /config/openclaw.json /home/node/.openclaw/openclaw.json
+              fi
+              chown -R 1000:1000 /home/node/.openclaw
+              log "Config initialization complete"
+          env:
+            - name: CONFIG_MODE
+              value: "merge"
+          securityContext:
+            runAsUser: 0
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+              add:
+                - CHOWN
+                - DAC_OVERRIDE
+                - FOWNER
+
+        # Install ClawHub skills and runtime dependencies (idempotent)
+        # Skills are installed from https://clawhub.com
+        init-skills:
+          image:
+            repository: node
+            tag: "22"
+          command:
+            - sh
+            - -c
+            - |
+              log() { echo "[$(date -Iseconds)] [init-skills] $*"; }
+
+              log "Starting skills initialization"
+
+              # ============================================================
+              # Runtime Dependencies
+              # ============================================================
+              # Some skills require additional runtimes (Python, Go, etc.)
+              # Install them here so they persist across pod restarts.
+              #
+              # Example: Install uv (Python package manager) for Python skills
+              # mkdir -p /home/node/.openclaw/bin
+              # if [ ! -f /home/node/.openclaw/bin/uv ]; then
+              #   log "Installing uv..."
+              #   curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR=/home/node/.openclaw/bin sh
+              # fi
+
+              # ============================================================
+              # Skill Installation
+              # ============================================================
+              # Install skills from ClawHub (https://clawhub.com)
+              # Add skill slugs to the list below to install them declaratively.
+              cd /home/node/.openclaw/workspace
+              mkdir -p skills
+              for skill in weather; do
+                if [ -n "$skill" ] && [ ! -d "skills/${skill##*/}" ]; then
+                  log "Installing skill: $skill"
+                  npx -y clawhub install "$skill" --no-input || true
+                else
+                  log "Skill already installed: $skill"
+                fi
+              done
+              log "Skills initialization complete"
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+
+      containers:
+        # -- Main OpenClaw container
+        main:
+          image:
+            # -- Container image repository
+            repository: ghcr.io/openclaw/openclaw
+            # -- Container image tag
+            tag: "2026.2.3"
+            # -- Image pull policy
+            pullPolicy: IfNotPresent
+          command:
+            - node
+            - dist/index.js
+          args:
+            - gateway
+            - --bind
+            - lan
+            - --port
+            - "18789"
+          # Reference a secret containing environment variables (e.g., API keys)
+          # Create this secret manually or via external-secrets/vault-operator
+          envFrom: []
+          # Example:
+          # - secretRef:
+          #     name: openclaw-env-secret
+          env: {}
+          # Example: Add runtime dependency paths for skills
+          # env:
+          #   PATH: /home/node/.openclaw/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          #   # For internal CA trust (Python requests library)
+          #   REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-bundle.crt
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          # -- Resource requests and limits
+          resources:
+            requests:
+              cpu: 200m
+              memory: 512Mi
+            limits:
+              cpu: 2000m
+              memory: 2Gi
+          probes:
+            liveness:
+              enabled: true
+              type: TCP
+              spec:
+                tcpSocket:
+                  port: 18789
+                initialDelaySeconds: 30
+                periodSeconds: 30
+                timeoutSeconds: 5
+                failureThreshold: 3
+            readiness:
+              enabled: true
+              type: TCP
+              spec:
+                tcpSocket:
+                  port: 18789
+                initialDelaySeconds: 10
+                periodSeconds: 10
+                timeoutSeconds: 5
+                failureThreshold: 3
+            startup:
+              enabled: true
+              type: TCP
+              spec:
+                tcpSocket:
+                  port: 18789
+                initialDelaySeconds: 5
+                periodSeconds: 5
+                timeoutSeconds: 5
+                failureThreshold: 30
+
+        # -- Chromium sidecar for browser automation (CDP on port 9222)
+        chromium:
+          image:
+            # -- Chromium image repository
+            repository: zenika/alpine-chrome
+            # -- Chromium image tag
+            tag: "124"
+          command:
+            - chromium-browser
+          args:
+            - --headless
+            - --disable-gpu
+            - --no-sandbox
+            - --disable-dev-shm-usage
+            - --remote-debugging-address=0.0.0.0
+            - --remote-debugging-port=9222
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+          probes:
+            readiness:
+              enabled: true
+              type: TCP
+              spec:
+                tcpSocket:
+                  port: 9222
+                initialDelaySeconds: 5
+                periodSeconds: 10
+
+  configMaps:
+    config:
+      enabled: true
+      data:
+        # OpenClaw configuration - JSON5 format
+        # Sensitive values use ${ENV_VAR} substitution from environment secret
+        openclaw.json: |
+          {
+            // Gateway configuration
+            "gateway": {
+              "port": 18789,
+              "mode": "local",
+              // IMPORTANT: trustedProxies uses exact IP matching only
+              // - CIDR notation is NOT supported - list each proxy IP individually
+              // - IPv6 exact addresses may work but are untested
+              // - Recommend single-stack IPv4 deployments for simplicity
+              "trustedProxies": ["10.0.0.1"]
+            },
+
+            // Browser configuration (Chromium sidecar)
+            "browser": {
+              "enabled": true,
+              "defaultProfile": "default",
+              "profiles": {
+                "default": {
+                  "cdpUrl": "http://localhost:9222",
+                  "color": "#4285F4"
+                }
+              }
+            },
+
+            // Agent configuration
+            "agents": {
+              "defaults": {
+                "workspace": "/home/node/.openclaw/workspace",
+                "model": {
+                  // Uses OPENAI_API_KEY from environment
+                  "primary": "openai/gpt-4o"
+                },
+                "userTimezone": "UTC",
+                "timeoutSeconds": 600,
+                "maxConcurrent": 1
+              },
+              "list": [
+                {
+                  "id": "main",
+                  "default": true,
+                  "identity": {
+                    "name": "OpenClaw",
+                    "emoji": "🦞"
+                  }
+                }
+              ]
+            },
+
+            // Session management
+            "session": {
+              "scope": "per-sender",
+              "store": "/home/node/.openclaw/sessions",
+              "reset": {
+                "mode": "idle",
+                "idleMinutes": 60
+              }
+            },
+
+            // Logging
+            "logging": {
+              "level": "info",
+              "consoleLevel": "info",
+              "consoleStyle": "compact",
+              "redactSensitive": "tools"
+            },
+
+            // Tools configuration
+            "tools": {
+              "profile": "full",
+              "web": {
+                "search": {
+                  "enabled": false
+                },
+                "fetch": {
+                  "enabled": true
+                }
+              }
+            }
+
+            // Channel configuration can be added here:
+            // "channels": {
+            //   "telegram": {
+            //     "botToken": "${TELEGRAM_BOT_TOKEN}",
+            //     "enabled": true
+            //   },
+            //   "discord": {
+            //     "token": "${DISCORD_BOT_TOKEN}"
+            //   },
+            //   "slack": {
+            //     "botToken": "${SLACK_BOT_TOKEN}",
+            //     "appToken": "${SLACK_APP_TOKEN}"
+            //   }
+            // }
+          }
+
+  service:
+    main:
+      controller: main
+      # IPv4-only (see trustedProxies note in gateway config)
+      ipFamilyPolicy: SingleStack
+      ipFamilies:
+        - IPv4
+      ports:
+        http:
+          port: 18789
+
+  ingress:
+    main:
+      enabled: false
+      # Uncomment and configure for your environment
+      # className: nginx
+      # annotations:
+      #   cert-manager.io/cluster-issuer: "your-issuer"
+      #   nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      #   nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+      #   nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+      # tls:
+      #   - secretName: openclaw-tls
+      #     hosts:
+      #       - openclaw.example.com
+      # hosts:
+      #   - host: openclaw.example.com
+      #     paths:
+      #       - path: /
+      #         pathType: Prefix
+      #         service:
+      #           identifier: main
+      #           port: http
+
+  persistence:
+    # ConfigMap for init container to copy from
+    config:
+      enabled: true
+      type: configMap
+      name: openclaw
+      advancedMounts:
+        main:
+          init-config:
+            - path: /config
+              readOnly: true
+
+    # Entire .openclaw directory as PVC
+    data:
+      enabled: true
+      type: persistentVolumeClaim
+      accessMode: ReadWriteOnce
+      size: 5Gi
+      advancedMounts:
+        main:
+          init-config:
+            - path: /home/node/.openclaw
+          init-skills:
+            - path: /home/node/.openclaw
+          main:
+            - path: /home/node/.openclaw
+
+    # CA bundle for internal TLS (optional)
+    # Use with trust-manager or similar to trust internal CAs
+    # ca-bundle:
+    #   enabled: true
+    #   type: configMap
+    #   name: ca-bundle
+    #   advancedMounts:
+    #     main:
+    #       main:
+    #         - path: /etc/ssl/certs/ca-bundle.crt
+    #           subPath: ca-bundle.crt
+    #           readOnly: true
+
+  # ============================================================================
+  # Network Policies
+  # ============================================================================
+  # Network policies provide workload isolation by controlling traffic to/from
+  # OpenClaw pods. Requires a CNI that supports NetworkPolicy (Calico, Cilium,
+  # Weave). Flannel without network policy controller will NOT enforce these.
+  #
+  # IMPORTANT: When enabled, ALL traffic is denied by default. You must
+  # explicitly allow required traffic via ingress/egress rules.
+  networkpolicies:
+    main:
+      enabled: false
+      controller: main
+      policyTypes:
+        - Ingress
+        - Egress
+      rules:
+        ingress:
+          # Allow ingress from gateway namespace (adjust label to match your setup)
+          # Example: allows traffic from pods in namespace with label
+          # kubernetes.io/metadata.name: gateway-system
+          - from:
+              - namespaceSelector:
+                  matchLabels:
+                    kubernetes.io/metadata.name: gateway-system
+            ports:
+              - protocol: TCP
+                port: 18789
+          # Alternatively, allow from ingress-nginx namespace:
+          # - from:
+          #     - namespaceSelector:
+          #         matchLabels:
+          #           kubernetes.io/metadata.name: ingress-nginx
+          #   ports:
+          #     - protocol: TCP
+          #       port: 18789
+        egress:
+          # DNS resolution (kube-dns/coredns)
+          - to:
+              - namespaceSelector:
+                  matchLabels:
+                    kubernetes.io/metadata.name: kube-system
+                podSelector:
+                  matchLabels:
+                    k8s-app: kube-dns
+            ports:
+              - protocol: UDP
+                port: 53
+              - protocol: TCP
+                port: 53
+          # External internet (API providers, package registries, etc.)
+          # Allows all traffic to public IPs while blocking private RFC1918 ranges
+          # This prevents OpenClaw from accessing internal cluster services
+          - to:
+              - ipBlock:
+                  cidr: 0.0.0.0/0
+                  except:
+                    - 10.0.0.0/8
+                    - 172.16.0.0/12
+                    - 192.168.0.0/16
+          # Vault access (uncomment if using HashiCorp Vault for secrets)
+          # - to:
+          #     - namespaceSelector:
+          #         matchLabels:
+          #           kubernetes.io/metadata.name: vault
+          #   ports:
+          #     - protocol: TCP
+          #       port: 8200
