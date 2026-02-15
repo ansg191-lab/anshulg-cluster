@@ -58,7 +58,7 @@ app-template:
         init-config:
           image:
             repository: ghcr.io/openclaw/openclaw
-            tag: "2026.2.12@sha256:6d1937db20fa6590b634ee9e25a4f7f80f65b44eba7129119b69e69c973e41d9"
+            tag: "2026.2.14@sha256:ace6f32961c4d574cb189d0007ec778408a9c02502f38af9ded6c864bae0f454"
           command:
             - sh
             - -c
@@ -177,7 +177,7 @@ app-template:
             # -- Container image repository
             repository: ghcr.io/openclaw/openclaw
             # -- Container image tag
-            tag: "2026.2.12@sha256:6d1937db20fa6590b634ee9e25a4f7f80f65b44eba7129119b69e69c973e41d9"
+            tag: "2026.2.14@sha256:ace6f32961c4d574cb189d0007ec778408a9c02502f38af9ded6c864bae0f454"
             # -- Image pull policy
             pullPolicy: IfNotPresent
           command:
