@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: patchmon-frontend
-          image: ghcr.io/patchmon/patchmon-frontend:1.3.7@sha256:c81fe302f1a039a7f3b887b54e4d165b3c7b9ed9f1e60e8f99a982607ef2f6b8
+          image: ghcr.io/patchmon/patchmon-frontend:1.4.2@sha256:002c9c9c1fe36961b0cf45a4b6723a6dafe97fa24ea4e39bd2fcc6b9ab73b71d
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000
