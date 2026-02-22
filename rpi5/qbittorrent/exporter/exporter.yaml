@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: qbt-exporter
-          image: ghcr.io/martabal/qbittorrent-exporter:v1.13.2@sha256:a5e941c6071dd9c15a76ad3855c9ee29f7944491acfb32cacc6bfaae4571b739
+          image: ghcr.io/martabal/qbittorrent-exporter:v1.13.3@sha256:cbb96f078ef255bc735a4a828f21af99b21d393d3685ee398b1ea0d0c55d3f9e
           imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
