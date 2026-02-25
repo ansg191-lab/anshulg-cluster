@@ -123,7 +123,7 @@ app-template:
         init-skills:
           image:
             repository: node
-            tag: "24@sha256:e74b31755a45dac7ff6c208d26589e1a4eb99bc7f6eec8a469f4aa1106297437"
+            tag: "24@sha256:3a09aa6354567619221ef6c45a5051b671f953f0a1924d1f819ffb236e520e6b"
           command:
             - sh
             - -c
