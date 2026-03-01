@@ -12,7 +12,7 @@ spec:
         spec:
           containers:
             - name: mam-point-spender
-              image: ghcr.io/ansg191-lab/containers/mam-point-spender:v2.2.0@sha256:0326a946c85de1db377e72a4dd2efa21154dbbe0a5a4b4071e44cc2ed3116370
+              image: ghcr.io/ansg191-lab/containers/mam-point-spender:v2.3.0@sha256:2f21b16d02515cc0bd89c46034e4b6b5a8da4e36e6f45639f429b004cf2a9e07
               imagePullPolicy: IfNotPresent
               envFrom:
                 - configMapRef:
