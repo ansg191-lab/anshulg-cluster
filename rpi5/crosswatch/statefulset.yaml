@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: crosswatch
-          image: ghcr.io/cenodude/crosswatch:0.8.2@sha256:a1d08cfefb74689d9ed0c200edd080a8a82ee044d2d63bceae6a0e263445dbf6
+          image: ghcr.io/cenodude/crosswatch:0.9.11@sha256:64b872b5ed0f91927200b90e6551f7a54e468e9677c0930db644c93c8a0a97b6
           imagePullPolicy: IfNotPresent
           env:
             - name: TZ
