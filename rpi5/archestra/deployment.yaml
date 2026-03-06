@@ -36,7 +36,7 @@ spec:
               echo "PostgreSQL is up - continuing"
       containers:
         - name: archestra
-          image: archestra/platform:1.0.58@sha256:ac320c0418bfae75154272817b26643154ed95ff11af31a6240513a808080615
+          image: archestra/platform:1.0.59@sha256:4036c9e7c37494da0dd237098550aea1b28d968791716fcc0d9fe45384a308f9
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000
