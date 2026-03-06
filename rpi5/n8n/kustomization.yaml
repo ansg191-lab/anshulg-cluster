@@ -31,6 +31,7 @@ configMapGenerator:
     literals:
       - TZ=America/Los_Angeles
       - N8N_USER_FOLDER=/data
+      - N8N_HOST=n8n.anshulg.net
       - N8N_PORT=5678
       - N8N_PROTOCOL=https
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
@@ -45,6 +46,8 @@ configMapGenerator:
       - DB_POSTGRESDB_SSL_ENABLED=true
       - DB_POSTGRESDB_SSL_REJECT_UNAUTHORIZED=false
       - DB_POSTGRESDB_SSL_CA=/etc/ssl/certs/ca-certificates.crt
+      - WEBHOOK_URL=https://n8n.anshulg.net/
+      - N8N_PROXY_HOPS=1
 
 patches:
   - target:
