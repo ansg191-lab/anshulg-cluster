@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: sportarr
-          image: sportarr/sportarr:4.0.985.1060@sha256:15b2c9f0782c408df03ffb28bdf61c26dc0c06164df95d16d7270564c7d88614
+          image: sportarr/sportarr:4.0.986.1061@sha256:4c12eba536aa80d1f98d5705bf7b2becfd2799ee2471f19f859aa4c8b5e3c46d
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID
