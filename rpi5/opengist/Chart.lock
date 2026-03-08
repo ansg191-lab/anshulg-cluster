@@ -1,6 +1,6 @@
 dependencies:
 - name: opengist
   repository: https://helm.opengist.io
-  version: 0.5.0
-digest: sha256:4d958014e7486cad78272d87147082792c3916d02d48a92f2d689eea8d12fb77
-generated: "2026-01-27T19:10:33.160636322Z"
+  version: 0.6.0
+digest: sha256:1c33eb306a0a68e74528c51ca520c65048669a10ec4683f532a6880ae703a6ca
+generated: "2026-02-12T13:47:05.41691154Z"
