@@ -25,7 +25,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: kellnr
-    version: 4.5.3
+    version: 5.0.2
     repository: https://kellnr.github.io/helm
   - name: postgresql
     version: 18.2.9
