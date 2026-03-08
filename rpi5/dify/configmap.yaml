@@ -23,7 +23,6 @@ data:
   # Weaviate
   VECTOR_STORE: "weaviate"
   WEAVIATE_ENDPOINT: "http://dify-weaviate:8080"
-  WEAVIATE_GRPC_ENABLED: "false"
 
   # Storage
   STORAGE_TYPE: "opendal"
