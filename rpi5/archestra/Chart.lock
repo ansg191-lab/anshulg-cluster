@@ -1,0 +1,6 @@
+dependencies:
+- name: archestra-platform
+  repository: oci://europe-west1-docker.pkg.dev/friendly-path-465518-r6/archestra-public/helm-charts
+  version: 1.0.36
+digest: sha256:26e993819ef3edac30ef7018c6d57127156a7c3740dcdfddd4f5e17f71e21ea3
+generated: "2026-01-31T09:40:02.020015-08:00"
