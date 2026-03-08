@@ -1,0 +1,140 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: dify-plugin-daemon-storage
+  namespace: dify
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dify-plugin-daemon
+  namespace: dify
+  labels:
+    app: dify
+    component: plugin-daemon
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dify
+      component: plugin-daemon
+  template:
+    metadata:
+      labels:
+        app: dify
+        component: plugin-daemon
+    spec:
+      nodeSelector:
+        kubernetes.io/arch: amd64
+      containers:
+        - name: plugin-daemon
+          image: langgenius/dify-plugin-daemon:0.5.3-local
+          imagePullPolicy: IfNotPresent
+          env:
+            # Server
+            - name: SERVER_HOST
+              value: "0.0.0.0"
+            - name: SERVER_PORT
+              value: "5002"
+            - name: SERVER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: dify-secrets
+                  key: PLUGIN_DAEMON_KEY
+            # Database
+            - name: DB_HOST
+              value: "rpi4.anshulg.direct"
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_USERNAME
+              value: "dify"
+            - name: DB_DATABASE
+              value: "dify_plugin"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: dify-secrets
+                  key: DB_PASSWORD
+            - name: DB_SSL_MODE
+              value: "require"
+            # Redis
+            - name: REDIS_HOST
+              value: "dify-redis"
+            - name: REDIS_PORT
+              value: "6379"
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: dify-secrets
+                  key: REDIS_PASSWORD
+            - name: REDIS_DB
+              value: "0"
+            - name: REDIS_USE_SSL
+              value: "false"
+            # Dify API
+            - name: DIFY_INNER_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: dify-secrets
+                  key: PLUGIN_DIFY_INNER_API_KEY
+            - name: DIFY_INNER_API_URL
+              value: "http://dify-api:5001"
+            # Plugin remote installing
+            - name: PLUGIN_REMOTE_INSTALLING_HOST
+              value: "0.0.0.0"
+            - name: PLUGIN_REMOTE_INSTALLING_PORT
+              value: "5003"
+            # Plugin paths
+            - name: PLUGIN_WORKING_PATH
+              value: "/app/data/cwd"
+            - name: PLUGIN_INSTALLED_PATH
+              value: "/app/data/plugin"
+            - name: PLUGIN_STORAGE_TYPE
+              value: "local"
+            - name: PLUGIN_STORAGE_LOCAL_ROOT
+              value: "/app/data/storage"
+            - name: PERSISTENCE_STORAGE_PATH
+              value: "/app/data/persistence"
+          ports:
+            - containerPort: 5002
+              name: http
+          volumeMounts:
+            - mountPath: /app/data
+              name: plugin-storage
+            - mountPath: /etc/ssl/certs/ca-certificates.crt
+              name: ca-certs
+              subPath: ca.crt
+          resources:
+            requests:
+              cpu: 200m
+              memory: 256Mi
+            limits:
+              memory: 1Gi
+      volumes:
+        - name: plugin-storage
+          persistentVolumeClaim:
+            claimName: dify-plugin-daemon-storage
+        - name: ca-certs
+          configMap:
+            name: anshulg-ca
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dify-plugin-daemon
+  namespace: dify
+spec:
+  selector:
+    app: dify
+    component: plugin-daemon
+  ports:
+    - port: 5002
+      targetPort: 5002
+      name: http

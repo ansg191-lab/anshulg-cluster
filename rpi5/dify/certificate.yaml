@@ -1,0 +1,57 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: dify-cert
+  namespace: dify
+spec:
+  secretName: dify-cert-tls
+  commonName: dify.internal
+  dnsNames:
+    - dify.internal
+  duration: 2160h0m0s
+  renewBefore: 720h0m0s
+  privateKey:
+    algorithm: ECDSA
+    size: 384
+    rotationPolicy: Always
+  subject:
+    organizations:
+      - Anshul Gupta
+    organizationalUnits:
+      - rpi5
+    provinces:
+      - California
+    countries:
+      - US
+  issuerRef:
+    kind: ClusterIssuer
+    name: rpi5-ca
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: dify-public-cert
+  namespace: dify
+spec:
+  secretName: dify-public-cert-tls
+  commonName: dify.anshulg.direct
+  dnsNames:
+    - dify.anshulg.direct
+  duration: 2160h0m0s
+  renewBefore: 720h0m0s
+  privateKey:
+    algorithm: ECDSA
+    size: 384
+    rotationPolicy: Always
+  subject:
+    organizations:
+      - Anshul Gupta
+    organizationalUnits:
+      - rpi5
+    provinces:
+      - California
+    countries:
+      - US
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt-prod

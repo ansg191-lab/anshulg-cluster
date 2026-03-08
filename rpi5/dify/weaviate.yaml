@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: dify-weaviate
+  namespace: dify
+  labels:
+    app: dify
+    component: weaviate
+spec:
+  replicas: 1
+  serviceName: dify-weaviate
+  selector:
+    matchLabels:
+      app: dify
+      component: weaviate
+  template:
+    metadata:
+      labels:
+        app: dify
+        component: weaviate
+    spec:
+      nodeSelector:
+        kubernetes.io/arch: amd64
+      containers:
+        - name: weaviate
+          image: semitechnologies/weaviate:1.27.0
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED
+              value: "false"
+            - name: AUTHENTICATION_APIKEY_ENABLED
+              value: "true"
+            - name: AUTHENTICATION_APIKEY_ALLOWED_KEYS
+              valueFrom:
+                secretKeyRef:
+                  name: dify-secrets
+                  key: WEAVIATE_API_KEY
+            - name: AUTHENTICATION_APIKEY_USERS
+              value: WeaviateUser
+            - name: DEFAULT_VECTORIZER_MODULE
+              value: none
+            - name: CLUSTER_HOSTNAME
+              value: node1
+            - name: PERSISTENCE_DATA_PATH
+              value: /var/lib/weaviate
+          ports:
+            - containerPort: 8080
+              name: http
+          volumeMounts:
+            - mountPath: /var/lib/weaviate
+              name: weaviate-data
+          resources:
+            requests:
+              cpu: 500m
+              memory: 512Mi
+            limits:
+              memory: 2Gi
+  volumeClaimTemplates:
+    - metadata:
+        name: weaviate-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: local-path
+        resources:
+          requests:
+            storage: 10Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dify-weaviate
+  namespace: dify
+spec:
+  selector:
+    app: dify
+    component: weaviate
+  ports:
+    - port: 8080
+      targetPort: 8080
+      name: http

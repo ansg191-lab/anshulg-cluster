@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dify-config
+  namespace: dify
+data:
+  # Database
+  DB_TYPE: "postgresql"
+  DB_HOST: "rpi4.anshulg.direct"
+  DB_PORT: "5432"
+  DB_USERNAME: "dify"
+  DB_DATABASE: "dify"
+  PGSSLMODE: "require"
+  SQLALCHEMY_POOL_SIZE: "30"
+  SQLALCHEMY_POOL_RECYCLE: "3600"
+
+  # Redis
+  REDIS_HOST: "dify-redis"
+  REDIS_PORT: "6379"
+  REDIS_USE_SSL: "false"
+  REDIS_DB: "0"
+
+  # Weaviate
+  VECTOR_STORE: "weaviate"
+  WEAVIATE_ENDPOINT: "http://dify-weaviate:8080"
+  WEAVIATE_GRPC_ENABLED: "false"
+
+  # Storage
+  STORAGE_TYPE: "opendal"
+  OPENDAL_SCHEME: "fs"
+  OPENDAL_FS_ROOT: "storage"
+
+  # URLs
+  CONSOLE_API_URL: "https://dify.anshulg.direct"
+  CONSOLE_WEB_URL: "https://dify.anshulg.direct"
+  SERVICE_API_URL: "https://dify.anshulg.direct"
+  APP_API_URL: "https://dify.anshulg.direct"
+  TRIGGER_URL: "https://dify.anshulg.direct"
+
+  # Inter-service
+  PLUGIN_DAEMON_URL: "http://dify-plugin-daemon:5002"
+  CODE_EXECUTION_ENDPOINT: "http://dify-sandbox:8194"
+  SANDBOX_HTTP_PROXY: "http://dify-ssrf-proxy:3128"
+  SANDBOX_HTTPS_PROXY: "http://dify-ssrf-proxy:3128"
+
+  # Other
+  MIGRATION_ENABLED: "true"
+  GUNICORN_TIMEOUT: "360"

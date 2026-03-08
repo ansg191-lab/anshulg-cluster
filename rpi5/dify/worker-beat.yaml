@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dify-worker-beat
+  namespace: dify
+  labels:
+    app: dify
+    component: worker-beat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dify
+      component: worker-beat
+  template:
+    metadata:
+      labels:
+        app: dify
+        component: worker-beat
+    spec:
+      nodeSelector:
+        kubernetes.io/arch: amd64
+      containers:
+        - name: worker-beat
+          image: langgenius/dify-api:1.13.0
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: MODE
+              value: beat
+            - name: CELERY_BROKER_URL
+              value: redis://:$(REDIS_PASSWORD)@dify-redis:6379/1
+          envFrom:
+            - configMapRef:
+                name: dify-config
+            - secretRef:
+                name: dify-secrets
+          volumeMounts:
+            - mountPath: /etc/ssl/certs/ca-certificates.crt
+              name: ca-certs
+              subPath: ca.crt
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 512Mi
+      volumes:
+        - name: ca-certs
+          configMap:
+            name: anshulg-ca
