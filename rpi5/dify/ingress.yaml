@@ -1,0 +1,67 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: dify-internal
+  namespace: dify
+  annotations:
+    external-dns.alpha.kubernetes.io/target: 192.168.1.100
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`dify.internal`) && (PathPrefix(`/api`) || PathPrefix(`/v1`) || PathPrefix(`/console/api`) || PathPrefix(`/files`))
+      priority: 10
+      middlewares:
+        - name: security-headers
+          namespace: kube-system
+      services:
+        - name: dify-api
+          port: 5001
+    - kind: Rule
+      match: Host(`dify.internal`)
+      priority: 1
+      middlewares:
+        - name: security-headers
+          namespace: kube-system
+      services:
+        - name: dify-web
+          port: 3000
+  tls:
+    secretName: dify-cert-tls
+    domains:
+      - main: dify.internal
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: dify-public
+  namespace: dify
+  annotations:
+    external-dns.alpha.kubernetes.io/target: 192.168.1.100
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`dify.anshulg.direct`) && (PathPrefix(`/api`) || PathPrefix(`/v1`) || PathPrefix(`/console/api`) || PathPrefix(`/files`))
+      priority: 10
+      middlewares:
+        - name: security-headers
+          namespace: kube-system
+      services:
+        - name: dify-api
+          port: 5001
+    - kind: Rule
+      match: Host(`dify.anshulg.direct`)
+      priority: 1
+      middlewares:
+        - name: security-headers
+          namespace: kube-system
+      services:
+        - name: dify-web
+          port: 3000
+  tls:
+    secretName: dify-public-cert-tls
+    domains:
+      - main: dify.anshulg.direct

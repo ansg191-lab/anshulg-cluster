@@ -1,0 +1,105 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: dify-plugin-daemon-storage
+  namespace: dify
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dify-plugin-daemon
+  namespace: dify
+  labels:
+    app: dify
+    component: plugin-daemon
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dify
+      component: plugin-daemon
+  template:
+    metadata:
+      labels:
+        app: dify
+        component: plugin-daemon
+    spec:
+      nodeSelector:
+        kubernetes.io/arch: amd64
+      containers:
+        - name: plugin-daemon
+          image: langgenius/dify-plugin-daemon:0.5.3-local
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: DB_HOST
+              value: rpi4.anshulg.direct
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_USERNAME
+              value: dify
+            - name: DB_DATABASE
+              value: dify_plugin
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: dify-secrets
+                  key: DB_PASSWORD
+            - name: PGSSLMODE
+              value: require
+            - name: SERVER_PORT
+              value: "5002"
+            - name: PLUGIN_DAEMON_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: dify-secrets
+                  key: PLUGIN_DAEMON_KEY
+            - name: DIFY_INNER_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: dify-secrets
+                  key: PLUGIN_DIFY_INNER_API_KEY
+            - name: DIFY_INNER_API_URL
+              value: http://dify-api:5001
+          ports:
+            - containerPort: 5002
+              name: http
+          volumeMounts:
+            - mountPath: /app/storage
+              name: plugin-storage
+            - mountPath: /etc/ssl/certs/ca-certificates.crt
+              name: ca-certs
+              subPath: ca.crt
+          resources:
+            requests:
+              cpu: 200m
+              memory: 256Mi
+            limits:
+              memory: 1Gi
+      volumes:
+        - name: plugin-storage
+          persistentVolumeClaim:
+            claimName: dify-plugin-daemon-storage
+        - name: ca-certs
+          configMap:
+            name: anshulg-ca
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dify-plugin-daemon
+  namespace: dify
+spec:
+  selector:
+    app: dify
+    component: plugin-daemon
+  ports:
+    - port: 5002
+      targetPort: 5002
+      name: http

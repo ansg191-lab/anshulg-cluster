@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dify-web-config
+  namespace: dify
+data:
+  CONSOLE_API_URL: "https://dify.anshulg.direct"
+  APP_API_URL: "https://dify.anshulg.direct"

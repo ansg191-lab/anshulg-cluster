@@ -1,0 +1,86 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dify-ssrf-proxy-config
+  namespace: dify
+data:
+  squid.conf: |
+    acl localnet src 10.0.0.0/8
+    acl localnet src 172.16.0.0/12
+    acl localnet src 192.168.0.0/16
+    acl localnet src fc00::/7
+    acl localnet src fe80::/10
+    acl localnet src 127.0.0.0/8
+    acl localnet src ::1
+
+    acl SSL_ports port 443
+    acl Safe_ports port 80
+    acl Safe_ports port 443
+    acl Safe_ports port 1025-65535
+    acl CONNECT method CONNECT
+
+    http_access deny !Safe_ports
+    http_access deny CONNECT !SSL_ports
+    http_access deny localnet
+    http_access allow all
+
+    http_port 3128
+    coredump_dir /var/spool/squid
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dify-ssrf-proxy
+  namespace: dify
+  labels:
+    app: dify
+    component: ssrf-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dify
+      component: ssrf-proxy
+  template:
+    metadata:
+      labels:
+        app: dify
+        component: ssrf-proxy
+    spec:
+      nodeSelector:
+        kubernetes.io/arch: amd64
+      containers:
+        - name: squid
+          image: ubuntu/squid:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3128
+              name: proxy
+          volumeMounts:
+            - mountPath: /etc/squid/squid.conf
+              name: squid-config
+              subPath: squid.conf
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              memory: 256Mi
+      volumes:
+        - name: squid-config
+          configMap:
+            name: dify-ssrf-proxy-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dify-ssrf-proxy
+  namespace: dify
+spec:
+  selector:
+    app: dify
+    component: ssrf-proxy
+  ports:
+    - port: 3128
+      targetPort: 3128
+      name: proxy
