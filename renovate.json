@@ -80,6 +80,12 @@
       "groupName": "linkerd"
     },
     {
+      "matchPackageNames": [
+        "lscr.io/linuxserver/mariadb"
+      ],
+      "allowedVersions": "<11.4.9 || >=11.5.0"
+    },
+    {
       "matchUpdateTypes": [
         "patch",
         "digest"
