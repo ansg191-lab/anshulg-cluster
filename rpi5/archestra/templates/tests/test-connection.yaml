@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "archestra.fullname" . }}-test-connection"
+  labels:
+    {{- include "archestra.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox@sha256:e226d6308690dbe282443c8c7e57365c96b5228f0fe7f40731b5d84d37a06839
+      command: ['wget']
+      args: ['{{ include "archestra.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
