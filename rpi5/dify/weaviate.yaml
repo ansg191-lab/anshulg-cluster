@@ -23,7 +23,7 @@ spec:
         kubernetes.io/arch: amd64
       containers:
         - name: weaviate
-          image: semitechnologies/weaviate:1.36.2@sha256:eda7b079b05e7e05deab9e90aae0de718720235e5b57577f0745c94cdd04c599
+          image: semitechnologies/weaviate:1.36.3@sha256:804a54abf67d0c00ad32145313312c4e01738b949a67b4f4a0906ba52338ce30
           imagePullPolicy: IfNotPresent
           env:
             - name: AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED
