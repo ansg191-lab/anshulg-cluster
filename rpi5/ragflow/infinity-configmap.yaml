@@ -26,24 +26,25 @@ data:
 
     [storage]
     data_dir = "/var/infinity/data"
+    persistence_dir = "/var/infinity/persistence"
+    catalog_dir = "/var/infinity/catalog"
+    snapshot_dir = "/var/infinity/snapshots"
     optimize_interval = "10s"
     cleanup_interval = "60s"
     compact_interval = "120s"
-    persistence_dir = "/var/infinity/persistence"
 
     [buffer]
     buffer_manager_size = "2GB"
     lru_num = 7
     memindex_memory_quota = "512MB"
-    result_buffer = "128MB"
-    temp_buffer = "128MB"
+    temp_dir = "/var/infinity/tmp"
+    result_cache = "off"
 
     [wal]
     wal_dir = "/var/infinity/wal"
-    full_checkpoint_interval = "86400s"
-    delta_checkpoint_interval = "60s"
-    wal_compact_threshold = "1073741824"
-    flush_option = "only_write"
+    checkpoint_interval = "86400s"
+    wal_compact_threshold = "1GB"
+    wal_flush = "only_write"
 
     [resource]
-    resource_dir = "/var/infinity/resource"
+    resource_dir = "/usr/share/infinity/resource"
