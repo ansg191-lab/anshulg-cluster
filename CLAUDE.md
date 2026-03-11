@@ -406,6 +406,7 @@ Internet → Caddy (TLS termination) → KanIDM Docker container
 **Notable implementation details:**
 - KanIDM runs as a dedicated `kanidm` system user under `/srv/kanidm` (data, certs, backups)
 - TLS certificate issuance/renewal is handled by a systemd timer (`kanidm-cert-renew.timer`)
+- **Important**: `ProtectHome=false` removed from cert renewal service (Feb 2026) - systemd service needs access to /srv/kanidm for certificate operations
 - Docker image cleanup runs weekly via `docker-image-prune.timer`
 - HAProxy binds LDAPS on both IPv4 and IPv6
 - `auth.anshulg.com` and `ldap.auth.anshulg.com` publish IPv6 (AAAA) records
@@ -432,12 +433,13 @@ Dedicated PostgreSQL 17 server running on Raspberry Pi 4 (4GB RAM, 4 CPUs):
 **Features:**
 - **PostgreSQL 17** - Tuned for web workloads (pgtune.leopard.in.ua settings)
 - **SSL/TLS** - GCP Private CA certificates for encrypted connections
-- **Network Access** - Listens on all interfaces, allows 192.168.0.0/16
+- **Network Access** - Listens on all interfaces, allows 192.168.0.0/16 and IPv6
 - **Authentication** - SCRAM-SHA-256 for secure password auth
 - **Backups** - Restic to GCS bucket with resticprofile scheduling
 - **Mail** - Postfix MTA with Fastmail relay + Zeyple GPG encryption
 - **Firewall** - nftables for network security
 - **Monitoring** - Mail notifications for backup status
+- **MariaDB** - Additional database for media apps (rpi5)
 
 **Connection:**
 - Host: `rpi4.anshulg.direct` (192.168.1.9)
@@ -445,6 +447,12 @@ Dedicated PostgreSQL 17 server running on Raspberry Pi 4 (4GB RAM, 4 CPUs):
 - SSL: Required (with Internal CA certificate)
 - Max connections: 100
 - Apps use this for persistent storage (e.g., Audiomuse)
+
+**Notable implementation details:**
+- **IPv6 Support** - Database listens on IPv6 interfaces (addresses: fd30:e1bf:9b4f::/64) as of Feb 2026
+- Apps connect using the rpi4 internal domain with SSL/TLS certificates
+- Restic backups run daily with email notifications on success/failure
+- Postfix configured with Fastmail SMTP relay and Zeyple GPG encryption for outgoing mail
 
 **Deployment:**
 ```bash
