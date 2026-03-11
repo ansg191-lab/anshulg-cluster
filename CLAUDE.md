@@ -385,12 +385,28 @@ All checks run in CI on every PR.
 
 **rpi5 (k3s):**
 - TLDs: `.internal` (Internal CA), `.anshulg.direct` (LetsEncrypt)
-- Self-hosted on Raspberry Pi 5
+- Self-hosted multi-node k3s cluster
 - Resource-constrained (128Mi-512Mi memory)
 - 40+ applications (media, DNS, storage, monitoring)
 - hostpath-storage for persistence
 - Kustomize-based apps for simple deployments
 - Network gateway: `gateway.anshulg.direct` (192.168.1.100) - see Gateway Router section
+- Nodes are manually provisioned (setup scripts in repo are legacy/unused)
+
+**rpi5 Cluster Nodes:**
+
+| Node | Hardware | IP | Pod CIDR | Max Pods | Notes |
+|------|----------|----|----------|----------|-------|
+| rpi5 | Raspberry Pi 5 | 192.168.1.x | 10.42.1.0/24 | 110 (default) | Primary node |
+| odroid-h4 | ODROID-H4 (8 CPU, 32GB RAM) | 192.168.1.52 | 10.42.0.0/24 | 150 | Intel i915 GPU, heavy workloads |
+| beelink | Beelink mini PC | 192.168.1.x | 10.42.2.0/24 | 110 (default) | |
+
+**odroid-h4 Kubelet Configuration:**
+- Config file: `/etc/rancher/k3s/config.yaml` on the node
+- Max pods increased from 110 → 150 (Mar 2026) due to high pod density
+- Network hard limit: 254 pods per node (from /24 pod CIDR)
+- Memory is the practical ceiling — 32GB RAM with ~89% utilization at ~107 pods
+- To modify: `ssh odroid-h4.anshulg.direct`, edit `/etc/rancher/k3s/config.yaml`, then `sudo systemctl restart k3s`
 
 ### Auth Server Architecture
 
