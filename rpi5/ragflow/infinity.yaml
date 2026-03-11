@@ -1,0 +1,103 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ragflow-infinity-data
+  namespace: ragflow
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ragflow-infinity
+  namespace: ragflow
+  labels:
+    app: ragflow
+    component: infinity
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ragflow
+      component: infinity
+  template:
+    metadata:
+      labels:
+        app: ragflow
+        component: infinity
+    spec:
+      nodeSelector:
+        kubernetes.io/arch: amd64
+      containers:
+        - name: infinity
+          image: infiniflow/infinity:v0.7.0-dev2
+          imagePullPolicy: IfNotPresent
+          command:
+            - "-f"
+            - /infinity_conf.toml
+          ports:
+            - containerPort: 23817
+              name: thrift
+            - containerPort: 23820
+              name: http
+            - containerPort: 5432
+              name: psql
+          volumeMounts:
+            - mountPath: /var/infinity
+              name: infinity-data
+            - mountPath: /infinity_conf.toml
+              name: infinity-config
+              subPath: infinity_conf.toml
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1Gi
+            limits:
+              memory: 3Gi
+          readinessProbe:
+            httpGet:
+              path: /admin/node/current
+              port: 23820
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /admin/node/current
+              port: 23820
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+      volumes:
+        - name: infinity-data
+          persistentVolumeClaim:
+            claimName: ragflow-infinity-data
+        - name: infinity-config
+          configMap:
+            name: ragflow-infinity-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ragflow-infinity
+  namespace: ragflow
+spec:
+  selector:
+    app: ragflow
+    component: infinity
+  ports:
+    - port: 23817
+      targetPort: 23817
+      name: thrift
+    - port: 23820
+      targetPort: 23820
+      name: http
+    - port: 5432
+      targetPort: 5432
+      name: psql
