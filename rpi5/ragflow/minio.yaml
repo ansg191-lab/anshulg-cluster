@@ -1,0 +1,105 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ragflow-minio-data
+  namespace: ragflow
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ragflow-minio
+  namespace: ragflow
+  labels:
+    app: ragflow
+    component: minio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ragflow
+      component: minio
+  template:
+    metadata:
+      labels:
+        app: ragflow
+        component: minio
+    spec:
+      nodeSelector:
+        kubernetes.io/arch: amd64
+      containers:
+        - name: minio
+          image: quay.io/minio/minio:RELEASE.2025-06-13T11-33-47Z
+          imagePullPolicy: IfNotPresent
+          command:
+            - server
+            - --console-address
+            - ":9001"
+            - /data
+          env:
+            - name: MINIO_ROOT_USER
+              valueFrom:
+                secretKeyRef:
+                  name: ragflow-secrets
+                  key: MINIO_USER
+            - name: MINIO_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ragflow-secrets
+                  key: MINIO_PASSWORD
+          ports:
+            - containerPort: 9000
+              name: api
+            - containerPort: 9001
+              name: console
+          volumeMounts:
+            - mountPath: /data
+              name: minio-data
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 1Gi
+          readinessProbe:
+            httpGet:
+              path: /minio/health/live
+              port: 9000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /minio/health/live
+              port: 9000
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+      volumes:
+        - name: minio-data
+          persistentVolumeClaim:
+            claimName: ragflow-minio-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ragflow-minio
+  namespace: ragflow
+spec:
+  selector:
+    app: ragflow
+    component: minio
+  ports:
+    - port: 9000
+      targetPort: 9000
+      name: api
+    - port: 9001
+      targetPort: 9001
+      name: console
