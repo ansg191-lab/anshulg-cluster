@@ -12,6 +12,8 @@ spec:
               value: "1"
             - name: RECEIVER_SERVER_URL
               value: "http://beets-import.beets.svc.cluster.local"
+            - name: BOOK_DEST
+              value: /bookimport
           envFrom:
             - secretRef:
                 name: qui-secrets
@@ -24,6 +26,11 @@ spec:
               # See https://github.com/kubernetes/kubernetes/issues/134894
               # subPath: usr/local/bin/sender
               readOnly: true
+            - mountPath: /book-copier
+              name: book-copier
+              readOnly: true
+            - mountPath: /bookimport
+              name: bookimport
           readinessProbe:
             httpGet:
               port: 7476
@@ -33,3 +40,10 @@ spec:
           image:
             reference: ghcr.io/ansg191/torrent-beets-importer/sender:main
             pullPolicy: Always
+        - name: book-copier
+          image:
+            reference: ghcr.io/ansg191/qui-book-copier:main
+            pullPolicy: Always
+        - name: bookimport
+          hostPath:
+            path: /data/BookImport
