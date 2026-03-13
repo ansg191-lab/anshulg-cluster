@@ -5,6 +5,9 @@ metadata:
 spec:
   template:
     spec:
+      securityContext:
+        supplementalGroups:
+          - 3002 # dataapps - for /data/BookImport access
       containers:
         - name: app
           env:
