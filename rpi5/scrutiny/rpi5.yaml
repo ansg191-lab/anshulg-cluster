@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: rpi5
-          image: ghcr.io/starosdev/scrutiny:1.38.0-collector@sha256:5fcb5ccc13d98a784f1f3964426aea9239a04f98b5248213bf8090b8a1bab853
+          image: ghcr.io/starosdev/scrutiny:1.47.1-collector@sha256:df3e88dd23822cc1618fb6bc7a45291964604f1dbcb590d5c3c744acd90a390d
           imagePullPolicy: IfNotPresent
           securityContext:
             privileged: true
