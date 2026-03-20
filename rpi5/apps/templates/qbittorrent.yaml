@@ -21,3 +21,6 @@ spec:
     path: rpi5/qbittorrent
     directory:
       recurse: true
+  syncPolicy:
+    automated:
+      prune: true
