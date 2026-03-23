@@ -12,15 +12,15 @@ spec:
   serviceName: booklore
   template:
     metadata:
-      name: booklore
+      name: grimmory
       annotations:
         reloader.stakater.com/auto: "true"
       labels:
         app: booklore
     spec:
       containers:
-        - name: booklore
-          image: ghcr.io/booklore-app/booklore:v2.2.1@sha256:252586c469ff6d07a06469fd1d49f19af932f4d323713d253c5d29e33b6ec97a
+        - name: grimmory
+          image: ghcr.io/grimmory-tools/grimmory:v2.3.0
           imagePullPolicy: IfNotPresent
           env:
             - name: USER_ID

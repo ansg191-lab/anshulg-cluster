@@ -17,7 +17,7 @@ spec:
         app: mariadb
     spec:
       containers:
-        - name: booklore
+        - name: mariadb
           image: lscr.io/linuxserver/mariadb:11.4.9@sha256:60b3fc40a8cc4fc0bb846956e9f7f1d69ac0f9fc3b9d21a3ee14faa75515fbc2
           imagePullPolicy: IfNotPresent
           env:
