@@ -64,7 +64,7 @@ spec:
             secretName: config
         - name: beets-receiver
           image:
-            reference: ghcr.io/ansg191/torrent-beets-importer/receiver:main
-            pullPolicy: Always
+            reference: ghcr.io/ansg191/torrent-beets-importer/receiver:v0.1.1
+            pullPolicy: IfNotPresent
       nodeSelector:
         kubernetes.io/arch: amd64

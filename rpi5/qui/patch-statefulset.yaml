@@ -41,8 +41,8 @@ spec:
       volumes:
         - name: beets-sender
           image:
-            reference: ghcr.io/ansg191/torrent-beets-importer/sender:main
-            pullPolicy: Always
+            reference: ghcr.io/ansg191/torrent-beets-importer/sender:v0.1.1
+            pullPolicy: IfNotPresent
         - name: book-copier
           image:
             reference: ghcr.io/ansg191/qui-book-copier:main
