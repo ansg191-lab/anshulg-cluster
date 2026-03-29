@@ -55,6 +55,10 @@ spec:
     networkPolicy:
       allowedIngressNamespaces:
         - kube-system
+      additionalEgress:
+        - ports:
+            - port: 6697
+              protocol: TCP
 
   availability:
     nodeSelector:
