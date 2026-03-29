@@ -47,6 +47,11 @@ spec:
       enabled: true
       size: "1Gi"
 
+  security:
+    networkPolicy:
+      allowedIngressNamespaces:
+        - kube-system
+
   availability:
     nodeSelector:
       kubernetes.io/hostname: odroid-h4
