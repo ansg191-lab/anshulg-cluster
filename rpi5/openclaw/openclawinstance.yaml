@@ -50,3 +50,15 @@ spec:
   availability:
     nodeSelector:
       kubernetes.io/hostname: odroid-h4
+
+  probes:
+    startup:
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      failureThreshold: 60
+      timeoutSeconds: 5
+    liveness:
+      initialDelaySeconds: 120
+      periodSeconds: 30
+      failureThreshold: 5
+      timeoutSeconds: 10
