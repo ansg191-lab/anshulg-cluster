@@ -28,6 +28,7 @@ spec:
     - https://helm.linkerd.io/edge
     - https://grafana.github.io/helm-charts
     - https://github.com/ansg191/oauth-proxy-op.git
+    - ghcr.io/openclaw-rocks/charts
   destinations:
     - namespace: '*'
       server: {{ .Values.spec.destination.server }}
