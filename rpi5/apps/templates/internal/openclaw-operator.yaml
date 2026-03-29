@@ -19,3 +19,5 @@ spec:
     namespace: openclaw-operator-system
   syncPolicy:
     automated: {}
+    syncOptions:
+      - ServerSideApply=true
