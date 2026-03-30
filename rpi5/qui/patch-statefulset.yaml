@@ -41,7 +41,7 @@ spec:
       volumes:
         - name: beets-sender
           image:
-            reference: ghcr.io/ansg191/torrent-beets-importer/sender:v0.1.1
+            reference: ghcr.io/ansg191/torrent-beets-importer/sender:v0.1.2@sha256:92ec10be6de66efc927c98d31b19eee6aee2c6e03a06e8cc1590c023d19b2608
             pullPolicy: IfNotPresent
         - name: book-copier
           image:
