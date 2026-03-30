@@ -25,15 +25,32 @@ output "kanidm_static_ipv6" {
   value       = google_compute_address.kanidm-ipv6.address
 }
 
+# Openclaw Instance Outputs
+output "openclaw_instance_name" {
+  description = "The name of the OpenClaw instance"
+  value       = google_compute_instance.openclaw.name
+}
+
+output "openclaw_static_ip" {
+  description = "The static IP address of the OpenClaw instance"
+  value       = google_compute_address.openclaw.address
+}
+
+output "openclaw_static_ipv6" {
+  description = "The static IPv6 address of the OpenClaw instance"
+  value       = google_compute_address.openclaw-ipv6.address
+}
+
 # Service Account Outputs
 output "service_accounts" {
   description = "Service account emails by purpose"
   value = {
-    kanidm               = google_service_account.kanidm.email
-    github_action        = google_service_account.github-action.email
-    rpi4_cas_issuer      = google_service_account.rpi4-postgres-cas-issuer.email
-    rpi5_cas_issuer      = google_service_account.rpi5-cas-issuer.email
-    dns01_solver         = google_service_account.dns01-solver.email
+    kanidm          = google_service_account.kanidm.email
+    openclaw        = google_service_account.openclaw.email
+    github_action   = google_service_account.github-action.email
+    rpi4_cas_issuer = google_service_account.rpi4-postgres-cas-issuer.email
+    rpi5_cas_issuer = google_service_account.rpi5-cas-issuer.email
+    dns01_solver    = google_service_account.dns01-solver.email
   }
 }
 
