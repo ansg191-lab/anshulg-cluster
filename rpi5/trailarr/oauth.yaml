@@ -29,7 +29,7 @@ spec:
                   app: oauth-proxy
       containers:
         - name: oauth-proxy
-          image: quay.io/oauth2-proxy/oauth2-proxy:v7.14.3@sha256:68336da945bdaff799262c8d14fb1d1aa9354df5e02b87e0955addc040344618
+          image: quay.io/oauth2-proxy/oauth2-proxy:v7.15.1@sha256:39f08531587045a5443db43299bf8495696c99ed8d0e1fdcbe60534f7c02ce14
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 4180
