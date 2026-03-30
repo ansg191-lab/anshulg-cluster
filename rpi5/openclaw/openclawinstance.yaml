@@ -11,10 +11,6 @@ spec:
   config:
     mergeMode: merge
     raw:
-      gateway:
-        controlUi:
-          allowedOrigins:
-            - "https://openclaw.internal"
       agents:
         defaults:
           model:
