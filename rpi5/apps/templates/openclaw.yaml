@@ -23,6 +23,3 @@ spec:
     path: rpi5/openclaw
     directory:
       recurse: true
-  syncPolicy:
-    automated:
-      prune: true
