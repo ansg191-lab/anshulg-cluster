@@ -56,6 +56,13 @@ resource "google_service_account" "openclaw" {
   description  = "Service account for Openclaw server instance"
 }
 
+# Allow openclaw Instance to retrieve CA certificate
+resource "google_privateca_ca_pool_iam_member" "openclaw-ca" {
+  ca_pool = google_privateca_ca_pool.default.id
+  role    = "roles/privateca.certificateRequester"
+  member  = "serviceAccount:${google_service_account.openclaw.email}"
+}
+
 # region Networking
 
 # Static IPV4 address for Openclaw
