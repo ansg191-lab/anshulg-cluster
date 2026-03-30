@@ -9,7 +9,7 @@ spec:
         name: openclaw-api-keys
 
   config:
-    mergeMode: merge
+    mergeMode: overwrite
     raw:
       gateway:
         controlUi:
