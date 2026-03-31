@@ -1,0 +1,43 @@
+- op: replace
+  path: /spec/template/spec/containers/0/ports
+  value:
+    - containerPort: 3000
+      protocol: TCP
+- op: add
+  path: /spec/template/spec/containers/0/envFrom
+  value:
+    - configMapRef:
+        name: browserless-config
+    - secretRef:
+        name: browserless-secret
+- op: add
+  path: /spec/template/spec/containers/0/resources
+  value:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      memory: 2Gi
+- op: add
+  path: /spec/template/spec/containers/0/securityContext
+  value:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
+    seccompProfile:
+      type: RuntimeDefault
+- op: add
+  path: /spec/template/spec/nodeSelector
+  value:
+    kubernetes.io/hostname: odroid-h4
+- op: add
+  path: /spec/template/spec/volumes
+  value:
+    - name: dshm
+      emptyDir:
+        medium: Memory
+        sizeLimit: 1Gi
+- op: add
+  path: /spec/template/spec/containers/0/volumeMounts
+  value:
+    - name: dshm
+      mountPath: /dev/shm
