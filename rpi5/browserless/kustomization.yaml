@@ -28,7 +28,7 @@ configMapGenerator:
     literals:
       - CONCURRENT=5
       - MAX_QUEUE_LENGTH=20
-      - TIMEOUT=30000
+      - TIMEOUT=300000
 
 patches:
   - target:
