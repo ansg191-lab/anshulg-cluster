@@ -1,0 +1,25 @@
+# OpenClaw sudo permissions (scoped for security)
+#
+# SECURITY NOTE: These permissions are intentionally limited.
+# If openclaw is compromised, attackers can only:
+# - Manage the openclaw service
+# - Run basic tailscale diagnostics
+# - View openclaw logs
+
+# To grant full sudo (NOT RECOMMENDED):
+#   openclaw ALL=(ALL) NOPASSWD: ALL
+
+# Service control - openclaw service only
+openclaw ALL=(ALL) NOPASSWD: /usr/bin/systemctl start openclaw-gateway
+openclaw ALL=(ALL) NOPASSWD: /usr/bin/systemctl stop openclaw-gateway
+openclaw ALL=(ALL) NOPASSWD: /usr/bin/systemctl restart openclaw-gateway
+openclaw ALL=(ALL) NOPASSWD: /usr/bin/systemctl status openclaw-gateway
+openclaw ALL=(ALL) NOPASSWD: /usr/bin/systemctl enable openclaw-gateway
+openclaw ALL=(ALL) NOPASSWD: /usr/bin/systemctl disable openclaw-gateway
+# daemon-reload affects all units (required after service file changes)
+openclaw ALL=(ALL) NOPASSWD: /usr/bin/systemctl daemon-reload
+
+# Journal access - openclaw logs only
+openclaw ALL=(ALL) NOPASSWD: /usr/bin/journalctl -u openclaw-gateway *
+
+# May add wireguard permissions in the future...
