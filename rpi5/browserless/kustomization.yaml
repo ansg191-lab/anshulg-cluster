@@ -26,6 +26,7 @@ configMapGenerator:
       - DOMAIN=browserless.internal
   - name: browserless-config
     literals:
+      - PREBOOT=true
       - CONCURRENT=5
       - MAX_QUEUE_LENGTH=20
       - TIMEOUT=300000
