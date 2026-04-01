@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: port-monitor
+  labels:
+    app: port-monitor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: port-monitor
+  template:
+    metadata:
+      labels:
+        app: port-monitor
+    spec:
+      containers:
+        - name: port-monitor
+          image: busybox:1.37.0
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -eu
+              HOST="82.21.158.36"
+              PORT="14041"
+              INTERVAL=10
+              LAST=""
+              log() { printf '%s [port-monitor] %s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "$1"; }
+              log "Starting port monitor for $HOST:$PORT (interval=${INTERVAL}s)"
+              while true; do
+                if nc -z -w 3 "$HOST" "$PORT" >/dev/null 2>&1; then
+                  NOW="up"
+                else
+                  NOW="down"
+                fi
+                if [ -z "$LAST" ]; then
+                  log "Initial state: $NOW"
+                elif [ "$NOW" != "$LAST" ]; then
+                  log "State changed: $LAST -> $NOW"
+                fi
+                LAST="$NOW"
+                sleep "$INTERVAL"
+              done
+          env:
+            - name: TZ
+              value: "America/Los_Angeles"
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+            limits:
+              memory: 32Mi
