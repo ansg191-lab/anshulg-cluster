@@ -55,6 +55,35 @@ create_system_user() {
 	fi
 }
 
+fix_root() {
+	log "Fixing root/ permissions..."
+
+	# Directories: 755 (standard Linux traversable)
+	find root -type d -exec chmod 755 {} +
+
+	# Files: 644 (world-readable default)
+	find root -type f -exec chmod 644 {} +
+
+	# Sudoers
+	chmod 660 root/etc/sudoers.d/*
+
+	# Sbin scripts: root-executable
+	chmod 755 root/usr/local/sbin/*.sh
+
+	# User dotfiles: owner-only
+	chmod 600 root/home/openclaw/.bashrc
+	chmod 600 root/home/openclaw/.bash_profile
+
+	# Openclaw Doctor recommended permissions
+	chmod 700 root/home/openclaw/.openclaw
+
+	# Ownership
+	chown -R root:root root
+	chown -R openclaw:openclaw root/home/openclaw
+
+	log "Done."
+}
+
 copy_root() {
 	log "Copy root files..."
 
@@ -63,10 +92,6 @@ copy_root() {
 		log "rsync could not be found. Installing it..."
 		apt-get update && apt-get install -y rsync
 	fi
-
-	log "Setting permissions..."
-	chown -R root:root root
-	chown -R openclaw:openclaw root/home/openclaw
 
 	log "Copying files..."
 	rsync -a --verbose root/ /
@@ -90,7 +115,7 @@ install_packages() {
 	  xargs -r sudo apt remove -y
 
 	log "Installing required packages..."
-	xargs apt-get install -y < "$SCRIPT_DIR/packages.txt"
+	xargs apt-get install -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" < "$SCRIPT_DIR/packages.txt"
 
 	log "Done."
 }
@@ -159,6 +184,10 @@ setup_node() {
 	# Set prefix to ~/.local for openclaw user
 	sudo -u openclaw npm config set prefix "$OPENCLAW_ROOT/.local"
 
+	# Setup Node Compile Cache for openclaw user
+	mkdir -p /var/tmp/openclaw-compile-cache
+	chown openclaw:openclaw /var/tmp/openclaw-compile-cache
+
 	log "Done."
 }
 
@@ -199,6 +228,25 @@ install_linuxbrew() {
 
 	log "Revoking temporary sudo access..."
 	rm -f /etc/sudoers.d/openclaw-temp
+
+	log "Done."
+}
+
+install_formulas() {
+	log "Installing Homebrew formulas for openclaw user..."
+
+	# List of formulas to install
+	FORMULAS=(
+		"gh"
+		"jq"
+		"codex"
+		"claude-code"
+	)
+
+	for formula in "${FORMULAS[@]}"; do
+		log "Installing $formula..."
+		sudo -iu openclaw bash -c 'brew install '"$formula"
+	done
 
 	log "Done."
 }
@@ -267,6 +315,7 @@ setup_caddy() {
 
 trap cleanup EXIT
 create_system_user "openclaw" "$OPENCLAW_ROOT" "/bin/bash"
+fix_root
 copy_root
 install_packages
 install_ca
@@ -276,9 +325,9 @@ setup_docker
 setup_node
 setup_certs
 setup_caddy
-# TODO: Setup firewall rules
 # TODO: Setup automatic updates
 # TODO: Setup mail
 setup_wireguard
 install_linuxbrew
+install_formulas
 setup_openclaw
