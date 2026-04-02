@@ -313,6 +313,29 @@ setup_caddy() {
 	log "Done."
 }
 
+setup_nfs() {
+	log "Seting up NFS client..."
+
+	# Reload system modules
+	sudo systemctl restart systemd-modules-load
+
+	# Make mount point for NFS
+	log "Creating mount point for NFS..."
+	mkdir -p /mnt/data
+
+	log "Adding NFS entry to /etc/fstab..."
+	if ! grep -q '192.168.1.52:/' /etc/fstab; then
+		echo '192.168.1.52:/ /mnt/data nfs4 rw,soft,timeo=50,retrans=3,_netdev,x-systemd.automount,x-systemd.mount-timeout=30,x-systemd.idle-timeout=600,noauto 0 0' \
+			| sudo tee -a /etc/fstab > /dev/null
+	fi
+
+	log "Mounting NFS share..."
+	sudo systemctl daemon-reload
+	sudo systemctl restart mnt-data.automount
+
+	log "Done."
+}
+
 trap cleanup EXIT
 create_system_user "openclaw" "$OPENCLAW_ROOT" "/bin/bash"
 fix_root
@@ -323,6 +346,7 @@ harden_sshd
 setup_user
 setup_docker
 setup_node
+setup_nfs
 setup_certs
 setup_caddy
 # TODO: Setup automatic updates

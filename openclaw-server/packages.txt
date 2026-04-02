@@ -44,3 +44,4 @@ wireguard-tools
 1password-cli
 caddy
 google-cloud-cli
+nfs-common
