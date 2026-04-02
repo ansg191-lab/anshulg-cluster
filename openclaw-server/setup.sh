@@ -336,6 +336,48 @@ setup_nfs() {
 	log "Done."
 }
 
+setup_mta() {
+	log "Setting up Mail Transfer Agent (MTA)..."
+
+	FASTMAIL_USER=$(op read "op://OpenClaw/OpenClaw Fastmail Password/username")
+	FASTMAIL_PASS=$(op read "op://OpenClaw/OpenClaw Fastmail Password/password")
+
+	log "Configuring /etc/mailname..."
+	echo "openclaw.anshulg.com" > /etc/mailname
+	chown root:root /etc/mailname
+	chmod 644 /etc/mailname
+
+	log "Writing Postfix SASL configuration..."
+	install -m 600 -o root -g root /dev/stdin /etc/postfix/sasl_passwd <<EOF
+[smtp.fastmail.com]:587 $FASTMAIL_USER:$FASTMAIL_PASS
+EOF
+	postmap /etc/postfix/sasl_passwd
+	chown root:root /etc/postfix/sasl_passwd /etc/postfix/sasl_passwd.db
+	chmod 600 /etc/postfix/sasl_passwd /etc/postfix/sasl_passwd.db
+
+	log "Configuring Postfix main.cf..."
+	postconf -e "myhostname = $(cat /etc/mailname)"
+	postconf -e "myorigin = \$myhostname"
+	postconf -e "inet_interfaces = loopback-only"
+	postconf -e "mydestination = "
+	postconf -e "relayhost = [smtp.fastmail.com]:587"
+	postconf -e "smtputf8_enable = no" # Fastmail doesn't support SMTPUTF8
+
+	# SASL + TLS (STARTTLS on 587)
+	postconf -e "smtp_sasl_auth_enable = yes"
+	postconf -e "smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd"
+	postconf -e "smtp_sasl_security_options = noanonymous"
+	postconf -e "smtp_tls_security_level = encrypt"
+	postconf -e "smtp_tls_loglevel = 1"
+	postconf -e "smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt"
+
+	log "Restarting Postfix..."
+	systemctl restart postfix
+	systemctl enable postfix
+
+	log "Done."
+}
+
 trap cleanup EXIT
 create_system_user "openclaw" "$OPENCLAW_ROOT" "/bin/bash"
 fix_root
@@ -350,7 +392,7 @@ setup_nfs
 setup_certs
 setup_caddy
 # TODO: Setup automatic updates
-# TODO: Setup mail
+setup_mta
 setup_wireguard
 install_linuxbrew
 install_formulas

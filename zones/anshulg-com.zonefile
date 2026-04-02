@@ -44,6 +44,7 @@ fm3._domainkey.anshulg.com. 300 IN CNAME fm3.anshulg.com.dkim.fmhosted.com.
 anshulg.com. 300 IN TXT "v=spf1 include:spf.messagingengine.com -all"
 k8s.anshulg.com. 300 IN TXT "v=spf1 include:spf.messagingengine.com -all"
 rpi5.anshulg.com. 300 IN TXT "v=spf1 include:spf.messagingengine.com -all"
+openclaw.anshulg.com. 300 IN TXT "v=spf1 include:spf.messagingengine.com -all"
 
 ;; DMARC Record
 _dmarc.anshulg.com. 300 IN TXT "v=DMARC1; p=quarantine; rua=mailto:postmaster@anshulg.com"

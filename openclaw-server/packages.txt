@@ -45,3 +45,5 @@ wireguard-tools
 caddy
 google-cloud-cli
 nfs-common
+postfix
+mpack
