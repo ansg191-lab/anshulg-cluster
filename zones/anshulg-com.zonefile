@@ -34,6 +34,8 @@ k8s.anshulg.com. 86400 IN MX 10 in1-smtp.messagingengine.com.
 k8s.anshulg.com. 86400 IN MX 20 in2-smtp.messagingengine.com.
 rpi5.anshulg.com. 86400 IN MX 10 in1-smtp.messagingengine.com.
 rpi5.anshulg.com. 86400 IN MX 20 in2-smtp.messagingengine.com.
+openclaw.anshulg.com. 86400 IN MX 10 in1-smtp.messagingengine.com.
+openclaw.anshulg.com. 86400 IN MX 20 in2-smtp.messagingengine.com.
 
 ;; DKIM Records
 fm1._domainkey.anshulg.com. 300 IN CNAME fm1.anshulg.com.dkim.fmhosted.com.
