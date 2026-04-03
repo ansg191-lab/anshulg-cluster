@@ -46,4 +46,5 @@ caddy
 google-cloud-cli
 nfs-common
 postfix
+fetchmail
 mpack

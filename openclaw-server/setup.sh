@@ -359,7 +359,7 @@ EOF
 	postconf -e "myhostname = $(cat /etc/mailname)"
 	postconf -e "myorigin = \$myhostname"
 	postconf -e "inet_interfaces = loopback-only"
-	postconf -e "mydestination = "
+	postconf -e "mydestination = localhost, \$myhostname"
 	postconf -e "relayhost = [smtp.fastmail.com]:587"
 	postconf -e "smtputf8_enable = no" # Fastmail doesn't support SMTPUTF8
 
@@ -374,6 +374,56 @@ EOF
 	log "Restarting Postfix..."
 	systemctl restart postfix
 	systemctl enable postfix
+
+	log "Done."
+}
+
+setup_fetchmail() {
+	log "Setting up Fetchmail..."
+
+	FASTMAIL_USER=$(op read "op://OpenClaw/OpenClaw Fastmail Password/username")
+	FASTMAIL_PASS=$(op read "op://OpenClaw/OpenClaw Fastmail Password/password")
+
+	log "Creating fetchmail state directory..."
+	install -d -o fetchmail -g nogroup -m 700 /var/lib/fetchmail
+
+	log "Writing /etc/fetchmailrc..."
+	install -m 600 -o fetchmail -g nogroup /dev/stdin /etc/fetchmailrc <<-EOF
+	set daemon 300
+	set syslog
+	set no bouncemail
+	set postmaster root
+	set idfile /var/lib/fetchmail/.fetchids
+
+	poll imap.fastmail.com
+	    protocol IMAP
+	    port 993
+	    user "$FASTMAIL_USER"
+	    password "$FASTMAIL_PASS"
+	    ssl
+	    sslcertpath /etc/ssl/certs
+	    folder Inbox/Openclaw/openclaw
+	    is openclaw here
+	    mda "/usr/sbin/sendmail -oem -oi openclaw"
+	    keep
+
+	poll imap.fastmail.com
+	    protocol IMAP
+	    port 993
+	    user "$FASTMAIL_USER"
+	    password "$FASTMAIL_PASS"
+	    ssl
+	    sslcertpath /etc/ssl/certs
+	    folder Inbox/Openclaw/anshulgupta
+	    is anshulgupta here
+	    mda "/usr/sbin/sendmail -oem -oi anshulgupta"
+	    keep
+	EOF
+
+	log "Enabling fetchmail daemon..."
+	sed -i 's/^START_DAEMON=.*/START_DAEMON=yes/' /etc/default/fetchmail
+	systemctl restart fetchmail
+	systemctl enable fetchmail
 
 	log "Done."
 }
@@ -393,6 +443,7 @@ setup_certs
 setup_caddy
 # TODO: Setup automatic updates
 setup_mta
+setup_fetchmail
 setup_wireguard
 install_linuxbrew
 install_formulas
