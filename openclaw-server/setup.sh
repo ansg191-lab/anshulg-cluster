@@ -367,7 +367,8 @@ EOF
 	postconf -e "smtp_sasl_auth_enable = yes"
 	postconf -e "smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd"
 	postconf -e "smtp_sasl_security_options = noanonymous"
-	postconf -e "smtp_tls_security_level = encrypt"
+	postconf -e "smtp_tls_security_level = verify"
+	postconf -e "smtp_tls_mandatory_protocols = >=TLSv1.3"
 	postconf -e "smtp_tls_loglevel = 1"
 	postconf -e "smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt"
 
