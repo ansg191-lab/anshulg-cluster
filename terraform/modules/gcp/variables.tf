@@ -84,38 +84,38 @@ variable "kanidm_backup_retention_days" {
   default     = 7
 }
 
-# Openclaw Instance Configuration
-variable "openclaw_machine_type" {
-  description = "Machine type for OpenClaw instance"
-  type        = string
-  default     = "e2-medium"
-}
-
-variable "openclaw_disk_size" {
-  description = "Boot disk size for OpenClaw instance in GB"
-  type        = number
-  default     = 20
-}
-
-variable "openclaw_disk_type" {
-  description = "Boot disk type for OpenClaw instance"
-  type        = string
-  default     = "pd-balanced"
-}
-
-variable "openclaw_image" {
-  description = "OS image for OpenClaw instance"
-  type        = string
-  default     = "projects/debian-cloud/global/images/debian-13-trixie-v20260310"
-}
-
-variable "openclaw_ssh_allowed_ips" {
-  description = "IP ranges allowed to SSH to OpenClaw instance"
-  type        = list(string)
-  default = [
-    "72.219.136.19/32", # Cox ISP
-  ]
-}
+# Openclaw Instance Configuration -- commented out, needs rethink
+# variable "openclaw_machine_type" {
+#   description = "Machine type for OpenClaw instance"
+#   type        = string
+#   default     = "e2-medium"
+# }
+#
+# variable "openclaw_disk_size" {
+#   description = "Boot disk size for OpenClaw instance in GB"
+#   type        = number
+#   default     = 20
+# }
+#
+# variable "openclaw_disk_type" {
+#   description = "Boot disk type for OpenClaw instance"
+#   type        = string
+#   default     = "pd-balanced"
+# }
+#
+# variable "openclaw_image" {
+#   description = "OS image for OpenClaw instance"
+#   type        = string
+#   default     = "projects/debian-cloud/global/images/debian-13-trixie-v20260310"
+# }
+#
+# variable "openclaw_ssh_allowed_ips" {
+#   description = "IP ranges allowed to SSH to OpenClaw instance"
+#   type        = list(string)
+#   default = [
+#     "72.219.136.19/32", # Cox ISP
+#   ]
+# }
 
 # Storage Configuration
 variable "restic_bucket_name" {
