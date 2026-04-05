@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: audiomuse
-          image: ghcr.io/neptunehub/audiomuse-ai:0.9.4@sha256:da4f6be43fc3e4cccfa4c57f895b2838562bb609ccd068e695cdd4dbf4847eaa
+          image: ghcr.io/neptunehub/audiomuse-ai:0.9.5@sha256:a81a13313c392463a0a2d94379b1b2fdd40ce686ac61de0434fcd63c242d1344
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
