@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: gotenberg
-          image: gotenberg/gotenberg:8.27.0@sha256:d71ab8c13b6bd47c7bc81195082005dfb17eaa75e8b1fadd347a64ee66ed98d5
+          image: gotenberg/gotenberg:8.30.0@sha256:d3c9e0ed2450c9a4631de6d14b51c75fd6051512c33aa8a6df622f085592c48b
           imagePullPolicy: IfNotPresent
           command:
             - gotenberg
