@@ -45,7 +45,7 @@ spec:
             pullPolicy: IfNotPresent
         - name: book-copier
           image:
-            reference: ghcr.io/ansg191/qui-book-copier:main
+            reference: ghcr.io/ansg191/qui-book-copier:main@sha256:152a633bbc7df6e3b0b763681eca5a5ff10731f1e002cdfc722fc2409100ebc9
             pullPolicy: Always
         - name: bookimport
           hostPath:
