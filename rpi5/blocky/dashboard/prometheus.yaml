@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: prometheus
-          image: prom/prometheus:v3.9.1@sha256:1f0f50f06acaceb0f5670d2c8a658a599affe7b0d8e78b898c1035653849a702
+          image: prom/prometheus:v3.11.0@sha256:dda13e28bf95a5e5ca5b8ed56852006094c1c8e8871d9c9dbeed30aa6e55271f
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9090
