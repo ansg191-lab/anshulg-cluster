@@ -21,6 +21,9 @@ spec:
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.branch }}
     path: rpi5/bookshelf/bookshelf
+  syncPolicy:
+    automated:
+      prune: true
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -38,3 +41,6 @@ spec:
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.branch }}
     path: rpi5/bookshelf/rreading-glasses
+  syncPolicy:
+    automated:
+      prune: true
