@@ -32,7 +32,7 @@ spec:
             - name: ND_PLUGINS_AUTORELOAD
               value: "true"
             - name: ND_AGENTS
-              value: "audiomuseai,lastfm,spotify,deezer"
+              value: "audiomuseai,lastfm,deezer"
           envFrom:
             - secretRef:
                 name: env
