@@ -24,3 +24,6 @@ spec:
     path: rpi5/calibre
     directory:
       recurse: true
+  syncPolicy:
+    automated:
+      prune: true

@@ -5,6 +5,9 @@ metadata:
 spec:
   template:
     spec:
+      securityContext:
+        supplementalGroups:
+          - 3002 # dataapps - for /data/BookImport access
       containers:
         - name: app
           env:
@@ -12,6 +15,8 @@ spec:
               value: "1"
             - name: RECEIVER_SERVER_URL
               value: "http://beets-import.beets.svc.cluster.local"
+            - name: BOOK_DEST
+              value: /bookimport
           envFrom:
             - secretRef:
                 name: qui-secrets
@@ -24,6 +29,11 @@ spec:
               # See https://github.com/kubernetes/kubernetes/issues/134894
               # subPath: usr/local/bin/sender
               readOnly: true
+            - mountPath: /book-copier
+              name: book-copier
+              readOnly: true
+            - mountPath: /bookimport
+              name: bookimport
           readinessProbe:
             httpGet:
               port: 7476
@@ -31,5 +41,12 @@ spec:
       volumes:
         - name: beets-sender
           image:
-            reference: ghcr.io/ansg191/torrent-beets-importer/sender:main
+            reference: ghcr.io/ansg191/torrent-beets-importer/sender:v0.1.2@sha256:92ec10be6de66efc927c98d31b19eee6aee2c6e03a06e8cc1590c023d19b2608
+            pullPolicy: IfNotPresent
+        - name: book-copier
+          image:
+            reference: ghcr.io/ansg191/qui-book-copier:main@sha256:152a633bbc7df6e3b0b763681eca5a5ff10731f1e002cdfc722fc2409100ebc9
             pullPolicy: Always
+        - name: bookimport
+          hostPath:
+            path: /data/BookImport

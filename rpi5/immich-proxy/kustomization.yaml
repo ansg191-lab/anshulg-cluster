@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - ../../kustomize/base
   - ../../kustomize/workloads/deployment
+  - middleware.yaml
 
 components:
   - ../../kustomize/components/ingress
@@ -20,7 +21,7 @@ labels:
 images:
   - name: busybox
     newName: nginxinc/nginx-unprivileged
-    newTag: 1.29.5@sha256:79f2c2c26124360d69d12078d36f9bf129fffe6eabe146ed3689b523fdf39a17
+    newTag: 1.29.5@sha256:5c8946de2a79b6031975ff6c54594a26bdb2f1b5abab1c03f501575ebb02510f
 
 configMapGenerator:
   - name: domain-config
@@ -45,3 +46,6 @@ patches:
   - target:
       kind: Service
     path: patch-service.yaml
+  - target:
+      kind: IngressRoute
+    path: patch-ingress-buffering.yaml

@@ -2,6 +2,9 @@ server {
     listen 8080 default_server;
     server_name _;
 
+    # Allow large uploads (10 GiB)
+    client_max_body_size 10240m;
+
     # Health check
     location = /healthz {
         return 200 'ok';

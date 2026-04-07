@@ -1,0 +1,42 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../kustomize/base
+  - ../../kustomize/workloads/deployment
+  - secret.yaml
+
+components:
+  - ../../kustomize/components/ingress
+
+namePrefix: browserless-
+labels:
+  - pairs:
+      app.kubernetes.io/name: browserless
+    includeSelectors: true
+
+images:
+  - name: busybox
+    newName: ghcr.io/browserless/chromium
+    newTag: latest@sha256:57a1edb1f76e56cf1f128a2c379381df9d937e643c2cf562d76463b0280c24c4
+
+configMapGenerator:
+  - name: domain-config
+    literals:
+      - DOMAIN=browserless.internal
+  - name: browserless-config
+    literals:
+      - PREBOOT=true
+      - CONCURRENT=5
+      - MAX_QUEUE_LENGTH=20
+      - TIMEOUT=300000
+
+patches:
+  - target:
+      group: apps
+      version: v1
+      kind: Deployment
+    path: patch-deployment.yaml
+  - target:
+      kind: Service
+    path: patch-service.yaml

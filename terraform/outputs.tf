@@ -9,6 +9,15 @@ output "auth_static_ip" {
   }
 }
 
+# Openclaw output -- commented out, needs rethink
+# output "openclaw_static_ip" {
+#   description = "The static IP address of openclaw.anshulg.com"
+#   value = {
+#     ipv4 = module.gcp.openclaw_static_ip
+#     ipv6 = module.gcp.openclaw_static_ipv6
+#   }
+# }
+
 output "service_accounts" {
   description = "Service account emails by purpose"
   value       = module.gcp.service_accounts

@@ -19,7 +19,7 @@ spec:
       hostNetwork: true
       containers:
         - name: plex
-          image: lscr.io/linuxserver/plex:1.43.0@sha256:bbe0118e39e2c071fc5fe39af3f32072207bf4146d56b6a8901bcb23082df207
+          image: lscr.io/linuxserver/plex:1.43.0@sha256:a21302c5297943e204e9b262f8c2eca3e0c7ddb52490bfb3f1db47f6103721ab
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID

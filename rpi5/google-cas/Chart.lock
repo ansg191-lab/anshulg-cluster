@@ -1,6 +1,6 @@
 dependencies:
 - name: cert-manager-google-cas-issuer
   repository: https://charts.jetstack.io
-  version: v0.10.2
-digest: sha256:6b8afe946c14b52e6ad1408909aa39b15e7ba105c313643adfefa8ec71935cfd
-generated: "2025-12-10T14:01:46.030318421Z"
+  version: v0.11.0
+digest: sha256:9171be46e10f40cb6d89c558f1aca12fb2d46c121ed5951ccdf99be98c268e64
+generated: "2026-02-27T13:23:24.606335823Z"

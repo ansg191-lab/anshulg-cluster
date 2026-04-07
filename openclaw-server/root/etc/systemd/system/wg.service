@@ -1,0 +1,14 @@
+[Unit]
+Description=WireGuard
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+
+ExecStart=/usr/local/sbin/wg-up.sh
+ExecStop=/usr/local/sbin/wg-down.sh
+
+[Install]
+WantedBy=multi-user.target

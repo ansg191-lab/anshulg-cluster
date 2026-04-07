@@ -1,9 +1,9 @@
 dependencies:
 - name: kellnr
   repository: https://kellnr.github.io/helm
-  version: 4.5.3
+  version: 5.0.4
 - name: postgresql
   repository: https://charts.bitnami.com/bitnami
-  version: 18.2.9
-digest: sha256:5d181e1b6860edc8e8cf0ae1e5867e22e1138f767d15eb3ab2c9f5151be475be
-generated: "2026-02-12T01:33:58.86283913Z"
+  version: 18.5.15
+digest: sha256:96811a0f2449a692547b9ac46b8a25e881dbf524a72db5c81817345e96b4a8e8
+generated: "2026-04-06T17:50:52.763899959Z"

@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: jellyfin
-          image: lscr.io/linuxserver/jellyfin:10.11.6@sha256:45814a5515fdb81cd41f5db946cfd53a3c5e91f0665b40b55bae30cab4b3cd2e
+          image: lscr.io/linuxserver/jellyfin:10.11.8@sha256:e93bc100c6da07bd058678e4b634e4e71031fe840227e2ed03a1104f032bebe8
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID

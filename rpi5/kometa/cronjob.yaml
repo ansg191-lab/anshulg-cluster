@@ -17,7 +17,7 @@ spec:
         spec:
           initContainers:
             - name: copy-config
-              image: busybox:1.37.0@sha256:b3255e7dfbcd10cb367af0d409747d511aeb66dfac98cf30e97e87e4207dd76f
+              image: busybox:1.37.0@sha256:1487d0af5f52b4ba31c7e465126ee2123fe3f2305d638e7827681e7cf6c83d5e
               imagePullPolicy: IfNotPresent
               command:
                 - /bin/sh
@@ -31,7 +31,7 @@ spec:
                   name: src-config
           containers:
             - name: kometa
-              image: kometateam/kometa:v2.2.2@sha256:32992226d1a505da3ed5d4e9c97bed8a6deb7aef36cd5ef8b1f519762607df45
+              image: kometateam/kometa:v2.3.1@sha256:683c04827ef3fecf1cc5cb178f75f91f968aef6c6d89d34bc9c70966fd1d7259
               imagePullPolicy: IfNotPresent
               args:
                 - --run

@@ -11,3 +11,4 @@ data:
   TEMP_DIR: "/app/temp_audio"
   AI_MODEL_PROVIDER: "GEMINI"
   AI_REQUEST_TIMEOUT_SECONDS: "600"
+  AUTH_ENABLED: "false"

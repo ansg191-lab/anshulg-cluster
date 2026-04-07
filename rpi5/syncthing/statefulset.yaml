@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: syncthing
-          image: lscr.io/linuxserver/syncthing:2.0.14@sha256:b99c94153e006bca7dcbcb1142879f27cceaf5ca149f593259731871aaaf6be3
+          image: lscr.io/linuxserver/syncthing:2.0.16@sha256:c15a770ebd879e729478638fee3a1ae383787ed2b923cb324bdab357e398a6b0
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID

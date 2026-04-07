@@ -13,6 +13,10 @@ spec:
     server: {{ .Values.spec.destination.server }}
     namespace: qui
   project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
   source:
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.branch }}

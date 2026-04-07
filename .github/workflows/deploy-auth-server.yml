@@ -28,7 +28,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Install Caddy
-        uses: jaxxstorm/action-install-gh-release@6096f2a2bbfee498ced520b6922ac2c06e990ed2 # v2.1.0
+        uses: jaxxstorm/action-install-gh-release@25e24d2d23ae098373794ef1d6faecb48ee52da8 # v3.0.0
         with:
           repo: caddyserver/caddy
 
@@ -48,7 +48,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-      - uses: shogo82148/actions-setup-perl@fa3bdcb0144a50651e317f30949bb4491e74a6e4 # v1.37.0
+      - uses: shogo82148/actions-setup-perl@dea55ec1f85d42d13106b8e8263b9b7199eaef09 # v1.39.0
         with:
           perl-version: "5.38"
           install-modules-with: cpanm
@@ -88,7 +88,7 @@ jobs:
             --source-ranges="${RUNNER_IP}/32" \
             --target-tags="kanidm"
 
-      - uses: webfactory/ssh-agent@a6f90b1f127823b31d4d4a8d96047790581349bd # v0.9.1
+      - uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
         with:
           ssh-private-key: ${{ secrets.GOOGLE_SSH_KEY }}
 

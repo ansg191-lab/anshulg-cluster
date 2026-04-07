@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: soju
-          image: codeberg.org/emersion/soju:v0.10.1@sha256:9355ba00cf084c94cca909d4e2f643e16772403a820b6f680f4a8b6b25a3ea68
+          image: codeberg.org/emersion/soju:v0.10.1@sha256:ae80f95f48acb3b61722b9f14252744a18d8fdf1b3329eae973bf264cc31ea2e
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 6697

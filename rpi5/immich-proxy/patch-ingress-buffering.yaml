@@ -1,0 +1,4 @@
+- op: add
+  path: /spec/routes/0/middlewares
+  value:
+    - name: immich-buffering

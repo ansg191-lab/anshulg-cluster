@@ -34,6 +34,8 @@ k8s.anshulg.com. 86400 IN MX 10 in1-smtp.messagingengine.com.
 k8s.anshulg.com. 86400 IN MX 20 in2-smtp.messagingengine.com.
 rpi5.anshulg.com. 86400 IN MX 10 in1-smtp.messagingengine.com.
 rpi5.anshulg.com. 86400 IN MX 20 in2-smtp.messagingengine.com.
+openclaw.anshulg.com. 86400 IN MX 10 in1-smtp.messagingengine.com.
+openclaw.anshulg.com. 86400 IN MX 20 in2-smtp.messagingengine.com.
 
 ;; DKIM Records
 fm1._domainkey.anshulg.com. 300 IN CNAME fm1.anshulg.com.dkim.fmhosted.com.
@@ -44,6 +46,7 @@ fm3._domainkey.anshulg.com. 300 IN CNAME fm3.anshulg.com.dkim.fmhosted.com.
 anshulg.com. 300 IN TXT "v=spf1 include:spf.messagingengine.com -all"
 k8s.anshulg.com. 300 IN TXT "v=spf1 include:spf.messagingengine.com -all"
 rpi5.anshulg.com. 300 IN TXT "v=spf1 include:spf.messagingengine.com -all"
+openclaw.anshulg.com. 300 IN TXT "v=spf1 include:spf.messagingengine.com -all"
 
 ;; DMARC Record
 _dmarc.anshulg.com. 300 IN TXT "v=DMARC1; p=quarantine; rua=mailto:postmaster@anshulg.com"
@@ -127,6 +130,10 @@ auth.anshulg.com. 60 IN A 34.94.107.30
 auth.anshulg.com. 60 IN AAAA 2600:1900:4120:716d:0:4::
 ldap.auth.anshulg.com. 60 IN A 34.94.107.30
 ldap.auth.anshulg.com. 60 IN AAAA 2600:1900:4120:716d:0:4::
+
+;; Openclaw Server
+openclaw.anshulg.com. 60 IN A 34.94.125.161
+openclaw.anshulg.com. 60 IN AAAA 2600:1900:4120:716d:0:5::
 
 ;; VPN Server
 vpn.anshulg.com. 60 IN CNAME anshul-vpn.duckdns.org.

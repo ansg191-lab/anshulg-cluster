@@ -17,7 +17,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # renovate: datasource=github-releases depName=restic/restic
 RESTIC_VERSION="0.18.1"
 # renovate: datasource=github-releases depName=creativeprojects/resticprofile
-RESTICPROFILE_VERSION="0.32.0"
+RESTICPROFILE_VERSION="0.33.0"
 
 OP_SERVICE_ACCOUNT_TOKEN=$(cat "1password.txt")
 export OP_SERVICE_ACCOUNT_TOKEN
@@ -119,7 +119,8 @@ EOF
 	postconf -e "smtp_sasl_auth_enable = yes"
 	postconf -e "smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd"
 	postconf -e "smtp_sasl_security_options = noanonymous"
-	postconf -e "smtp_tls_security_level = encrypt"
+	postconf -e "smtp_tls_security_level = verify"
+	postconf -e "smtp_tls_mandatory_protocols = >=TLSv1.3"
 	postconf -e "smtp_tls_loglevel = 1"
 	postconf -e "smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt"
 

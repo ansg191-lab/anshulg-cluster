@@ -11,7 +11,7 @@ spec:
         spec:
           initContainers:
             - name: pgdump
-              image: postgres:17.7@sha256:4493696c5ba6a9cd4a3303411d5dd6af52cf5e34cdd87ba8ebf26a19735f84d1
+              image: postgres:17.9@sha256:28ed727ae9f0f4e0e19e88055e1158c1ac2d5ac35d87bdbe869a9cc99bfe618c
               imagePullPolicy: IfNotPresent
               command:
                 - sh
@@ -39,7 +39,7 @@ spec:
                   name: backup
           containers:
             - name: restic
-              image: creativeprojects/resticprofile:0.32.0@sha256:79f5838ec4423a129b3202c3c3761bfa0f982cc9c3435d55525f6e83c68bdd9a
+              image: creativeprojects/resticprofile:0.33.0@sha256:a83046002b08704fb7106d72dcee023b0c34bae30a54250f864e0465bfa7e5ec
               imagePullPolicy: IfNotPresent
               command: [ "resticprofile", "backup" ]
               env:

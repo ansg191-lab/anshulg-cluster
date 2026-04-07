@@ -41,7 +41,17 @@ spec:
         readOnly: true
         subPath: ca.crt
     deployment:
+      replicas: 3
       additionalVolumes:
         - name: ca-certs
           configMap:
             name: anshulg-ca
+
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app.kubernetes.io/name: traefik
+                app.kubernetes.io/instance: traefik-kube-system
+            topologyKey: kubernetes.io/hostname

@@ -26,6 +26,8 @@ ingressRoute:
 
 kellnr:
   kellnr:
+    registry:
+      dataDir: "/opt/kdata"
     docs:
       enabled: true
     proxy:

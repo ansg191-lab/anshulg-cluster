@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: openvpn
-          image: debian:13.3-slim@sha256:f6e2cfac5cf956ea044b4bd75e6397b4372ad88fe00908045e9a0d21712ae3ba
+          image: debian:13.4-slim@sha256:4ffb3a1511099754cddc70eb1b12e50ffdb67619aa0ab6c13fcd800a78ef7c7a
           imagePullPolicy: IfNotPresent
           args:
             - "/bin/sh"
@@ -45,7 +45,7 @@ spec:
             initialDelaySeconds: 30
             periodSeconds: 5
         - name: qbittorrent
-          image: linuxserver/qbittorrent:5.1.4@sha256:dfa75bc534ad4f36262f75b5c1d4c4f0ddd5e7ed5711ebc581c70920cce204ee
+          image: linuxserver/qbittorrent:5.1.4@sha256:a89108b1bf43de072a35a59a3ee41b97b564538faae5cbb3f6c803aa7f5fd9f7
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID

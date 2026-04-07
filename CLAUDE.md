@@ -385,12 +385,28 @@ All checks run in CI on every PR.
 
 **rpi5 (k3s):**
 - TLDs: `.internal` (Internal CA), `.anshulg.direct` (LetsEncrypt)
-- Self-hosted on Raspberry Pi 5
+- Self-hosted multi-node k3s cluster
 - Resource-constrained (128Mi-512Mi memory)
 - 40+ applications (media, DNS, storage, monitoring)
 - hostpath-storage for persistence
 - Kustomize-based apps for simple deployments
 - Network gateway: `gateway.anshulg.direct` (192.168.1.100) - see Gateway Router section
+- Nodes are manually provisioned (setup scripts in repo are legacy/unused)
+
+**rpi5 Cluster Nodes:**
+
+| Node | Hardware | IP | Pod CIDR | Max Pods | Notes |
+|------|----------|----|----------|----------|-------|
+| rpi5 | Raspberry Pi 5 | 192.168.1.x | 10.42.1.0/24 | 110 (default) | Primary node |
+| odroid-h4 | ODROID-H4 (8 CPU, 32GB RAM) | 192.168.1.52 | 10.42.0.0/24 | 150 | Intel i915 GPU, heavy workloads |
+| beelink | Beelink mini PC | 192.168.1.x | 10.42.2.0/24 | 110 (default) | |
+
+**odroid-h4 Kubelet Configuration:**
+- Config file: `/etc/rancher/k3s/config.yaml` on the node
+- Max pods increased from 110 → 150 (Mar 2026) due to high pod density
+- Network hard limit: 254 pods per node (from /24 pod CIDR)
+- Memory is the practical ceiling — 32GB RAM with ~89% utilization at ~107 pods
+- To modify: `ssh odroid-h4.anshulg.direct`, edit `/etc/rancher/k3s/config.yaml`, then `sudo systemctl restart k3s`
 
 ### Auth Server Architecture
 
@@ -406,6 +422,7 @@ Internet → Caddy (TLS termination) → KanIDM Docker container
 **Notable implementation details:**
 - KanIDM runs as a dedicated `kanidm` system user under `/srv/kanidm` (data, certs, backups)
 - TLS certificate issuance/renewal is handled by a systemd timer (`kanidm-cert-renew.timer`)
+- **Important**: `ProtectHome=false` removed from cert renewal service (Feb 2026) - systemd service needs access to /srv/kanidm for certificate operations
 - Docker image cleanup runs weekly via `docker-image-prune.timer`
 - HAProxy binds LDAPS on both IPv4 and IPv6
 - `auth.anshulg.com` and `ldap.auth.anshulg.com` publish IPv6 (AAAA) records
@@ -432,12 +449,13 @@ Dedicated PostgreSQL 17 server running on Raspberry Pi 4 (4GB RAM, 4 CPUs):
 **Features:**
 - **PostgreSQL 17** - Tuned for web workloads (pgtune.leopard.in.ua settings)
 - **SSL/TLS** - GCP Private CA certificates for encrypted connections
-- **Network Access** - Listens on all interfaces, allows 192.168.0.0/16
+- **Network Access** - Listens on all interfaces, allows 192.168.0.0/16 and IPv6
 - **Authentication** - SCRAM-SHA-256 for secure password auth
 - **Backups** - Restic to GCS bucket with resticprofile scheduling
 - **Mail** - Postfix MTA with Fastmail relay + Zeyple GPG encryption
 - **Firewall** - nftables for network security
 - **Monitoring** - Mail notifications for backup status
+- **MariaDB** - Additional database for media apps (rpi5)
 
 **Connection:**
 - Host: `rpi4.anshulg.direct` (192.168.1.9)
@@ -445,6 +463,12 @@ Dedicated PostgreSQL 17 server running on Raspberry Pi 4 (4GB RAM, 4 CPUs):
 - SSL: Required (with Internal CA certificate)
 - Max connections: 100
 - Apps use this for persistent storage (e.g., Audiomuse)
+
+**Notable implementation details:**
+- **IPv6 Support** - Database listens on IPv6 interfaces (addresses: fd30:e1bf:9b4f::/64) as of Feb 2026
+- Apps connect using the rpi4 internal domain with SSL/TLS certificates
+- Restic backups run daily with email notifications on success/failure
+- Postfix configured with Fastmail SMTP relay and Zeyple GPG encryption for outgoing mail
 
 **Deployment:**
 ```bash
