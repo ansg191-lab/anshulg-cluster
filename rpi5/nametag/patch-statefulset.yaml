@@ -10,6 +10,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: env-config
+            - secretRef:
+                name: env
           volumeMounts:
             - mountPath: /app/data/photos
               name: data
