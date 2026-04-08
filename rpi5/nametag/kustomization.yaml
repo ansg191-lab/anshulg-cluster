@@ -20,8 +20,8 @@ labels:
 
 images:
   - name: busybox
-    newName: izderadicka/audioserve
-    newTag: latest@sha256:c3609321701765671cae121fc0f61db122e8c124643c04770fbc9326c74b18e3
+    newName: ghcr.io/mattogodoy/nametag
+    newTag: 0.42.0@sha256:571391c1c9416f62ae97ee508a0a1dd0c8dabbfa947b9322b96bea1db30813f3
 
 configMapGenerator:
   - name: domain-config
