@@ -29,7 +29,7 @@ configMapGenerator:
       - DIRECT_DOMAIN=nametag.anshulg.direct
   - name: env-config
     literals:
-      - DB_HOST="rpi4.anshulg.com"
+      - DB_HOST="rpi4.anshulg.direct"
       - DB_PORT="5432"
       - DB_NAME="nametag"
       - DB_USER="nametag"
