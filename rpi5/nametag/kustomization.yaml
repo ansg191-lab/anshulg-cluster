@@ -1,0 +1,51 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../kustomize/base
+  - ../../kustomize/workloads/statefulset
+  - cronjobs.yaml
+
+components:
+#  - ../../kustomize/components/ingress
+  - ../../kustomize/components/direct-ingress
+  - ../../kustomize/components/security-context
+
+namePrefix: nametag-
+labels:
+  - pairs:
+      app.kubernetes.io/name: nametag
+    includeSelectors: true
+
+images:
+  - name: busybox
+    newName: izderadicka/audioserve
+    newTag: latest@sha256:c3609321701765671cae121fc0f61db122e8c124643c04770fbc9326c74b18e3
+
+configMapGenerator:
+  - name: domain-config
+    literals:
+      - DIRECT_DOMAIN=nametag.anshulg.direct
+  - name: env-config
+    literals:
+      - DB_HOST="rpi4.anshulg.com"
+      - DB_PORT="5432"
+      - DB_NAME="nametag"
+      - DB_USER="nametag"
+      - NEXTAUTH_URL="https://nametag.anshulg.direct"
+      - SMTP_HOST="mail.mail.svc.cluster.local"
+      - SMTP_PORT="587"
+      - SMTP_SECURE="false"
+      - SMTP_REQUIRE_TLS="false"
+      - EMAIL_DOMAIN="anshulg.com"
+
+patches:
+  - target:
+      kind: StatefulSet
+    path: patch-statefulset.yaml
+  - target:
+      kind: StatefulSet
+    path: patch-statefulset2.yaml
+  - target:
+      kind: Service
+    path: patch-service.yaml

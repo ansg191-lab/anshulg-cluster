@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: empty
+spec:
+  template:
+    spec:
+      containers:
+        - name: app
+          envFrom:
+            - configMapRef:
+                name: env-config
+          volumeMounts:
+            - mountPath: /app/data/photos
+              name: data
+          readinessProbe:
+            httpGet:
+              port: 3000
+              path: /api/health
+          livenessProbe:
+            httpGet:
+              port: 3000
+              path: /api/health
+            initialDelaySeconds: 30
