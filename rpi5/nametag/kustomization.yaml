@@ -39,6 +39,7 @@ configMapGenerator:
       - SMTP_SECURE="false"
       - SMTP_REQUIRE_TLS="false"
       - EMAIL_DOMAIN="anshulg.com"
+      - DISABLE_REGISTRATION="true"
 
 patches:
   - target:
