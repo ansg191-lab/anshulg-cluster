@@ -10,7 +10,7 @@ spec:
         spec:
           containers:
             - name: send-reminders
-              image: busybox:1.37.0
+              image: busybox:1.37.0@sha256:1487d0af5f52b4ba31c7e465126ee2123fe3f2305d638e7827681e7cf6c83d5e
               imagePullPolicy: IfNotPresent
               command:
                 - /bin/sh
@@ -47,7 +47,7 @@ spec:
         spec:
           containers:
             - name: purge-deleted
-              image: busybox:1.37.0
+              image: busybox:1.37.0@sha256:1487d0af5f52b4ba31c7e465126ee2123fe3f2305d638e7827681e7cf6c83d5e
               imagePullPolicy: IfNotPresent
               command:
                 - /bin/sh
@@ -84,7 +84,7 @@ spec:
         spec:
           containers:
             - name: carddav-sync
-              image: busybox:1.37.0
+              image: busybox:1.37.0@sha256:1487d0af5f52b4ba31c7e465126ee2123fe3f2305d638e7827681e7cf6c83d5e
               imagePullPolicy: IfNotPresent
               command:
                 - /bin/sh
