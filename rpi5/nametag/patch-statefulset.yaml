@@ -11,7 +11,7 @@ spec:
             - configMapRef:
                 name: env-config
             - secretRef:
-                name: env
+                name: nametag-env
           volumeMounts:
             - mountPath: /app/data/photos
               name: data
