@@ -1,65 +1,65 @@
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: restore
-spec:
-  suspend: true
-  template:
-    spec:
-      containers:
-        - name: restore
-          image: ghcr.io/paperless-ngx/paperless-ngx:2.20.13@sha256:4b05bcd28e6923768000b5d247cbf2c66fd49bdc3f3b05955bd4f6790a638b01
-          imagePullPolicy: IfNotPresent
-          command:
-            - sh
-            - -euxc
-            - >-
-              python3 manage.py migrate &&
-              rm -rf /usr/src/paperless/media/* &&
-              document_importer ../export
-          env:
-            - name: PAPERLESS_DBHOST
-              valueFrom:
-                secretKeyRef:
-                  key: host
-                  name: database
-            - name: PAPERLESS_DBPORT
-              valueFrom:
-                secretKeyRef:
-                  key: port
-                  name: database
-            - name: PAPERLESS_DBNAME
-              valueFrom:
-                secretKeyRef:
-                  key: dbname
-                  name: database
-            - name: PAPERLESS_DBUSER
-              valueFrom:
-                secretKeyRef:
-                  key: user
-                  name: database
-            - name: PAPERLESS_DBPASS
-              valueFrom:
-                secretKeyRef:
-                  key: password
-                  name: database
-          envFrom:
-            - configMapRef:
-                name: paperless-config
-          securityContext:
-            runAsGroup: 568
-          volumeMounts:
-            - mountPath: /usr/src/paperless/media
-              name: media
-            - mountPath: /usr/src/paperless/export
-              name: export
-      restartPolicy: Never
-      volumes:
-        - name: media
-          nfs:
-            path: /mnt/GuptaZ/Home/Paperless
-            server: 192.168.1.10
-        - name: export
-          nfs:
-            path: /mnt/GuptaZ/Home/PaperlessExport
-            server: 192.168.1.10
+#apiVersion: batch/v1
+#kind: Job
+#metadata:
+#  name: restore
+#spec:
+#  suspend: true
+#  template:
+#    spec:
+#      containers:
+#        - name: restore
+#          image: ghcr.io/paperless-ngx/paperless-ngx:2.20.13@sha256:4b05bcd28e6923768000b5d247cbf2c66fd49bdc3f3b05955bd4f6790a638b01
+#          imagePullPolicy: IfNotPresent
+#          command:
+#            - sh
+#            - -euxc
+#            - >-
+#              python3 manage.py migrate &&
+#              rm -rf /usr/src/paperless/media/* &&
+#              document_importer ../export
+#          env:
+#            - name: PAPERLESS_DBHOST
+#              valueFrom:
+#                secretKeyRef:
+#                  key: host
+#                  name: database
+#            - name: PAPERLESS_DBPORT
+#              valueFrom:
+#                secretKeyRef:
+#                  key: port
+#                  name: database
+#            - name: PAPERLESS_DBNAME
+#              valueFrom:
+#                secretKeyRef:
+#                  key: dbname
+#                  name: database
+#            - name: PAPERLESS_DBUSER
+#              valueFrom:
+#                secretKeyRef:
+#                  key: user
+#                  name: database
+#            - name: PAPERLESS_DBPASS
+#              valueFrom:
+#                secretKeyRef:
+#                  key: password
+#                  name: database
+#          envFrom:
+#            - configMapRef:
+#                name: paperless-config
+#          securityContext:
+#            runAsGroup: 568
+#          volumeMounts:
+#            - mountPath: /usr/src/paperless/media
+#              name: media
+#            - mountPath: /usr/src/paperless/export
+#              name: export
+#      restartPolicy: Never
+#      volumes:
+#        - name: media
+#          nfs:
+#            path: /mnt/GuptaZ/Home/Paperless
+#            server: 192.168.1.10
+#        - name: export
+#          nfs:
+#            path: /mnt/GuptaZ/Home/PaperlessExport
+#            server: 192.168.1.10
