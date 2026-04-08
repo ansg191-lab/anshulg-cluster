@@ -5,6 +5,7 @@ resources:
   - ../../kustomize/base
   - ../../kustomize/workloads/statefulset
   - cronjobs.yaml
+  - secrets.yaml
 
 components:
 #  - ../../kustomize/components/ingress
