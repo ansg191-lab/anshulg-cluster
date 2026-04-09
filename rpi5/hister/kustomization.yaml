@@ -17,9 +17,10 @@ labels:
     includeSelectors: true
 
 images:
+  # Pinned to master until v0.12.0 is released (need PostgreSQL support, not in v0.11.0)
   - name: busybox
     newName: ghcr.io/asciimoo/hister
-    newTag: 0.11.0@sha256:9c503d675625fe04660f54fd241dfcfe68188f8582f40ab86404b2eb2cf665a8
+    newTag: master@sha256:066e19ad6a8825583ce12f818f1285e96ad72285b6348b6393dfbfd2e0e2d497
 
 configMapGenerator:
   - name: domain-config

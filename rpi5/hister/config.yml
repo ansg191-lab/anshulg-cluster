@@ -2,13 +2,12 @@ app:
   directory: '/hister/data'
   search_url: 'https://kagi.com/search?q={query}'
   log_level: 'info'
+  user_handling: true
   open_results_on_new_tab: false
 
 server:
   address: '0.0.0.0:4433'
-  base_url: 'https://histor.internal'
-  user_handling: true
-#  database: 'host=rpi4.anshulg.direct user=hister password=hister dbname=hister port=5432 sslmode=require'
+  base_url: 'https://hister.internal'
 
 indexer:
   detect_languages: false
