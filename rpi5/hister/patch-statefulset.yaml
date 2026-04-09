@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: empty
+spec:
+  template:
+    spec:
+      containers:
+        - name: app
+          env:
+            - name: HISTER__APP__ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: hister-api-key
+                  key: password
+          envFrom:
+            - secretRef:
+                name: histor-secrets
+          volumeMounts:
+            - mountPath: /hister/data
+              name: data
+            - mountPath: /hister/data/config.yaml
+              name: config
+              subPath: config.yaml
+          readinessProbe:
+            httpGet:
+              port: 4433
+              path: /
+          livenessProbe:
+            httpGet:
+              port: 4433
+              path: /
+            initialDelaySeconds: 30
+      volumes:
+        - name: config
+          configMap:
+            name: config

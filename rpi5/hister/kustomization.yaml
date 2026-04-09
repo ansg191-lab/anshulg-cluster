@@ -1,0 +1,42 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../kustomize/base
+  - ../../kustomize/workloads/statefulset
+  - secrets.yaml
+  - api-key.yaml
+
+components:
+  - ../../kustomize/components/ingress
+  - ../../kustomize/components/security-context
+
+namePrefix: hister-
+labels:
+  - pairs:
+      app.kubernetes.io/name: hister
+    includeSelectors: true
+
+images:
+  - name: busybox
+    newName: ghcr.io/asciimoo/hister
+    newTag: 0.11.0@sha256:9c503d675625fe04660f54fd241dfcfe68188f8582f40ab86404b2eb2cf665a8
+
+configMapGenerator:
+  - name: domain-config
+    literals:
+      - DOMAIN=hister.internal
+  - name: config
+    files:
+      - config.yaml
+
+patches:
+  - target:
+      kind: StatefulSet
+    path: patch-statefulset.yaml
+  - target:
+      kind: StatefulSet
+    path: patch-statefulset2.yaml
+  - target:
+      kind: Service
+    path: patch-service.yaml

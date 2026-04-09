@@ -1,0 +1,38 @@
+app:
+  directory: '/hister/data'
+  search_url: 'https://kagi.com/search?q={query}'
+  log_level: 'info'
+  open_results_on_new_tab: false
+
+server:
+  address: '0.0.0.0:4433'
+  base_url: 'https://histor.internal'
+#  database: 'host=rpi4.anshulg.direct user=hister password=hister dbname=hister port=5432 sslmode=require'
+
+indexer:
+  detect_languages: false
+  directories: []
+#    - path: '/data/notes'
+#      filetypes: ['txt', 'md']
+
+crawler:
+  backend: 'http'
+  timeout: 10
+  delay: 1
+  user_agent: 'Hister'
+
+hotkeys:
+  web:
+    '/': 'focus_search_input'
+    'enter': 'open_result'
+    'alt+enter': 'open_result_in_new_tab'
+    'alt+j': 'select_next_result'
+    'alt+k': 'select_previous_result'
+    'alt+o': 'open_query_in_search_engine'
+    'alt+v': 'view_result_popup'
+    'tab': 'autocomplete'
+    '?': 'show_hotkeys'
+
+sensitive_content_patterns:
+  aws_access_key: 'AKIA[0-9A-Z]{16}'
+  github_token: '(ghp|gho|ghu|ghs|ghr)_[a-zA-Z0-9]{36}'
