@@ -7,7 +7,7 @@ app:
 
 server:
   address: '0.0.0.0:4433'
-  base_url: 'https://hister.internal'
+  base_url: 'https://hister.anshulg.direct'
 
 indexer:
   detect_languages: false

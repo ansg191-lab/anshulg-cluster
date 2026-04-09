@@ -9,7 +9,7 @@ spec:
         - name: app
           env:
             - name: HISTER__SERVER__BASE_URL
-              value: https://hister.internal
+              value: https://hister.anshulg.direct
           envFrom:
             - secretRef:
                 name: hister-secrets

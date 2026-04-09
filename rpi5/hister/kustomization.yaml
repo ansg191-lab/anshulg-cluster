@@ -7,7 +7,7 @@ resources:
   - secrets.yaml
 
 components:
-  - ../../kustomize/components/ingress
+  - ../../kustomize/components/direct-ingress
   - ../../kustomize/components/security-context
 
 namePrefix: hister-
@@ -25,7 +25,7 @@ images:
 configMapGenerator:
   - name: domain-config
     literals:
-      - DOMAIN=hister.internal
+      - DIRECT_DOMAIN=hister.anshulg.direct
   - name: config
     files:
       - config.yml

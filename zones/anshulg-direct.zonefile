@@ -22,6 +22,7 @@ audiobookshelf.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
 audioserve.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
 crosswatch.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
 dify.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
+hister.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
 immich.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
 jellyfin.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
 jellyseer.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
