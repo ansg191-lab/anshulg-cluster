@@ -15,7 +15,7 @@ spec:
                   key: password
           envFrom:
             - secretRef:
-                name: histor-secrets
+                name: hister-secrets
           volumeMounts:
             - mountPath: /hister/data
               name: data
