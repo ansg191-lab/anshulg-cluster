@@ -5,7 +5,6 @@ resources:
   - ../../kustomize/base
   - ../../kustomize/workloads/statefulset
   - secrets.yaml
-  - api-key.yaml
 
 components:
   - ../../kustomize/components/ingress

@@ -1,6 +1,0 @@
-apiVersion: onepassword.com/v1
-kind: OnePasswordItem
-metadata:
-  name: api-key
-spec:
-  itemPath: "vaults/Dev/items/Hister API Key"

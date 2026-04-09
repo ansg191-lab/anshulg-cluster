@@ -10,11 +10,6 @@ spec:
           env:
             - name: HISTER__SERVER__BASE_URL
               value: https://hister.internal
-            - name: HISTER__APP__ACCESS_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: hister-api-key
-                  key: password
           envFrom:
             - secretRef:
                 name: hister-secrets

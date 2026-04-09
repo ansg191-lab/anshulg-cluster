@@ -7,6 +7,7 @@ app:
 server:
   address: '0.0.0.0:4433'
   base_url: 'https://histor.internal'
+  user_handling: true
 #  database: 'host=rpi4.anshulg.direct user=hister password=hister dbname=hister port=5432 sslmode=require'
 
 indexer:
