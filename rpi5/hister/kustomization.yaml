@@ -28,7 +28,7 @@ configMapGenerator:
       - DOMAIN=hister.internal
   - name: config
     files:
-      - config.yaml
+      - config.yml
 
 patches:
   - target:

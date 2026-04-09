@@ -19,9 +19,9 @@ spec:
           volumeMounts:
             - mountPath: /hister/data
               name: data
-            - mountPath: /hister/data/config.yaml
+            - mountPath: /hister/data/config.yml
               name: config
-              subPath: config.yaml
+              subPath: config.yml
           readinessProbe:
             httpGet:
               port: 4433
