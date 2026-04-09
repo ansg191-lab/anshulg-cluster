@@ -8,6 +8,8 @@ spec:
       containers:
         - name: app
           env:
+            - name: HISTER__SERVER__BASE_URL
+              value: https://hister.internal
             - name: HISTER__APP__ACCESS_TOKEN
               valueFrom:
                 secretKeyRef:
