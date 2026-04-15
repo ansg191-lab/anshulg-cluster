@@ -17,7 +17,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # renovate: datasource=github-releases depName=restic/restic
 RESTIC_VERSION="0.18.1"
 # renovate: datasource=github-releases depName=creativeprojects/resticprofile
-RESTICPROFILE_VERSION="0.33.0"
+RESTICPROFILE_VERSION="0.33.1"
 
 OP_SERVICE_ACCOUNT_TOKEN=$(cat "1password.txt")
 export OP_SERVICE_ACCOUNT_TOKEN
