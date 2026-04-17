@@ -16,9 +16,11 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - uses: ludeeus/action-shellcheck@00cae500b08a931fb5698e11e79bfbd38e612a38 # 2.0.0
+      - uses: reviewdog/action-shellcheck@4c07458293ac342d477251099501a718ae5ef86e # v1.32.0
         with:
-          scandir: './zones'
+          path: './zones'
+          reporter: github-check
+          fail_on_error: "true"
 
   deploy:
     runs-on: ubuntu-latest
