@@ -21,7 +21,7 @@ labels:
 images:
   - name: busybox
     newName: ghcr.io/transmute-app/transmute
-    newTag: main@sha256:9041b9cf3c567b9b5871d6391776d16ffcb99dda8e9b05d20379d6b672f9889d
+    newTag: v0.11.0@sha256:13ea1a8885dc696a3b07ce18fe1cc4f80b38000cc667500837bf9bdf8b467a5f
 
 configMapGenerator:
   - name: domain-config
