@@ -8,20 +8,20 @@
 # this machine's public IP, then replace ":80" below with your
 # domain name.
 
-:443 {
-	tls /etc/caddy/certs/tls.crt /etc/caddy/certs/tls.key
-	respond 421 {
-		body "Misdirected Request"
-		close
-	}
-}
-
-openclaw.internal {
-	encode zstd gzip
-
-	tls /etc/caddy/certs/tls.crt /etc/caddy/certs/tls.key
-	reverse_proxy http://localhost:18789
-}
+#:443 {
+#	tls /etc/caddy/certs/tls.crt /etc/caddy/certs/tls.key
+#	respond 421 {
+#		body "Misdirected Request"
+#		close
+#	}
+#}
+#
+#openclaw.internal {
+#	encode zstd gzip
+#
+#	tls /etc/caddy/certs/tls.crt /etc/caddy/certs/tls.key
+#	reverse_proxy http://localhost:18789
+#}
 
 # Refer to the Caddy docs for more information:
 # https://caddyserver.com/docs/caddyfile

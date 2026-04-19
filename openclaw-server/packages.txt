@@ -43,8 +43,9 @@ wireguard
 wireguard-tools
 1password-cli
 caddy
-google-cloud-cli
 nfs-common
 postfix
 fetchmail
 mpack
+ripgrep
+ffmpeg

@@ -8,7 +8,7 @@
 set -eu
 
 USER="anshulgupta"
-INSTANCE="openclaw.anshulg.com"
+INSTANCE="hermes.anshulg.com"
 SERVER="$USER@$INSTANCE"
 
 echo "Deploying to $SERVER..."

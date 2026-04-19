@@ -4,7 +4,7 @@ export TERM=xterm-256color
 export COLORTERM=truecolor
 
 # Add local bin to PATH
-export PATH="/home/openclaw/.local/bin:$PATH"
+export PATH="/home/hermes/.local/bin:/home/hermes/.local/bin:$PATH"
 
 # Color support for common tools
 export CLICOLOR=1
@@ -15,16 +15,16 @@ alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias ll='ls -lah'
 
-# D-Bus session for systemd access
-XDG_RUNTIME_DIR="/run/user/$(id -u)"
-export XDG_RUNTIME_DIR
-if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
-  export DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}/bus"
-fi
+# # D-Bus session for systemd access
+# XDG_RUNTIME_DIR="/run/user/$(id -u)"
+# export XDG_RUNTIME_DIR
+# if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
+#   export DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}/bus"
+# fi
 
 # Homebrew
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"
 
-# Node Compile Cache
-export NODE_COMPILE_CACHE=/var/tmp/openclaw-compile-cache
-export OPENCLAW_NO_RESPAWN=1
+# # Node Compile Cache
+# export NODE_COMPILE_CACHE=/var/tmp/openclaw-compile-cache
+# export OPENCLAW_NO_RESPAWN=1
