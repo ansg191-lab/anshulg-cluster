@@ -1,0 +1,40 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../kustomize/base
+  - ../../kustomize/workloads/statefulset
+  - secrets.yaml
+
+components:
+  - ../../kustomize/components/ingress
+  - ../../kustomize/components/direct-ingress
+  - ../../kustomize/components/security-context
+
+namePrefix: transmute-
+labels:
+  - pairs:
+      app.kubernetes.io/name: transmute
+    includeSelectors: true
+
+images:
+  - name: busybox
+    newName: ghcr.io/transmute-app/transmute
+    newTag: v0.11.0@sha256:13ea1a8885dc696a3b07ce18fe1cc4f80b38000cc667500837bf9bdf8b467a5f
+
+configMapGenerator:
+  - name: domain-config
+    literals:
+      - DOMAIN=transmute.internal
+      - DIRECT_DOMAIN=transmute.anshulg.direct
+
+patches:
+  - target:
+      kind: StatefulSet
+    path: patch-statefulset.yaml
+  - target:
+      kind: StatefulSet
+    path: patch-statefulset2.yaml
+  - target:
+      kind: Service
+    path: patch-service.yaml

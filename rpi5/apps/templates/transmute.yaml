@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: transmute
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: transmute
+  namespace: argocd
+spec:
+  destination:
+    server: {{ .Values.spec.destination.server }}
+    namespace: transmute
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  source:
+    repoURL: {{ .Values.spec.source.repoURL }}
+    targetRevision: {{ .Values.spec.source.branch }}
+    path: rpi5/transmute
