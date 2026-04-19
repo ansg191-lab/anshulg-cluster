@@ -1,0 +1,10 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: buffering
+spec:
+  buffering:
+    maxRequestBodyBytes: 10737418240
+    memRequestBodyBytes: 1048576
+    maxResponseBodyBytes: 10737418240
+    memResponseBodyBytes: 1048576

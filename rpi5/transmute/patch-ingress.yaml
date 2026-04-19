@@ -1,0 +1,6 @@
+- op: replace
+  path: /spec/routes/0/middlewares
+  value:
+    - name: security-headers
+      namespace: kube-system
+    - name: transmute-buffering

@@ -5,6 +5,7 @@ resources:
   - ../../kustomize/base
   - ../../kustomize/workloads/statefulset
   - secrets.yaml
+  - middleware.yaml
 
 components:
   - ../../kustomize/components/ingress
@@ -38,3 +39,8 @@ patches:
   - target:
       kind: Service
     path: patch-service.yaml
+  - target:
+      group: traefik.io
+      kind: IngressRoute
+      version: v1alpha1
+    path: patch-ingress.yaml
