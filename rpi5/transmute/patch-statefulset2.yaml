@@ -3,6 +3,3 @@
   value:
     - containerPort: 3313
       protocol: TCP
-- op: replace
-  path: /spec/template/spec/containers/0/securityContext/readOnlyRootFilesystem
-  value: false

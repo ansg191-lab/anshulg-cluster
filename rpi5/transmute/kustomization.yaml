@@ -10,7 +10,6 @@ resources:
 components:
   - ../../kustomize/components/ingress
   - ../../kustomize/components/direct-ingress
-  - ../../kustomize/components/security-context
 
 namePrefix: transmute-
 labels:

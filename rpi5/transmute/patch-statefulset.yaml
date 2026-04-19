@@ -13,12 +13,7 @@ spec:
           volumeMounts:
             - mountPath: /app/data
               name: data
-            - mountPath: /tmp
-              name: tmp
           readinessProbe:
             httpGet:
               port: 3313
               path: /api/health/ready
-      volumes:
-        - name: tmp
-          emptyDir: {}
