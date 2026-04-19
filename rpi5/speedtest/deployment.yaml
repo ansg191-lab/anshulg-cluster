@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: speedtest
-          image: ghcr.io/librespeed/speedtest:latest-alpine@sha256:e4bf5633ffb5298a43c6b9911d85b43fe7cee3db2efc465323f47356ba04d21a
+          image: ghcr.io/librespeed/speedtest:latest-alpine@sha256:705bfc0f92fd83ffe4f87fd3fa836786a80e55e107ce4544481c44672eb76ba7
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
