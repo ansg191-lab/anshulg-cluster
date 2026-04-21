@@ -4,10 +4,15 @@ kind: Kustomization
 resources:
   - ../../kustomize/base
   - ../../kustomize/workloads/statefulset
+  - serverstransport.yaml
+  - middleware.yaml
 
 components:
   - ../../kustomize/components/ingress
   - ../../kustomize/components/direct-ingress
+
+configurations:
+  - nameReferences.yaml
 
 namePrefix: anthropic-
 labels:
@@ -39,3 +44,6 @@ patches:
   - target:
       kind: Service
     path: patch-service.yaml
+  - target:
+      kind: IngressRoute
+    path: patch-ingress.yaml

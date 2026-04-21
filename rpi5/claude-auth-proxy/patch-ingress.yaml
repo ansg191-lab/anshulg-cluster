@@ -1,0 +1,7 @@
+- op: add
+  path: /spec/routes/0/services/0/serversTransport
+  value: timeout
+- op: add
+  path: /spec/routes/0/middlewares
+  value:
+    - name: sse-headers

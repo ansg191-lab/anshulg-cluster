@@ -1,0 +1,17 @@
+nameReference:
+  - kind: ServersTransport
+    group: traefik.io
+    version: v1alpha1
+    fieldSpecs:
+      - group: traefik.io
+        version: v1alpha1
+        kind: IngressRoute
+        path: spec/routes/services/serversTransport
+  - kind: Middleware
+    group: traefik.io
+    version: v1alpha1
+    fieldSpecs:
+      - group: traefik.io
+        version: v1alpha1
+        kind: IngressRoute
+        path: spec/routes/middlewares/name
