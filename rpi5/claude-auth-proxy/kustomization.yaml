@@ -1,0 +1,41 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../kustomize/base
+  - ../../kustomize/workloads/statefulset
+
+components:
+  - ../../kustomize/components/ingress
+  - ../../kustomize/components/direct-ingress
+
+namePrefix: anthropic-
+labels:
+  - pairs:
+      app.kubernetes.io/name: anthropic
+    includeSelectors: true
+
+images:
+  - name: busybox
+    newName: ghcr.io/ansg191/claude-auth-proxy
+    newTag: main@sha256:116327e9c0a411745b8a591c4c11096ce42789a87acf7a0b16ed52e93c0450a2
+
+configMapGenerator:
+  - name: domain-config
+    literals:
+      - DOMAIN=anthropic.internal
+      - DIRECT_DOMAIN=anthropic.anshulg.direct
+  - name: env-config
+    literals:
+      - RUST_LOG=debug,h2=info
+
+patches:
+  - target:
+      kind: StatefulSet
+    path: patch-statefulset.yaml
+  - target:
+      kind: StatefulSet
+    path: patch-statefulset2.yaml
+  - target:
+      kind: Service
+    path: patch-service.yaml

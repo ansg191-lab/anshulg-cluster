@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: empty
+spec:
+  replicas: 3
+  template:
+    spec:
+      containers:
+        - name: app
+          envFrom:
+            - configMapRef:
+                name: env-config
+          volumeMounts:
+            - mountPath: /home/nonroot
+              name: data
+            - mountPath: /etc/ssl/certs/ca-certificates.crt
+              name: ca-certs
+              subPath: ca.crt
+          readinessProbe:
+            httpGet:
+              port: 3000
+              path: /ready
+          livenessProbe:
+            httpGet:
+              port: 3000
+              path: /health
+            initialDelaySeconds: 30
+      volumes:
+        - name: ca-certs
+          configMap:
+            name: anshulg-ca
