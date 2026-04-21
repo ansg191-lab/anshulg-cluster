@@ -18,6 +18,7 @@ anshulg.direct. 21600 IN NS ns-cloud-c4.googledomains.com.
 
 ;; Route to RPI5 K8S Load Balancer
 abs.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
+anthropic.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
 audiobookshelf.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
 audioserve.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
 crosswatch.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
