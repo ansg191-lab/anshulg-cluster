@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - https://github.com/VictoriaMetrics/operator/config/base-with-webhook?ref=v0.69.0
+  - vmsingle.yaml
 
 images:
   - name: manager
