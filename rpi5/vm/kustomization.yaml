@@ -6,6 +6,7 @@ resources:
   - vmsingle.yaml
   - vmagent.yaml
   - node-exporter.yaml
+  - node-scrape.yaml
 
 images:
   - name: manager
