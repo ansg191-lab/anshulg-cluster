@@ -6,6 +6,7 @@ resources:
   - vmsingle.yaml
   - vlsingle.yaml
   - vmagent.yaml
+  - vlagent.yaml
   - node-exporter.yaml
   - node-scrape.yaml
 

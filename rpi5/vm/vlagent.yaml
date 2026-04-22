@@ -1,0 +1,15 @@
+apiVersion: operator.victoriametrics.com/v1
+kind: VLAgent
+metadata:
+  name: main
+spec:
+  k8sCollector:
+    enabled: true
+  remoteWrite:
+    - url: http://vlsingle-main.vm.svc:9428/internal/insert
+  resources:
+    requests:
+      memory: 64Mi
+      cpu: 50m
+    limits:
+      memory: 256Mi
