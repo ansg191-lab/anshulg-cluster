@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: vpa
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vpa
+  namespace: argocd
+spec:
+  project: internal
+  source:
+    chart: vpa
+    repoURL: https://charts.fairwinds.com/stable
+    targetRevision: 4.11.0
+    helm:
+      values: |
+        recommender:
+          enabled: true
+          replicaCount: 2
+          resources:
+            requests:
+              cpu: 50m
+              memory: 150Mi
+            limits:
+              memory: 500Mi
+        updater:
+          enabled: false
+        admissionController:
+          enabled: false
+  destination:
+    server: {{ .Values.spec.destination.server }}
+    namespace: vpa
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true

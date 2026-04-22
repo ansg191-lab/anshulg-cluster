@@ -24,6 +24,7 @@ spec:
     - https://stakater.github.io/stakater-charts
     - https://raw.githubusercontent.com/kubernetes-csi/csi-driver-smb/master/charts
     - https://charts.anshulg.com
+    - https://charts.fairwinds.com/stable
     - https://pkgs.tailscale.com/helmcharts
     - https://helm.linkerd.io/edge
     - https://grafana.github.io/helm-charts
