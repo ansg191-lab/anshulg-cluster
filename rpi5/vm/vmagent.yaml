@@ -1,0 +1,14 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMAgent
+metadata:
+  name: main
+spec:
+  selectAllByDefault: true
+  remoteWrite:
+    - url: http://vmsingle-main.vm.svc:8428/api/v1/write
+  resources:
+    requests:
+      memory: 128Mi
+      cpu: 100m
+    limits:
+      memory: 512Mi
