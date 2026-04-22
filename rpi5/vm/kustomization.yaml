@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - https://github.com/VictoriaMetrics/operator/config/base-with-webhook?ref=v0.69.0
   - vmsingle.yaml
+  - vlsingle.yaml
   - vmagent.yaml
   - node-exporter.yaml
   - node-scrape.yaml
