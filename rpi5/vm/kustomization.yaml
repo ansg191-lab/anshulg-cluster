@@ -7,4 +7,4 @@ resources:
 images:
   - name: manager
     newName: victoriametrics/operator
-    newTag: v0.69.0
+    newTag: v0.69.0@sha256:8b637eaf5f8694ce7847a67b781f3e9a9df298eaa2c5d7fe6ff15cc3fd3f5bf6
