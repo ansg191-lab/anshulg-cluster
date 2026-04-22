@@ -14,3 +14,20 @@ spec:
     namespace: kube-system
   syncPolicy:
     automated: {}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kube-state-metrics
+  namespace: argocd
+spec:
+  project: internal
+  source:
+    chart: kube-state-metrics
+    repoURL: ghcr.io/prometheus-community/charts
+    targetRevision: 7.2.2
+  destination:
+    server: {{ .Values.spec.destination.server }}
+    namespace: kube-system
+  syncPolicy:
+    automated: {}
