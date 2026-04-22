@@ -3,3 +3,7 @@ kind: Kustomization
 
 resources:
   - statefulset.yaml
+  - vpa.yaml
+
+configurations:
+  - nameReferences.yaml
