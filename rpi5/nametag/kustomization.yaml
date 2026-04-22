@@ -21,7 +21,7 @@ labels:
 images:
   - name: busybox
     newName: ghcr.io/mattogodoy/nametag
-    newTag: 0.42.2@sha256:214274e7ad48b7f83ec86c42778108b00ad5aceae9011db9d4fbc7b89a347321
+    newTag: 0.43.2@sha256:3935248f7e4c8a36b70b05d79d78df155dbbc423f9a3062f23e306e7559c596f
 
 configMapGenerator:
   - name: domain-config
