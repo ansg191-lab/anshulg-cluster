@@ -8,6 +8,7 @@ resources:
   - vmagent.yaml
   - vlagent.yaml
   - grafana.yaml
+  - grafana-admin.yaml
   - node-exporter.yaml
   - node-scrape.yaml
 
