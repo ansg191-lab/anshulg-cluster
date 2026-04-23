@@ -16,6 +16,12 @@ spec:
           size: 5Gi
           storageClassName: local-path
 
+        deploymentStrategy:
+          type: Recreate
+
+        initChownData:
+          enabled: false
+
         admin:
           existingSecret: grafana-admin
           userKey: admin-user
