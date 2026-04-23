@@ -1,0 +1,102 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: grafana
+  namespace: argocd
+spec:
+  project: internal
+  source:
+    chart: grafana
+    repoURL: https://grafana-community.github.io/helm-charts/
+    targetRevision: 12.1.1
+    helm:
+      values: |
+        persistence:
+          enabled: true
+          size: 5Gi
+          storageClassName: local-path
+
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            memory: 1Gi
+
+        plugins:
+          - victoriametrics-metrics-datasource
+          - victoriametrics-logs-datasource
+
+        datasources:
+          datasources.yaml:
+            apiVersion: 1
+            datasources:
+              - name: VictoriaMetrics
+                type: prometheus
+                access: proxy
+                url: http://vmsingle-main.vm.svc:8428
+                isDefault: true
+                editable: false
+              - name: VictoriaMetrics-Native
+                type: victoriametrics-metrics-datasource
+                access: proxy
+                url: http://vmsingle-main.vm.svc:8428
+                editable: false
+              - name: VictoriaLogs
+                type: victoriametrics-logs-datasource
+                access: proxy
+                url: http://vlsingle-main.vm.svc:9428
+                editable: false
+
+        dashboardProviders:
+          dashboardproviders.yaml:
+            apiVersion: 1
+            providers:
+              - name: default
+                orgId: 1
+                folder: ""
+                type: file
+                disableDeletion: false
+                editable: true
+                options:
+                  path: /var/lib/grafana/dashboards/default
+
+        dashboards:
+          default:
+            node-exporter-full:
+              gnetId: 1860
+              revision: 41
+              datasource: VictoriaMetrics
+            victoriametrics-single:
+              gnetId: 10229
+              revision: 31
+              datasource: VictoriaMetrics
+            vmagent:
+              gnetId: 12683
+              revision: 24
+              datasource: VictoriaMetrics
+            kube-state-metrics-v2:
+              gnetId: 13332
+              revision: 12
+              datasource: VictoriaMetrics
+
+        sidecar:
+          dashboards:
+            enabled: true
+            label: grafana_dashboard
+            labelValue: "1"
+            searchNamespace: ALL
+            folder: /tmp/dashboards
+            provider:
+              foldersFromFilesStructure: true
+
+        service:
+          type: ClusterIP
+          port: 80
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: vm
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
