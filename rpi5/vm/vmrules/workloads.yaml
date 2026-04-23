@@ -133,8 +133,8 @@ spec:
         - alert: ContainerMemoryNearLimit
           expr: |
             (container_memory_working_set_bytes{container!=""}
-              / on (namespace, pod, container)
-              kube_pod_container_resource_limits{resource="memory"}) > 0.90
+              / on (namespace, pod, container) group_left()
+              kube_pod_container_resource_limits{resource="memory", container!=""}) > 0.90
           for: 15m
           labels:
             severity: warning
