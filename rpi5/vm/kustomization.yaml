@@ -7,6 +7,13 @@ resources:
   - vlsingle.yaml
   - vmagent.yaml
   - vlagent.yaml
+  - vmalert.yaml
+  - vmalertmanager.yaml
+  - vmalertmanagerconfig.yaml
+  - discord-webhook.yaml
+  - vmrules/infrastructure.yaml
+  - vmrules/workloads.yaml
+  - vmrules/stack.yaml
   - grafana.yaml
   - grafana-admin.yaml
   - node-exporter.yaml

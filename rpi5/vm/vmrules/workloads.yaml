@@ -1,0 +1,144 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: workloads
+spec:
+  groups:
+    - name: pods
+      interval: 30s
+      rules:
+        - alert: PodCrashLoopBackOff
+          expr: kube_pod_container_status_waiting_reason{reason="CrashLoopBackOff"} == 1
+          for: 5m
+          labels:
+            severity: warning
+            component: pod
+          annotations:
+            summary: "Pod {{ $labels.namespace }}/{{ $labels.pod }} in CrashLoopBackOff"
+            description: "Container {{ $labels.container }} has been in CrashLoopBackOff for 5m+."
+
+        - alert: PodOOMKilled
+          expr: |
+            increase(
+              kube_pod_container_status_last_terminated_reason{reason="OOMKilled"}[5m]
+            ) > 0
+          labels:
+            severity: warning
+            component: pod
+          annotations:
+            summary: "Pod {{ $labels.namespace }}/{{ $labels.pod }} OOMKilled"
+            description: "Container {{ $labels.container }} was OOMKilled - consider raising memory limit."
+
+        - alert: PodFrequentlyRestarting
+          expr: |
+            increase(kube_pod_container_status_restarts_total[15m]) > 5
+          for: 15m
+          labels:
+            severity: warning
+            component: pod
+          annotations:
+            summary: "Pod {{ $labels.namespace }}/{{ $labels.pod }} restarting frequently"
+            description: ">5 restarts in the last 15 minutes."
+
+        - alert: PodNotReadyLong
+          expr: |
+            sum by (namespace, pod) (kube_pod_status_phase{phase=~"Pending|Unknown"}) > 0
+          for: 15m
+          labels:
+            severity: warning
+            component: pod
+          annotations:
+            summary: "Pod {{ $labels.namespace }}/{{ $labels.pod }} stuck Pending/Unknown"
+            description: "Pod has not reached Running for 15m+."
+
+    - name: deployments
+      interval: 30s
+      rules:
+        - alert: DeploymentReplicasUnavailable
+          expr: |
+            kube_deployment_status_replicas_available
+              < kube_deployment_spec_replicas
+          for: 15m
+          labels:
+            severity: warning
+            component: deployment
+          annotations:
+            summary: "Deployment {{ $labels.namespace }}/{{ $labels.deployment }} has missing replicas"
+            description: "{{ $value }} available vs desired replicas."
+
+        - alert: DeploymentGenerationMismatch
+          expr: |
+            kube_deployment_status_observed_generation
+              != kube_deployment_metadata_generation
+          for: 15m
+          labels:
+            severity: warning
+            component: deployment
+          annotations:
+            summary: "Deployment {{ $labels.namespace }}/{{ $labels.deployment }} rollout stuck"
+            description: "Observed generation does not match metadata generation for 15m+."
+
+    - name: daemonsets
+      interval: 30s
+      rules:
+        - alert: DaemonSetMisscheduled
+          expr: kube_daemonset_status_number_misscheduled > 0
+          for: 15m
+          labels:
+            severity: warning
+            component: daemonset
+          annotations:
+            summary: "DaemonSet {{ $labels.namespace }}/{{ $labels.daemonset }} has misscheduled pods"
+
+        - alert: DaemonSetNotFullyReady
+          expr: |
+            kube_daemonset_status_number_ready
+              != kube_daemonset_status_desired_number_scheduled
+          for: 15m
+          labels:
+            severity: warning
+            component: daemonset
+          annotations:
+            summary: "DaemonSet {{ $labels.namespace }}/{{ $labels.daemonset }} not fully ready"
+            description: "{{ $value }} ready of desired count for 15m+."
+
+    - name: statefulsets
+      interval: 30s
+      rules:
+        - alert: StatefulSetReplicasUnavailable
+          expr: |
+            kube_statefulset_status_replicas_ready
+              < kube_statefulset_status_replicas
+          for: 15m
+          labels:
+            severity: warning
+            component: statefulset
+          annotations:
+            summary: "StatefulSet {{ $labels.namespace }}/{{ $labels.statefulset }} missing replicas"
+
+    - name: containers
+      interval: 30s
+      rules:
+        - alert: ContainerHighCPUThrottling
+          expr: |
+            rate(container_cpu_cfs_throttled_seconds_total{container!=""}[5m]) > 0.5
+          for: 15m
+          labels:
+            severity: info
+            component: container
+          annotations:
+            summary: "Container {{ $labels.namespace }}/{{ $labels.pod }}/{{ $labels.container }} heavily throttled"
+            description: "Consider raising CPU limit."
+
+        - alert: ContainerMemoryNearLimit
+          expr: |
+            (container_memory_working_set_bytes{container!=""}
+              / on (namespace, pod, container)
+              kube_pod_container_resource_limits{resource="memory"}) > 0.90
+          for: 15m
+          labels:
+            severity: warning
+            component: container
+          annotations:
+            summary: "Container {{ $labels.namespace }}/{{ $labels.pod }}/{{ $labels.container }} at >90% memory limit"
+            description: "Likely to OOMKill soon - consider raising memory limit."

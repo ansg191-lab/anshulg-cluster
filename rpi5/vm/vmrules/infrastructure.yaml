@@ -1,0 +1,120 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: infrastructure
+spec:
+  groups:
+    - name: node
+      interval: 30s
+      rules:
+        - alert: NodeNotReady
+          expr: kube_node_status_condition{condition="Ready",status="true"} == 0
+          for: 5m
+          labels:
+            severity: critical
+            component: node
+          annotations:
+            summary: "Node {{ $labels.node }} is not ready"
+            description: "Node has been NotReady for more than 5 minutes."
+
+        - alert: NodeMemoryPressure
+          expr: kube_node_status_condition{condition="MemoryPressure",status="true"} == 1
+          for: 5m
+          labels:
+            severity: warning
+            component: node
+          annotations:
+            summary: "Node {{ $labels.node }} has memory pressure"
+
+        - alert: NodeDiskPressure
+          expr: kube_node_status_condition{condition="DiskPressure",status="true"} == 1
+          for: 5m
+          labels:
+            severity: warning
+            component: node
+          annotations:
+            summary: "Node {{ $labels.node }} has disk pressure"
+
+        - alert: NodeHighMemoryUsage
+          expr: |
+            (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes)
+              / node_memory_MemTotal_bytes > 0.90
+          for: 10m
+          labels:
+            severity: warning
+            component: node
+          annotations:
+            summary: "Node {{ $labels.instance }} memory usage >90%"
+            description: "Memory has been above 90% for 10 minutes."
+
+        - alert: NodeHighDiskUsage
+          expr: |
+            (node_filesystem_size_bytes{fstype!~"tmpfs|fuse.lxcfs|squashfs|ramfs|overlay"}
+             - node_filesystem_avail_bytes{fstype!~"tmpfs|fuse.lxcfs|squashfs|ramfs|overlay"})
+              / node_filesystem_size_bytes{fstype!~"tmpfs|fuse.lxcfs|squashfs|ramfs|overlay"} > 0.85
+          for: 15m
+          labels:
+            severity: warning
+            component: node
+          annotations:
+            summary: "Node {{ $labels.instance }} disk >85% on {{ $labels.mountpoint }}"
+
+        - alert: NodeDiskWillFillSoon
+          expr: |
+            predict_linear(
+              node_filesystem_avail_bytes{fstype!~"tmpfs|fuse.lxcfs|squashfs|ramfs|overlay"}[6h],
+              24 * 3600
+            ) < 0
+          for: 30m
+          labels:
+            severity: warning
+            component: node
+          annotations:
+            summary: "Node {{ $labels.instance }} disk {{ $labels.mountpoint }} will fill in <24h"
+
+        - alert: NodeHighLoadAverage
+          expr: node_load5 / count by (instance) (node_cpu_seconds_total{mode="idle"}) > 2
+          for: 15m
+          labels:
+            severity: info
+            component: node
+          annotations:
+            summary: "Node {{ $labels.instance }} 5m load avg >2x CPU count"
+
+    - name: pvc
+      interval: 30s
+      rules:
+        - alert: PVCAlmostFull
+          expr: |
+            kubelet_volume_stats_used_bytes
+              / kubelet_volume_stats_capacity_bytes > 0.85
+          for: 15m
+          labels:
+            severity: warning
+            component: pvc
+          annotations:
+            summary: "PVC {{ $labels.namespace }}/{{ $labels.persistentvolumeclaim }} >85% full"
+
+        - alert: PVCWillFillSoon
+          expr: |
+            predict_linear(kubelet_volume_stats_available_bytes[6h], 24 * 3600) < 0
+              and
+            kubelet_volume_stats_used_bytes / kubelet_volume_stats_capacity_bytes > 0.5
+          for: 30m
+          labels:
+            severity: warning
+            component: pvc
+          annotations:
+            summary: "PVC {{ $labels.namespace }}/{{ $labels.persistentvolumeclaim }} will fill in <24h"
+
+    - name: cluster
+      interval: 30s
+      rules:
+        - alert: KubernetesUnschedulableNodes
+          expr: kube_node_spec_unschedulable == 1
+          for: 15m
+          labels:
+            severity: warning
+            component: cluster
+          annotations:
+            summary: "Node {{ $labels.node }} is unschedulable"

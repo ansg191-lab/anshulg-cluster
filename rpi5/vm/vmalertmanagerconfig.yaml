@@ -1,0 +1,42 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMAlertmanagerConfig
+metadata:
+  name: main
+spec:
+  route:
+    receiver: discord
+    group_by: ['alertname', 'namespace']
+    group_wait: 30s
+    group_interval: 5m
+    repeat_interval: 12h
+    routes:
+      - matchers: ['severity = "critical"']
+        receiver: discord
+        group_wait: 10s
+        repeat_interval: 1h
+        continue: false
+  receivers:
+    - name: discord
+      discord_configs:
+        - webhook_url_secret:
+            name: discord-webhook
+            key: url
+          send_resolved: true
+          title: '[{{ .Status | toUpper }}] {{ .GroupLabels.alertname }}'
+          message: |
+            {{ range .Alerts }}
+            **{{ .Annotations.summary }}**
+            {{ .Annotations.description }}
+
+            Severity: `{{ .Labels.severity }}`
+            {{ if .Labels.namespace }}Namespace: `{{ .Labels.namespace }}`{{ end }}
+            {{ if .Labels.pod }}Pod: `{{ .Labels.pod }}`{{ end }}
+            {{ if .Labels.node }}Node: `{{ .Labels.node }}`{{ end }}
+            {{ if .Labels.instance }}Instance: `{{ .Labels.instance }}`{{ end }}
+            {{ end }}
+  inhibit_rules:
+    - source_matchers: ['alertname = "NodeNotReady"']
+      target_matchers: ['component = "pod"']
+      equal: ['node']
+    - source_matchers: ['alertname = "VMSingleIngestionStalled"']
+      target_matchers: ['alertname = "ScrapeTargetDown"']

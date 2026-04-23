@@ -1,0 +1,125 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: stack
+spec:
+  groups:
+    - name: scraping
+      interval: 30s
+      rules:
+        - alert: ScrapeTargetDown
+          expr: up == 0
+          for: 10m
+          labels:
+            severity: warning
+            component: scrape
+          annotations:
+            summary: "Scrape target {{ $labels.job }} / {{ $labels.instance }} is down"
+            description: "No data from {{ $labels.job }} ({{ $labels.instance }}) for 10m+."
+
+        - alert: ScrapeDurationHigh
+          expr: scrape_duration_seconds > 10
+          for: 15m
+          labels:
+            severity: info
+            component: scrape
+          annotations:
+            summary: "Scrape {{ $labels.job }} / {{ $labels.instance }} is slow (>10s)"
+
+    - name: vmagent
+      interval: 30s
+      rules:
+        - alert: VMAgentRemoteWriteErrors
+          expr: rate(vmagent_remotewrite_errors_total[5m]) > 0.5
+          for: 10m
+          labels:
+            severity: warning
+            component: vmagent
+          annotations:
+            summary: "VMAgent {{ $labels.instance }} has high remote_write error rate"
+            description: "VMSingle may be unreachable or overloaded."
+
+        - alert: VMAgentRemoteWritePendingDataHigh
+          expr: vmagent_remotewrite_pending_data_bytes > 100 * 1024 * 1024
+          for: 10m
+          labels:
+            severity: warning
+            component: vmagent
+          annotations:
+            summary: "VMAgent {{ $labels.instance }} has large pending remote_write buffer"
+            description: "Pending buffer >100MB - backpressure from VMSingle."
+
+    - name: vmsingle
+      interval: 30s
+      rules:
+        - alert: VMSingleIngestionStalled
+          expr: rate(vm_rows_inserted_total[10m]) == 0
+          for: 10m
+          labels:
+            severity: critical
+            component: vmsingle
+          annotations:
+            summary: "VMSingle ingestion stalled"
+            description: "No rows inserted for 10m+; VMAgent not pushing or VMSingle is broken."
+
+        - alert: VMSingleDiskUsageHigh
+          expr: |
+            vm_free_disk_space_bytes
+              / vm_data_size_bytes < 0.15
+          for: 30m
+          labels:
+            severity: warning
+            component: vmsingle
+          annotations:
+            summary: "VMSingle on {{ $labels.instance }} has <15% free disk"
+            description: "Consider increasing PVC size or reducing retention."
+
+    - name: vlsingle
+      interval: 30s
+      rules:
+        - alert: VLSingleIngestionStalled
+          expr: rate(vl_rows_ingested_total[10m]) == 0
+          for: 10m
+          labels:
+            severity: critical
+            component: vlsingle
+          annotations:
+            summary: "VictoriaLogs ingestion stalled"
+            description: "No logs ingested for 10m+; VLAgent not pushing or VLSingle is broken."
+
+    - name: vm-operator
+      interval: 30s
+      rules:
+        - alert: VMOperatorReconcileErrors
+          expr: |
+            rate(controller_runtime_reconcile_errors_total{controller=~"vm.*|vl.*"}[10m]) > 0.1
+          for: 10m
+          labels:
+            severity: warning
+            component: vm-operator
+          annotations:
+            summary: "VM operator reconciler errors on {{ $labels.controller }}"
+
+    - name: certificates
+      interval: 1m
+      rules:
+        - alert: CertManagerCertExpiringSoon
+          expr: |
+            (certmanager_certificate_expiration_timestamp_seconds - time()) / 86400 < 14
+          for: 1h
+          labels:
+            severity: warning
+            component: cert-manager
+          annotations:
+            summary: "Cert {{ $labels.namespace }}/{{ $labels.name }} expires in <14 days"
+            description: "Investigate cert-manager renewal - expires {{ $value }} days from now."
+
+        - alert: CertManagerCertNotReady
+          expr: |
+            certmanager_certificate_ready_status{condition="True"} == 0
+          for: 1h
+          labels:
+            severity: warning
+            component: cert-manager
+          annotations:
+            summary: "Cert {{ $labels.namespace }}/{{ $labels.name }} not ready"
