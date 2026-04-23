@@ -98,6 +98,26 @@ spec:
         service:
           type: ClusterIP
           port: 80
+
+        ingress:
+          enabled: true
+          ingressClassName: traefik
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt-prod
+            traefik.ingress.kubernetes.io/router.entrypoints: websecure
+            traefik.ingress.kubernetes.io/router.tls: "true"
+            traefik.ingress.kubernetes.io/router.middlewares: kube-system-security-headers@kubernetescrd
+          hosts:
+            - grafana.anshulg.direct
+          tls:
+            - secretName: grafana-tls
+              hosts:
+                - grafana.anshulg.direct
+
+        grafana.ini:
+          server:
+            domain: grafana.anshulg.direct
+            root_url: https://grafana.anshulg.direct/
   destination:
     server: https://kubernetes.default.svc
     namespace: vm
