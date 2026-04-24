@@ -49,3 +49,4 @@ fetchmail
 mpack
 ripgrep
 ffmpeg
+google-cloud-cli

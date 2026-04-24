@@ -1,0 +1,27 @@
+[Unit]
+Description=Hermes Agent Web UI Service
+After=network-online.target wg.service
+Wants=network-online.target wg.service
+
+[Service]
+Type=simple
+User=hermes
+Group=hermes
+ExecStart=/home/hermes/.hermes/hermes-agent/venv/bin/python /home/hermes/.hermes/hermes-web-ui/server.py
+WorkingDirectory=/home/hermes/.hermes/hermes-agent
+Environment="HOME=/home/hermes"
+Environment="USER=hermes"
+Environment="LOGNAME=hermes"
+Environment="PATH=/home/hermes/.hermes/hermes-web-ui/.venv/bin:/home/hermes/.hermes/hermes-agent/venv/bin:/home/hermes/.hermes/hermes-agent/node_modules/.bin:/usr/bin:/home/hermes/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+Environment="VIRTUAL_ENV=/home/hermes/.hermes/hermes-web-ui/.venv"
+Environment="HERMES_HOME=/home/hermes/.hermes"
+Environment="HERMES_WEBUI_AGENT_DIR=/home/hermes/.hermes/hermes-agent"
+Environment="HERMES_WEBUI_PYTHON=/home/hermes/.hermes/hermes-agent/venv/bin/python"
+Restart=on-failure
+RestartSec=30
+TimeoutStopSec=60
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

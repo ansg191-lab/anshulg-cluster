@@ -213,6 +213,37 @@ setup_docker() {
 	log_success "Docker setup completed for hermes user"
 }
 
+setup_certs() {
+	log_info "Setting up certificates..."
+	local CERT_DIR="/etc/caddy/certs"
+
+	# Generate certs if they don't exist
+	if [[ ! -f "$CERT_DIR/tls.crt" || ! -f "$CERT_DIR/tls.key" ]]; then
+		log_info "Generating self-signed certificates for Caddy..."
+		pushd "$CERT_DIR" || exit
+
+		openssl req -newkey rsa:4096 -out csr.pem -keyout tls.key -config csr.cnf -nodes
+		gcloud privateca certificates create hermes-cert \
+			--project anshulg-cluster \
+			--issuer-pool default \
+			--issuer-location us-west1 \
+			--ca anshul-ca-1 \
+			--csr csr.pem \
+			--cert-output-file tls.crt \
+			--validity "P90D"
+
+		chown root:caddy tls.crt
+		chown root:caddy tls.key
+		chmod 640 tls.crt
+		chmod 640 tls.key
+		popd || exit
+	else
+		log_warn "Certificates already exist, skipping generation..."
+	fi
+
+	log_success "Finished setting up certificates"
+}
+
 setup_caddy() {
 	log_info "Setting up Caddy..."
 
@@ -361,6 +392,7 @@ install_uv() {
 		exit 1
 	fi
 
+	chmod 755 "$tmp"
 	if ! sudo -u hermes sh "$tmp"; then
 		log_error "Failed to install uv. Exiting setup script."
 		exit 1
@@ -395,6 +427,30 @@ install_hermes() {
 	log_success "Finished installing hermes"
 }
 
+install_hermes_webui() {
+	log_info "Installing hermes webui..."
+
+	# Check if already installed
+	if [ -d "/home/hermes/.hermes/hermes-web-ui" ]; then
+		log_info "hermes webui is already installed. Skipping installation."
+		return
+	fi
+
+	log_info "Cloning hermes webui repository..."
+	sudo -u hermes git clone https://github.com/nesquena/hermes-webui.git /home/hermes/.hermes/hermes-web-ui
+
+	log_info "Setting up .venv using uv"
+	pushd /home/hermes/.hermes/hermes-web-ui || { log_error "Failed to change directory to hermes-web-ui"; exit 1; }
+	sudo -u hermes uv venv
+	sudo -u hermes uv pip install -r requirements.txt
+	popd || { log_error "Failed to exit hermes-web-ui directory"; exit 1; }
+
+	log_info "Enabling systemd unit"
+	systemctl enable --now hermes-webui
+
+	log_success "Finished installing hermes webui"
+}
+
 main() {
 	log_info "Starting setup script..."
 
@@ -406,6 +462,7 @@ main() {
 	setup_wireguard
 	harden_sshd
 	setup_docker
+	setup_certs
 	setup_caddy
 	setup_nfs
 	setup_mta
@@ -415,6 +472,7 @@ main() {
 	install_formulas
 	install_uv
 	install_hermes
+	install_hermes_webui
 }
 trap cleanup EXIT
 main

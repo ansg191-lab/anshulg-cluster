@@ -4,9 +4,9 @@ req_extensions = v3_req
 prompt = no
 
 [req_distinguished_name]
-CN = openclaw.internal
+CN = hermes.internal
 O = Anshul Gupta
-OU = OpenClaw Server
+OU = Hermes Server
 L = Irvine
 ST = California
 C = US
@@ -17,5 +17,5 @@ extendedKeyUsage = serverAuth
 subjectAltName = @alt_names
 
 [alt_names]
-DNS.1 = openclaw.internal
+DNS.1 = hermes.internal
 IP.1 = 192.168.3.5
