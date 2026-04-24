@@ -52,7 +52,7 @@ spec:
           livenessProbe:
             tcpSocket:
               port: 6060
-            initialDelaySeconds: 30
+            initialDelaySeconds: 60
       restartPolicy: Always
       securityContext:
         fsGroup: 3002
