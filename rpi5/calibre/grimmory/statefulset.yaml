@@ -31,6 +31,8 @@ spec:
               value: "America/Los_Angeles"
             - name: BOOKLORE_PORT
               value: "6060"
+            - name: "API_DOCS_ENABLED"
+              value: "true"
           envFrom:
             - secretRef:
                 name: booklore-web-env
