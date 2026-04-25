@@ -3,6 +3,36 @@ kind: Namespace
 metadata:
   name: vpa
 ---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: vpa-webhook-cert
+  namespace: vpa
+spec:
+  secretName: vpa-webhook-tls
+  duration: 8760h0m0s
+  renewBefore: 720h0m0s
+  privateKey:
+    algorithm: ECDSA
+    rotationPolicy: Always
+  subject:
+    organizations:
+      - Anshul Gupta
+    organizationalUnits:
+      - rpi5
+      - vpa
+    provinces:
+      - California
+    countries:
+      - US
+  commonName: vpa-webhook.vpa.svc
+  dnsNames:
+    - vpa-webhook.vpa.svc
+    - vpa-webhook.vpa.svc.cluster.local
+  issuerRef:
+    kind: ClusterIssuer
+    name: rpi5-ca
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -26,9 +56,21 @@ spec:
             limits:
               memory: 500Mi
         updater:
-          enabled: false
+          enabled: true
         admissionController:
-          enabled: false
+          enabled: true
+          generateCertificate: false
+          secretName: vpa-webhook-tls
+          tlsSecretKeys:
+            - key: ca.crt
+              path: caCert.pem
+            - key: tls.crt
+              path: serverCert.pem
+            - key: tls.key
+              path: serverKey.pem
+          mutatingWebhookConfiguration:
+            annotations:
+              cert-manager.io/inject-ca-from: vpa/vpa-webhook-cert
   destination:
     server: {{ .Values.spec.destination.server }}
     namespace: vpa
