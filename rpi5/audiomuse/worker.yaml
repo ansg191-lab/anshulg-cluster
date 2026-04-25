@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: audiomuse
-          image: ghcr.io/neptunehub/audiomuse-ai:1.0.2@sha256:025bd8b9131136d92d983dce4671a4b10d41c655d47a71d06dbd7bb761acf900
+          image: ghcr.io/neptunehub/audiomuse-ai:1.0.3@sha256:151d6b565ae3cedfcf5c9e0f86c99166254abf3beb2409565c50cb01538b3845
           imagePullPolicy: IfNotPresent
           env:
             - name: SERVICE_TYPE
