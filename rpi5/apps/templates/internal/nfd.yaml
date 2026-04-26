@@ -14,6 +14,16 @@ spec:
     chart: node-feature-discovery
     repoURL: registry.k8s.io/nfd/charts
     targetRevision: 0.18.3
+    helm:
+      values: |
+        master:
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
   destination:
     server: {{ .Values.spec.destination.server }}
     namespace: node-feature-discovery
