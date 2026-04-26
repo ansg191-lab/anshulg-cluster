@@ -8,8 +8,10 @@ spec:
     kind: StatefulSet
     name: ss
   updatePolicy:
-    updateMode: "Off"
+    updateMode: "InPlaceOrRecreate"
+    minReplicas: 1
   resourcePolicy:
     containerPolicies:
       - containerName: '*'
         controlledResources: ["cpu", "memory"]
+        controlledValues: RequestsAndLimits
