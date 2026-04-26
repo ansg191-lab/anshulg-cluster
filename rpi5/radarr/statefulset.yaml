@@ -43,6 +43,12 @@ spec:
             - mountPath: /etc/ssl/certs/ca-certificates.crt
               name: ca
               subPath: ca.crt
+          resources:
+            requests:
+              cpu: 250m
+              memory: 500Mi
+            limits:
+              memory: 1Gi
           livenessProbe:
             httpGet:
               port: 7878
