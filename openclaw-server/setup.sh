@@ -37,6 +37,9 @@ log_error() {
 ################################################################################
 HERMES_ROOT="/home/hermes"
 
+# renovate: datasource=github-releases depName=oauth2-proxy/oauth2-proxy
+OAUTH2_PROXY_VERSION="v7.15.2"
+
 OP_SERVICE_ACCOUNT_TOKEN=$(cat "/1password.txt" 2>/dev/null)
 [[ -z "$OP_SERVICE_ACCOUNT_TOKEN" ]] && {
 	log_error "OP_SERVICE_ACCOUNT_TOKEN is not set. Please set it in /1password.txt"
@@ -325,6 +328,107 @@ EOF
 
 # TODO: Setup fetchmail
 
+install_oauth_proxy() {
+	local arch="linux-amd64"
+	local archive="oauth2-proxy-${OAUTH2_PROXY_VERSION}.${arch}.tar.gz"
+	local checksum_file="${archive}-sha256sum.txt"
+	local extracted_dir="oauth2-proxy-${OAUTH2_PROXY_VERSION}.${arch}"
+	local base_url="https://github.com/oauth2-proxy/oauth2-proxy/releases/download/${OAUTH2_PROXY_VERSION}"
+	local install_path="/usr/local/bin/oauth2-proxy"
+
+	log_info "Installing oauth2-proxy ${OAUTH2_PROXY_VERSION}..."
+
+	if [[ -x "$install_path" ]]; then
+		local current_version
+		current_version=$("$install_path" --version 2>/dev/null | head -n1 | awk '{print $2}')
+		if [[ "$current_version" == "$OAUTH2_PROXY_VERSION" ]]; then
+			log_success "oauth2-proxy ${OAUTH2_PROXY_VERSION} already installed, skipping"
+			return 0
+		fi
+		log_info "Found oauth2-proxy ${current_version:-unknown}, upgrading to ${OAUTH2_PROXY_VERSION}"
+	fi
+
+	local tmp_dir
+	if ! tmp_dir=$(mktemp -d -t oauth2-proxy.XXXXXX); then
+		log_error "Failed to create temporary directory"
+		exit 1
+	fi
+	trap 'rm -rf "$tmp_dir"' RETURN
+
+	log_info "Downloading ${archive}..."
+	if ! curl -fsSL --retry 3 --retry-delay 2 --retry-max-time 60 \
+		-o "${tmp_dir}/${archive}" "${base_url}/${archive}"; then
+		log_error "Failed to download oauth2-proxy archive from ${base_url}/${archive}"
+		exit 1
+	fi
+
+	log_info "Downloading ${checksum_file}..."
+	if ! curl -fsSL --retry 3 --retry-delay 2 --retry-max-time 60 \
+		-o "${tmp_dir}/${checksum_file}" "${base_url}/${checksum_file}"; then
+		log_error "Failed to download checksum file from ${base_url}/${checksum_file}"
+		exit 1
+	fi
+
+	log_info "Verifying SHA-256 checksum..."
+	if ! ( cd "$tmp_dir" && sha256sum -c "$checksum_file" ); then
+		log_error "Checksum verification failed for ${archive}"
+		exit 1
+	fi
+	log_success "Checksum verified"
+
+	log_info "Extracting ${archive}..."
+	if ! tar -xzf "${tmp_dir}/${archive}" -C "$tmp_dir"; then
+		log_error "Failed to extract ${archive}"
+		exit 1
+	fi
+
+	local binary="${tmp_dir}/${extracted_dir}/oauth2-proxy"
+	if [[ ! -f "$binary" ]]; then
+		log_error "Expected binary not found at ${binary}"
+		exit 1
+	fi
+
+	log_info "Installing binary to ${install_path}..."
+	if ! install -m 755 -o root -g root "$binary" "$install_path"; then
+		log_error "Failed to install oauth2-proxy binary to ${install_path}"
+		exit 1
+	fi
+
+	local installed_version
+	installed_version=$("$install_path" --version 2>/dev/null | head -n1 | awk '{print $2}')
+	if [[ "$installed_version" != "$OAUTH2_PROXY_VERSION" ]]; then
+		log_warn "Installed binary reports version '${installed_version:-unknown}', expected '${OAUTH2_PROXY_VERSION}'"
+	fi
+
+	log_success "Finished installing oauth2-proxy ${OAUTH2_PROXY_VERSION}"
+}
+
+setup_oauth_proxy() {
+	log_info "Setting up oauth2-proxy..."
+
+	local -x OAUTH2_PROXY_CLIENT_ID OAUTH2_PROXY_CLIENT_SECRET OAUTH2_PROXY_COOKIE_SECRET
+
+	OAUTH2_PROXY_CLIENT_ID=$(op read "op://OpenClaw/Hermes OAuth/username")
+	OAUTH2_PROXY_CLIENT_SECRET=$(op read "op://OpenClaw/Hermes OAuth/credential")
+	OAUTH2_PROXY_COOKIE_SECRET=$(op read "op://OpenClaw/Hermes OAuth/Cookie Secret")
+
+	[[ -z "$OAUTH2_PROXY_CLIENT_ID" || -z "$OAUTH2_PROXY_CLIENT_SECRET" || -z "$OAUTH2_PROXY_COOKIE_SECRET" ]] && {
+		log_error "Failed to retrieve Hermes OAuth secrets from 1Password!"
+		exit 1
+	}
+
+	log_info "Generating oauth2-proxy configuration..."
+	envsubst < /etc/oauth2-proxy/oauth2-proxy.cfg.tpl > /etc/oauth2-proxy/oauth2-proxy.cfg
+	chown caddy:caddy /etc/oauth2-proxy/oauth2-proxy.cfg
+	chmod 660 /etc/oauth2-proxy/oauth2-proxy.cfg
+
+	log_info "Starting oauth2-proxy service..."
+	systemctl daemon-reload
+	systemctl enable --now oauth2-proxy.socket
+
+	log_success "Finished setting up oauth2-proxy"
+}
+
 ################################################################################
 # USER FUNCTIONS
 ################################################################################
@@ -466,6 +570,8 @@ main() {
 	setup_caddy
 	setup_nfs
 	setup_mta
+	install_oauth_proxy
+	setup_oauth_proxy
 
 	setup_node
 	install_linuxbrew

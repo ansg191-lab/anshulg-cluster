@@ -16,11 +16,34 @@
 #	}
 #}
 #
+
 hermes.internal {
+	# Bind to wireguard
+	bind 192.168.3.5 fd30:e1bf:9b4f:100::5
+
 	encode zstd gzip
 
 	tls /etc/caddy/certs/tls.crt /etc/caddy/certs/tls.key
-	reverse_proxy http://localhost:8787
+
+	handle /oauth2/* {
+		reverse_proxy unix//run/oauth2.sock {
+			header_up X-Real-IP {remote_host}
+			header_up X-Forwarded-Uri {uri}
+		}
+	}
+
+	handle {
+		forward_auth unix//run/oauth2.sock {
+			uri /oauth2/auth
+			header_up X-Real-IP {remote_host}
+
+			@error status 401
+			handle_response @error {
+				redir * /oauth2/sign_in?rd={scheme}://{host}{uri}
+			}
+		}
+		reverse_proxy http://localhost:8787
+	}
 }
 
 # Refer to the Caddy docs for more information:

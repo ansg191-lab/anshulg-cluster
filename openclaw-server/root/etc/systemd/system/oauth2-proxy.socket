@@ -1,0 +1,10 @@
+[Unit]
+Description=OAuth2 Proxy Socket
+
+[Socket]
+ListenStream=%t/oauth2.sock
+SocketGroup=caddy
+SocketMode=0660
+
+[Install]
+WantedBy=sockets.target
