@@ -24,7 +24,3 @@ alias ll='ls -lah'
 
 # Homebrew
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"
-
-# # Node Compile Cache
-# export NODE_COMPILE_CACHE=/var/tmp/openclaw-compile-cache
-# export OPENCLAW_NO_RESPAWN=1
