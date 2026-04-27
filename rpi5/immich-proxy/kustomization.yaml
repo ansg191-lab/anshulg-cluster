@@ -21,7 +21,7 @@ labels:
 images:
   - name: busybox
     newName: nginxinc/nginx-unprivileged
-    newTag: 1.30.0@sha256:9b269aa3263e1dcba790fda66aa91b6b02f904adcd8329e5cf256e14a65e2974
+    newTag: 1.30.0@sha256:14672dc5c195f06cf0ee4abe71a0a3bea8d7591fb7aad9225f0a8fead7a790ae
 
 configMapGenerator:
   - name: domain-config
