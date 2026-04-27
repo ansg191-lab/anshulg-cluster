@@ -84,8 +84,9 @@
     {
       "customType": "regex",
       "managerFilePatterns": [
-        "/git-server/setup.sh/",
-        "/db-server/setup.sh/"
+        "/auth-server/setup.sh/",
+        "/db-server/setup.sh/",
+        "/hermes-server/setup.sh/"
       ],
       "matchStrings": [
         "#\\s*renovate:\\s*datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\s.*?_VERSION=\"(?<currentValue>.*)\"\\s"
