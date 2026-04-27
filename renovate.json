@@ -10,9 +10,6 @@
   "separateMajorMinor": true,
   "separateMinorPatch": true,
   "timezone": "America/Los_Angeles",
-  "automergeSchedule": [
-    "* 2-8 * * *"
-  ],
   "kubernetes": {
     "managerFilePatterns": [
       "/k8s/.+\\.yaml$/",
@@ -79,13 +76,6 @@
       ],
       "groupName": "linkerd"
     },
-    {
-      "matchUpdateTypes": [
-        "patch",
-        "digest"
-      ],
-      "automerge": true
-    }
   ],
   "ignorePaths": [
     "rpi5/windmill/values.yaml"
