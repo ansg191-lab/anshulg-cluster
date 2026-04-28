@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: cyber-chef
-          image: mpepping/cyberchef:v10.23.0@sha256:37955fd1e28397c6dce0858210d839b92a6291e870d6f20d27e1f3efff93de27
+          image: mpepping/cyberchef:v10.24.0@sha256:cff5537302cbc57936b888ce4e95eaab1c26c3c2ef2b02568d493d5dcfb1358b
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
