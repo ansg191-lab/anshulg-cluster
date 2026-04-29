@@ -1,0 +1,37 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../kustomize/base
+  - ../../kustomize/workloads/deployment
+
+components:
+  - ../../kustomize/components/ingress
+  - ../../kustomize/components/security-context
+
+namePrefix: kuryana-
+labels:
+  - pairs:
+      app.kubernetes.io/name: kuryana
+    includeSelectors: true
+
+images:
+  - name: busybox
+    newName: ghcr.io/ansg191/kuryana
+    newTag: master@sha256:b1cafdccdc81f6d17988cb2ed76bd392ed6c09d5b0aee41f2aeb3e015d9a99b3
+
+configMapGenerator:
+  - name: domain-config
+    literals:
+      - DOMAIN=kuryana.internal
+
+patches:
+  - target:
+      kind: Deployment
+    path: patch-deployment.yaml
+  - target:
+      kind: Deployment
+    path: patch-deployment2.yaml
+  - target:
+      kind: Service
+    path: patch-service.yaml

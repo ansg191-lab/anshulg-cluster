@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kuryana
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kuryana
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: {{ .Values.spec.destination.server }}
+    namespace: kuryana
+  project: default
+  source:
+    repoURL: {{ .Values.spec.source.repoURL }}
+    targetRevision: {{ .Values.spec.source.branch }}
+    path: rpi5/kuryana
+  syncPolicy:
+    automated: {}
