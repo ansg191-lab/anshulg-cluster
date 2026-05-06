@@ -20,3 +20,21 @@ spec:
   syncPolicy:
     syncOptions:
       - ServerSideApply=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kyverno-policies
+  namespace: argocd
+spec:
+  destination:
+    server: {{ .Values.spec.destination.server }}
+    namespace: default
+  project: internal
+  source:
+    repoURL: {{ .Values.spec.source.repoURL }}
+    targetRevision: {{ .Values.spec.source.branch }}
+    path: rpi5/policies
+  syncPolicy:
+    automated:
+      prune: true
