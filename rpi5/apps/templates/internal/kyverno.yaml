@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kyverno
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kyverno
+  namespace: argocd
+spec:
+  project: internal
+  source:
+    chart: kyverno
+    repoURL: https://kyverno.github.io/kyverno/
+    targetRevision: 3.8.0
+  destination:
+    server: {{ .Values.spec.destination.server }}
+    namespace: kyverno
+  syncPolicy:
+    syncOptions:
+      - ServerSideApply=true

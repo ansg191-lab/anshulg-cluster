@@ -31,6 +31,7 @@ spec:
     - https://github.com/ansg191/oauth-proxy-op.git
     - ghcr.io/prometheus-community/charts
     - https://grafana-community.github.io/helm-charts/
+    - https://kyverno.github.io/kyverno/
   destinations:
     - namespace: '*'
       server: {{ .Values.spec.destination.server }}
