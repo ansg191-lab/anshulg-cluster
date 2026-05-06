@@ -6,6 +6,8 @@ spec:
   replicas: 3
   template:
     spec:
+      imagePullSecrets:
+        - name: docker-regcred
       containers:
         - name: app
           envFrom:
@@ -16,6 +18,10 @@ spec:
               mountPath: /etc/nginx/templates
             - name: tmp
               mountPath: /tmp
+            - name: var-cache-nginx
+              mountPath: /var/cache/nginx
+            - name: run-nginx
+              mountPath: /run/nginx
             - name: nginx-conf
               mountPath: /etc/nginx/conf.d
           readinessProbe:
@@ -32,6 +38,12 @@ spec:
           configMap:
             name: nginx-proxy-template
         - name: tmp
+          emptyDir:
+            medium: Memory
+        - name: var-cache-nginx
+          emptyDir:
+            medium: Memory
+        - name: run-nginx
           emptyDir:
             medium: Memory
         - name: nginx-conf

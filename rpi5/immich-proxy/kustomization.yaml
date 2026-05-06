@@ -20,8 +20,8 @@ labels:
 
 images:
   - name: busybox
-    newName: nginxinc/nginx-unprivileged
-    newTag: 1.30.0@sha256:3def659164dfb7d6be8563983ea9d2fe7e4dfcf2af96770d728723a5c5ad3bad
+    newName: dhi.io/nginx
+    newTag: 1.30-debian13-dev@sha256:57c83fceb4568e7202f0909ba36424f234f1fb88fc4dbd6c6c415d9c9f51b47e
 
 configMapGenerator:
   - name: domain-config
