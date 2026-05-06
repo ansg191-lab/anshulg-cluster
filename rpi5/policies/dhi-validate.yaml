@@ -1,0 +1,66 @@
+apiVersion: policies.kyverno.io/v1alpha1
+kind: ImageValidatingPolicy
+metadata:
+  name: verify-dhi-images
+  annotations:
+    policies.kyverno.io/title: Verify Docker Hardened Images
+    policies.kyverno.io/category: Software Supply Chain Security
+    policies.kyverno.io/severity: high
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/minversion: 1.14.0
+    policies.kyverno.io/description: >-
+      Verifies all dhi.io container images are signed with Docker's official
+      DHI Cosign key. Unsigned or tampered images are denied at admission.
+spec:
+  webhookConfiguration:
+    timeoutSeconds: 30
+  evaluation:
+    background:
+      enabled: false
+  validationActions:
+    - Deny
+  matchConstraints:
+    resourceRules:
+      - apiGroups:
+          - ""
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - pods
+
+  matchImageReferences:
+    - glob: dhi.io/*
+
+  credentials:
+    allowInsecureRegistry: false
+    secrets:
+      - docker-regcred
+
+  validationConfigurations:
+    mutateDigest: false
+    verifyDigest: true
+    required: true
+
+  attestors:
+    - name: dhi
+      cosign:
+        key:
+          data: |
+            -----BEGIN PUBLIC KEY-----
+            MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEKdROmntRJFBrOJOQF5ww6gDBJqGm
+            Fxa4333s1KsL9ISjtmRzGNih9lNRsqfRVjgFgJIdL6EQ9dohdanvn7r2cg==
+            -----END PUBLIC KEY-----
+        ctlog:
+          url: https://rekor.sigstore.dev
+          insecureIgnoreTlog: true
+          insecureIgnoreSCT: true
+
+  validations:
+    - expression: >-
+        images.containers
+          .map(image, verifyImageSignatures(image, [attestors.dhi]))
+          .all(e, e > 0)
+      message: "dhi.io image failed Cosign signature verification."
