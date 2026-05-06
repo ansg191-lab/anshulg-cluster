@@ -8,6 +8,8 @@ kind: Application
 metadata:
   name: kyverno
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
   project: internal
   source:
@@ -26,10 +28,12 @@ kind: Application
 metadata:
   name: kyverno-policies
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
     server: {{ .Values.spec.destination.server }}
-    namespace: default
+    namespace: kyverno
   project: internal
   source:
     repoURL: {{ .Values.spec.source.repoURL }}
