@@ -75,7 +75,7 @@
         "linkerd-control-plane"
       ],
       "groupName": "linkerd"
-    },
+    }
   ],
   "ignorePaths": [
     "rpi5/windmill/values.yaml"
@@ -92,6 +92,17 @@
         "#\\s*renovate:\\s*datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\s.*?_VERSION=\"(?<currentValue>.*)\"\\s"
       ],
       "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
+    }
+  ],
+  "registryAliases": {
+    "dhi.io": "dhi.io"
+  },
+  "hostRules": [
+    {
+      "matchHost": "dhi.io",
+      "hostType": "docker",
+      "username": "{{ secrets.MEND_DHI_USERNAME }}",
+      "password": "{{ secrets.MEND_DHI_PASSWORD }}"
     }
   ]
 }
