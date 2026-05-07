@@ -1,6 +1,6 @@
 services:
   home:
-    image: ghcr.io/ansg191/anshulg-com:0.4.1@sha256:f8eeaee1f0e9336c34f5d4feba4dea7eba53a99dd90ba16bdf61070dd3d95dd5
+    image: ghcr.io/ansg191/anshulg-com:0.4.2@sha256:ba69e4f74fae439f0485175241e99644b8e1cf3f81f1e1f6c5acfec6ee858733
 
     ports:
       - "127.0.0.1:4321:4321"
