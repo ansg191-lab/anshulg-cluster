@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: empty
+spec:
+  replicas: 3
+  template:
+    spec:
+      imagePullSecrets:
+        - name: docker-regcred
+      containers:
+        - name: app
+          envFrom:
+            - configMapRef:
+                name: nginx-env
+          volumeMounts:
+            - name: nginx-template
+              mountPath: /etc/nginx/templates
+            - name: tmp
+              mountPath: /tmp
+            - name: var-cache-nginx
+              mountPath: /var/cache/nginx
+            - name: run-nginx
+              mountPath: /run/nginx
+            - name: nginx-conf
+              mountPath: /etc/nginx/conf.d
+#          readinessProbe:
+#            httpGet:
+#              port: 8080
+#              path: /
+          livenessProbe:
+            httpGet:
+              port: 8080
+              path: /healthz
+            initialDelaySeconds: 30
+      volumes:
+        - name: nginx-template
+          configMap:
+            name: nginx-proxy-template
+        - name: tmp
+          emptyDir:
+            medium: Memory
+        - name: var-cache-nginx
+          emptyDir:
+            medium: Memory
+        - name: run-nginx
+          emptyDir:
+            medium: Memory
+        - name: nginx-conf
+          emptyDir:
+            medium: Memory

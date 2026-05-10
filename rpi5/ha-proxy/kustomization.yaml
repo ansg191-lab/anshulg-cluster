@@ -1,0 +1,51 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../kustomize/base
+  - ../../kustomize/workloads/deployment
+  - middleware.yaml
+
+components:
+#  - ../../kustomize/components/ingress
+  - ../../kustomize/components/direct-ingress
+  - ../../kustomize/components/security-context
+  - ../../kustomize/components/tailscale
+
+namePrefix: homeassistant-
+labels:
+  - pairs:
+      app.kubernetes.io/name: homeassistant
+    includeSelectors: true
+
+images:
+  - name: busybox
+    newName: dhi.io/nginx
+    newTag: 1.30-debian13-dev@sha256:57c83fceb4568e7202f0909ba36424f234f1fb88fc4dbd6c6c415d9c9f51b47e
+
+configMapGenerator:
+  - name: domain-config
+    literals:
+#      - DOMAIN=homeassistant.internal
+      - DIRECT_DOMAIN=homeassistant.anshulg.direct
+      - TS_HOST=homeassistant
+  - name: nginx-proxy-template
+    files:
+      - default.conf.template=default.conf.template
+  - name: nginx-env
+    literals:
+      - UPSTREAM_HOST=192.168.1.10:30103
+
+patches:
+  - target:
+      kind: Deployment
+    path: patch-deployment.yaml
+  - target:
+      kind: Deployment
+    path: patch-deployment2.yaml
+  - target:
+      kind: Service
+    path: patch-service.yaml
+  - target:
+      kind: IngressRoute
+    path: patch-ingress-buffering.yaml
