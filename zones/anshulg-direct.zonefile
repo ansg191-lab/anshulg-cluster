@@ -25,6 +25,7 @@ crosswatch.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
 dify.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
 grafana.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
 hister.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
+homeassistant.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
 immich.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
 jellyfin.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
 jellyseer.anshulg.direct. 60 IN CNAME gateway.anshulg.direct.
