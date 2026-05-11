@@ -6,6 +6,7 @@ resources:
   - ../../kustomize/workloads/statefulset
   - serverstransport.yaml
   - middleware.yaml
+  - policy.yaml
 
 components:
   - ../../kustomize/components/ingress
@@ -23,7 +24,7 @@ labels:
 images:
   - name: busybox
     newName: ghcr.io/ansg191/claude-auth-proxy
-    newTag: main@sha256:29dc6d447ab44e6c8f28adbc18c32828dff3be60e4c9109b15b36d5ebee6f043
+    newTag: main@sha256:b7dc7f23c66fbd752888d01af6ec8473f4f03fa0254aba30b41470e21fb8231c
 
 configMapGenerator:
   - name: domain-config
