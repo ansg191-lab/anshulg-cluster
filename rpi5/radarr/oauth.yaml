@@ -19,9 +19,11 @@ spec:
       labels:
         app: oauth-proxy
     spec:
+      imagePullSecrets:
+        - name: docker-regcred
       containers:
         - name: oauth-proxy
-          image: quay.io/oauth2-proxy/oauth2-proxy:v7.15.2@sha256:aa0bd8dd5ab0c78e4c91c92755ad573a5f92241f88138b4141b8ec803463b4fd
+          image: dhi.io/oauth2-proxy:7.15.2-debian13@sha256:e45557c0e8d760ec7e7f483abf523d6b2502cc3cc7636ebe5b14dc3c3b13f725
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 4180
