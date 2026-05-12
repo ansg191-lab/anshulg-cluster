@@ -32,6 +32,7 @@ spec:
     - ghcr.io/prometheus-community/charts
     - https://grafana-community.github.io/helm-charts/
     - https://kyverno.github.io/kyverno/
+    - ghcr.io/aquasecurity/helm-charts
   destinations:
     - namespace: '*'
       server: {{ .Values.spec.destination.server }}
