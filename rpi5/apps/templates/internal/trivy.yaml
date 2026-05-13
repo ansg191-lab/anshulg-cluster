@@ -19,6 +19,7 @@ spec:
         trivy:
           ignoreUnfixed: true
           severity: HIGH,CRITICAL
+          sbomSources: oci,rekor
   destination:
     server: {{ .Values.spec.destination.server }}
     namespace: trivy-system
