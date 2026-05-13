@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: valkey
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: dhi.io
+    chart: valkey-chart
+    targetRevision: 0.9.4
+    helm:
+      values: |
+        global:
+          imagePullSecrets:
+            - docker-regcred
+        auth:
+          enabled: false
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: litellm
+  syncPolicy:
+    automated: {}

@@ -1,0 +1,117 @@
+model_list:
+  # Anthropic Claude via Proxy
+  # Free but errors when usage limits are hit
+  - model_name: claude-haiku-4-5
+    litellm_params:
+      model: anthropic/claude-haiku-4-5
+      api_base: http://anthropic-svc.claude-auth-proxy.svc.cluster.local
+      api_key: placeholder
+    model_info:
+      input_cost_per_token: 0
+      output_cost_per_token: 0
+  - model_name: claude-sonnet-4-6
+    litellm_params:
+      model: anthropic/claude-sonnet-4-6
+      api_base: http://anthropic-svc.claude-auth-proxy.svc.cluster.local
+      api_key: placeholder
+    model_info:
+      input_cost_per_token: 0
+      output_cost_per_token: 0
+  - model_name: claude-opus-4-6
+    litellm_params:
+      model: anthropic/claude-opus-4-6
+      api_base: http://anthropic-svc.claude-auth-proxy.svc.cluster.local
+      api_key: placeholder
+    model_info:
+      input_cost_per_token: 0
+      output_cost_per_token: 0
+  - model_name: claude-opus-4-7
+    litellm_params:
+      model: anthropic/claude-opus-4-7
+      api_base: http://anthropic-svc.claude-auth-proxy.svc.cluster.local
+      api_key: placeholder
+      drop_params: true
+    model_info:
+      input_cost_per_token: 0
+      output_cost_per_token: 0
+
+  # Anthropic Claude via API
+  - model_name: claude-haiku-4-5-fallback
+    litellm_params:
+      model: anthropic/claude-haiku-4-5
+      api_key: os.environ/ANTHROPIC_API_KEY
+  - model_name: claude-sonnet-4-6-fallback
+    litellm_params:
+      model: anthropic/claude-sonnet-4-6
+      api_key: os.environ/ANTHROPIC_API_KEY
+
+  # Opencode Zen
+  - model_name: minimax-m2.7
+    litellm_params:
+      model: openai/minimax-m2.7
+      api_base: https://opencode.ai/zen/v1
+      api_key: os.environ/OPENCODE_API_KEY
+    model_info:
+      input_cost_per_token: 0.0000003
+      output_cost_per_token: 0.0000012
+  - model_name: minimax-m2.5
+    litellm_params:
+      model: openai/minimax-m2.5
+      api_base: https://opencode.ai/zen/v1
+      api_key: os.environ/OPENCODE_API_KEY
+    model_info:
+      input_cost_per_token: 0.0000003
+      output_cost_per_token: 0.0000012
+  - model_name: kimi-k2.5
+    litellm_params:
+      model: openai/kimi-k2.5
+      api_base: https://opencode.ai/zen/v1
+      api_key: os.environ/OPENCODE_API_KEY
+    model_info:
+      input_cost_per_token: 0.0000006
+      output_cost_per_token: 0.000003
+  - model_name: kimi-k2.6
+    litellm_params:
+      model: openai/kimi-k2.6
+      api_base: https://opencode.ai/zen/v1
+      api_key: os.environ/OPENCODE_API_KEY
+    model_info:
+      input_cost_per_token: 0.00000095
+      output_cost_per_token: 0.000004
+  - model_name: qwen3.6-plus
+    litellm_params:
+      model: openai/qwen3.6-plus
+      api_base: https://opencode.ai/zen/v1
+      api_key: os.environ/OPENCODE_API_KEY
+    model_info:
+      input_cost_per_token: 0.0000005
+      output_cost_per_token: 0.000003
+  - model_name: qwen3.5-plus
+    litellm_params:
+      model: openai/qwen3.5-plus
+      api_base: https://opencode.ai/zen/v1
+      api_key: os.environ/OPENCODE_API_KEY
+    model_info:
+      input_cost_per_token: 0.0000002
+      output_cost_per_token: 0.0000012
+
+general_settings:
+  use_redis_transaction_buffer: true
+  enable_redis_auth_cache: true
+  store_model_in_db: true
+  store_prompts_in_spend_logs: true
+
+litellm_settings:
+  cache: True
+  cache_params:
+    type: redis
+    host: litellm-valkey-valkey-chart
+    port: 6379
+
+router_settings:
+  num_retries: 2
+  fallbacks:
+    - claude-haiku-4-5:
+        - "claude-haiku-4-5-fallback"
+    - claude-sonnet-4-6:
+        - "claude-sonnet-4-6-fallback"

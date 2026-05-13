@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: empty
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+        - name: app
+          args:
+            - "--config"
+            - "/app/proxy_config.yaml"
+          env:
+            - name: FORWARDED_ALLOW_IPS
+              value: "10.42.0.0/16"
+          envFrom:
+            - secretRef:
+                name: litellm-secrets
+          volumeMounts:
+            - mountPath: /app/proxy_config.yaml
+              name: config
+              subPath: config.yaml
+              readOnly: true
+            - mountPath: /etc/ssl/certs/ca-certificates.crt
+              name: ca-certs
+              subPath: ca.crt
+          startupProbe:
+            httpGet:
+              path: /health/liveliness
+              port: 4000
+            periodSeconds: 10
+            failureThreshold: 18
+            timeoutSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health/liveliness
+              port: 4000
+            periodSeconds: 15
+            successThreshold: 1
+            failureThreshold: 3
+            timeoutSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health/readiness
+              port: 4000
+            periodSeconds: 15
+            successThreshold: 1
+            failureThreshold: 3
+            timeoutSeconds: 10
+      volumes:
+        - name: config
+          configMap:
+            name: litellm-config
+        - name: ca-certs
+          configMap:
+            name: anshulg-ca
+      nodeSelector:
+        kubernetes.io/arch: amd64

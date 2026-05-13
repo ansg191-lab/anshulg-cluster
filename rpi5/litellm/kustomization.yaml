@@ -1,0 +1,41 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../kustomize/base
+  - ../../kustomize/workloads/deployment
+  - secrets.yaml
+  - valkey.yaml
+
+components:
+  - ../../kustomize/components/ingress
+  - ../../kustomize/components/direct-ingress
+#  - ../../kustomize/components/security-context
+
+namePrefix: litellm-
+labels:
+  - pairs:
+      app.kubernetes.io/name: litellm
+    includeSelectors: true
+
+images:
+  - name: busybox
+    newName: docker.litellm.ai/berriai/litellm-database
+    newTag: v1.83.14-stable@sha256:da4ab06d9d57da205263877425544d6df8e78147737b0dd8dc1e9e93a6d8ac2e
+
+configMapGenerator:
+  - name: domain-config
+    literals:
+      - DOMAIN=ai.internal
+      - DIRECT_DOMAIN=ai.anshulg.direct
+  - name: litellm-config
+    files:
+      - config.yaml
+
+patches:
+  - target:
+      kind: Deployment
+    path: patch-deployment.yaml
+  - target:
+      kind: Service
+    path: patch-service.yaml
