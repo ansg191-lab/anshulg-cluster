@@ -101,7 +101,7 @@
     {
       "matchHost": "dhi.io",
       "hostType": "docker",
-      "username": "{{ secrets.MEND_DHI_USERNAME }}",
+      "username": "ansg191",
       "password": "{{ secrets.MEND_DHI_PASSWORD }}"
     }
   ]
