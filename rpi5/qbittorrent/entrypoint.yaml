@@ -3,7 +3,7 @@ data:
   entrypoint.sh: "#!/usr/bin/env sh\n#\n# Copyright (c) 2026. Anshul Gupta\n# All
     rights reserved.\n#\n\nset -e\n\necho \"Installing OpenVPN and dependencies...\"\napt-get
     update && apt-get install -y --no-install-recommends openvpn iproute2 iptables
-    ca-certificates bsdextrautils\n\n# Create authentication file\necho \"Setting
+    ca-certificates bsdextrautils tini\n\n# Create authentication file\necho \"Setting
     up OpenVPN credentials...\"\nif [ -f /auth/username ] && [ -f /auth/password ];
     then\n\tprintf \"%s\\n%s\\n\" \"$(cat /auth/username)\" \"$(cat /auth/password)\"
     > /credentials\n\tchmod 600 /credentials\nfi\n\n# Start OpenVPN\necho \"Starting
@@ -28,7 +28,7 @@ data:
     +x\n\n# Allow traffic to k8s internal services\nip route add 10.43.0.0/16 via
     10.42.0.1 dev eth0\n\necho \"IP Routes:\"\nip route show | column -t\n\n# Keep
     the container alive and expose logs if OpenVPN dies\necho \"Container setup complete.
-    Running forever...\"\nexec tail -F /var/log/* /var/log/openvpn/* /dev/null\n"
+    Running forever...\"\nexec tini -- tail -F /var/log/* /var/log/openvpn/* /dev/null\n"
 kind: ConfigMap
 metadata:
   name: ovpn-script

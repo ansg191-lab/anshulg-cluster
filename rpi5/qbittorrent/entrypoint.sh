@@ -7,7 +7,7 @@
 set -e
 
 echo "Installing OpenVPN and dependencies..."
-apt-get update && apt-get install -y --no-install-recommends openvpn iproute2 iptables ca-certificates bsdextrautils
+apt-get update && apt-get install -y --no-install-recommends openvpn iproute2 iptables ca-certificates bsdextrautils tini
 
 # Create authentication file
 echo "Setting up OpenVPN credentials..."
@@ -66,4 +66,4 @@ ip route show | column -t
 
 # Keep the container alive and expose logs if OpenVPN dies
 echo "Container setup complete. Running forever..."
-exec tail -F /var/log/* /var/log/openvpn/* /dev/null
+exec tini -- tail -F /var/log/* /var/log/openvpn/* /dev/null
