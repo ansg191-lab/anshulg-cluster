@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - ../../kustomize/base
   - ../../kustomize/workloads/statefulset
+  - secrets.yaml
 
 components:
   - ../../kustomize/components/ingress

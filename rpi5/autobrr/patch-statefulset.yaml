@@ -10,6 +10,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: env-config
+            - secretRef:
+                name: autobrr-secrets
           volumeMounts:
             - mountPath: /config
               name: data
