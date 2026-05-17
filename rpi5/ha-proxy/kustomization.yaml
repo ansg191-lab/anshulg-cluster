@@ -21,7 +21,7 @@ labels:
 images:
   - name: busybox
     newName: dhi.io/nginx
-    newTag: 1.30-debian13-dev@sha256:57c83fceb4568e7202f0909ba36424f234f1fb88fc4dbd6c6c415d9c9f51b47e
+    newTag: 1.31-debian13-dev@sha256:cb19b87741692be25eec958bfac83a79446f1a4862ce73b542e66adf83cadba6
 
 configMapGenerator:
   - name: domain-config
