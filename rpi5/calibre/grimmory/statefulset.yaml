@@ -33,6 +33,8 @@ spec:
               value: "6060"
             - name: "API_DOCS_ENABLED"
               value: "true"
+            - name: SPRING_APPLICATION_JSON
+              value: '{"spring":{"jackson":{"find-and-add-modules":false}}}'
           envFrom:
             - secretRef:
                 name: booklore-web-env
@@ -51,6 +53,12 @@ spec:
             httpGet:
               port: 6060
               path: /
+          startupProbe:
+            tcpSocket:
+              port: 6060
+            failureThreshold: 60
+            periodSeconds: 10
+            timeoutSeconds: 2
           livenessProbe:
             tcpSocket:
               port: 6060
