@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: worker
+  template:
+    metadata:
+      annotations:
+        linkerd.io/inject: enabled
+      labels:
+        app.kubernetes.io/component: worker
+    spec:
+      containers:
+        - name: app
+          image: flowiseai/flowise-worker:3.1.2
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5566
+              protocol: TCP
+              name: healthz
+          envFrom:
+            - configMapRef:
+                name: env-config
+            - secretRef:
+                name: flowise-secrets
+          volumeMounts:
+            - mountPath: /data/Flowise
+              name: data
+          readinessProbe:
+            httpGet:
+              port: 5566
+              path: /healthz
+            initialDelaySeconds: 30
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 6
+          livenessProbe:
+            httpGet:
+              port: 5566
+              path: /healthz
+            initialDelaySeconds: 90
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 6
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+            limits:
+              memory: 2Gi
+      restartPolicy: Always
+      volumes:
+        - name: data
+          hostPath:
+            path: /data/Flowise
+            type: DirectoryOrCreate

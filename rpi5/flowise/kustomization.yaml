@@ -1,0 +1,66 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../kustomize/base
+  - ../../kustomize/workloads/deployment
+  - worker.yaml
+  - secrets.yaml
+  - valkey.yaml
+
+components:
+  - ../../kustomize/components/direct-ingress
+
+namePrefix: flowise-
+labels:
+  - pairs:
+      app.kubernetes.io/name: flowise
+    includeSelectors: true
+
+images:
+  - name: busybox
+    newName: flowiseai/flowise
+    newTag: 3.1.2@sha256:3f96eb1fe88ba038a028b024f98d9f9cf7c62bdbe170ea190d90698936165f94
+  - name: flowiseai/flowise-worker
+    newTag: 3.1.2@sha256:e956fd4e1859f3f76ae272809ab3fd1fe534ea230c9c990e8437607d97f69c53
+
+configMapGenerator:
+  - name: domain-config
+    literals:
+      - DIRECT_DOMAIN=flowise.anshulg.direct
+  - name: env-config
+    literals:
+      - TZ=America/Los_Angeles
+      - PORT=3000
+      - WORKER_PORT=5566
+      - APP_URL=https://flowise.anshulg.direct
+      - NUMBER_OF_PROXIES=1
+      - DISABLE_FLOWISE_TELEMETRY=true
+      - DATABASE_TYPE=postgres
+      - DATABASE_HOST=rpi4.anshulg.direct
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=flowise
+      - STORAGE_TYPE=local
+      - BLOB_STORAGE_PATH=/data/Flowise/storage
+      - SECRETKEY_STORAGE_TYPE=local
+      - SECRETKEY_PATH=/data/Flowise/secrets
+      - LOG_PATH=/data/Flowise/logs
+      - MODE=queue
+      - QUEUE_NAME=flowise-queue
+      - WORKER_CONCURRENCY=10000
+      - QUEUE_REDIS_EVENT_STREAM_MAX_LEN=10000
+      - REDIS_HOST=flowise-valkey
+      - REDIS_PORT=6379
+
+patches:
+  - target:
+      kind: Deployment
+      name: deployment
+    path: patch-deployment.yaml
+  - target:
+      kind: Deployment
+      name: deployment
+    path: patch-deployment-ports.yaml
+  - target:
+      kind: Service
+    path: patch-service.yaml
