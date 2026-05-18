@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: flowiseai/flowise-worker:3.1.2
+          image: flowiseai/flowise-worker:3.1.2@sha256:e956fd4e1859f3f76ae272809ab3fd1fe534ea230c9c990e8437607d97f69c53
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5566
