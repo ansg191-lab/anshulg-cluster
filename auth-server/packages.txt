@@ -3,3 +3,5 @@ docker-compose
 ca-certificates
 caddy
 haproxy
+1password-cli
+wireguard-tools

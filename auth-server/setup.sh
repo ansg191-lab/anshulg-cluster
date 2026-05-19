@@ -14,6 +14,13 @@ KANIDM_ROOT="/srv/kanidm"
 HOMEPAGE_ROOT="/srv/home"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+OP_SERVICE_ACCOUNT_TOKEN=$(cat "/1password.txt" 2>/dev/null)
+[[ -z "$OP_SERVICE_ACCOUNT_TOKEN" ]] && {
+	log "OP_SERVICE_ACCOUNT_TOKEN is not set. Please set it in /1password.txt"
+	exit 1
+}
+export OP_SERVICE_ACCOUNT_TOKEN
+
 log() {
     echo -e "${GREEN}${LOCK} $1${NC}"
 }
@@ -60,6 +67,18 @@ copy_root() {
 	log "Copying files..."
 	rsync -a --verbose root/ /
 	chown root:root /
+}
+
+add_repos() {
+	log "Adding necessary repositories..."
+
+	sudo rpm --import https://downloads.1password.com/linux/keys/1password.asc
+
+	if ! sudo zypper repos | grep -q "1password"; then
+		sudo zypper addrepo https://downloads.1password.com/linux/rpm/stable/x86_64 1password
+	fi
+
+	log "Repositories added successfully"
 }
 
 install_packages() {
@@ -191,6 +210,30 @@ setup_certs() {
 	fi
 }
 
+setup_wg() {
+	log "Setting up WireGuard..."
+
+	# Download VPN configuration from 1Password
+	log "Retrieving WireGuard configuration from 1Password..."
+	WG_CONFIG=$(op read "op://auth.anshulg.com/Auth Wireguard Config/vpn.conf" 2>/dev/null)
+	[[ -z "$WG_CONFIG" ]] && {
+		log "Failed to retrieve WireGuard configuration from 1Password!"
+		exit 1
+	}
+	# Save the configuration to a file
+	printf "%s" "$WG_CONFIG" | install -D -o root -g root -m 600 /dev/stdin /etc/wireguard/wg0.conf
+	log "WireGuard configuration saved to /etc/wireguard/wg0.conf"
+
+	# Ensure wireguard module is loaded
+	modprobe wireguard || modprobe -v wireguard
+
+	# Enable systemd service for WireGuard
+	log "Enabling WireGuard systemd service..."
+	systemctl daemon-reload
+	systemctl enable --now wg
+	log  "WireGuard setup completed successfully"
+}
+
 setup_services() {
 	log "Setting up services..."
 
@@ -282,11 +325,13 @@ trap cleanup EXIT
 create_system_user kanidm "$KANIDM_ROOT"
 create_system_user homepage "$HOMEPAGE_ROOT"
 copy_root
+add_repos
 install_packages
 harden_sshd
 install_ca
 install_gcloud
 setup_certs
+setup_wg
 setup_services
 write_compose_env kanidm "$KANIDM_ROOT"
 start_kanidm
