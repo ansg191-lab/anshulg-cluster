@@ -31,5 +31,15 @@ anshulg.com {
 	}
 }
 
+c012e955-9630-42f2-9ec0-138c037d020d.anshulg.com {
+	reverse_proxy https://192.168.3.1 {
+		header_up Host renovate-pr-triage.internal
+		transport http {
+			tls_trust_pool file /etc/caddy/AnshulGuptaRootCA.crt
+			tls_server_name renovate-pr-triage.internal
+		}
+	}
+}
+
 # Refer to the Caddy docs for more information:
 # https://caddyserver.com/docs/caddyfile

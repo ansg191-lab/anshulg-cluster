@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: empty
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+        - name: app
+          envFrom:
+            - secretRef:
+                name: renovate-pr-triage-secrets
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /healthz
+          volumeMounts:
+            - mountPath: /key
+              name: renovate-pr-triage-gh-key
+      volumes:
+        - name: renovate-pr-triage-gh-key
+          secret:
+            secretName: renovate-pr-triage-gh-key
