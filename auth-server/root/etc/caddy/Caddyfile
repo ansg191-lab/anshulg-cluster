@@ -31,17 +31,5 @@ anshulg.com {
 	}
 }
 
-bcc75486-af84-4166-a7e1-51cdde05f770.anshulg.com {
-	encode zstd gzip
-
-	reverse_proxy https://192.168.3.1 {
-		header_up Host whoami.internal
-		transport http {
-			tls_server_name whoami.internal
-			tls_trusted_ca_certs /etc/caddy/AnshulGuptaRootCA.crt
-		}
-	}
-}
-
 # Refer to the Caddy docs for more information:
 # https://caddyserver.com/docs/caddyfile
