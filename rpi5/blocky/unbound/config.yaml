@@ -1,134 +1,101 @@
 apiVersion: v1
 data:
-  a-records.conf: |
-    # A Record
-        local-data: "abs.internal. A 192.168.3.1"
-        local-data: "abs.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "ai.internal. A 192.168.3.1"
-        local-data: "ai.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "anthropic.internal. A 192.168.3.1"
-        local-data: "anthropic.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "archestra.internal. A 192.168.3.1"
-        local-data: "archestra.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "audiobookshelf.internal. A 192.168.3.1"
-        local-data: "audiobookshelf.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "audiomuse.internal. A 192.168.3.1"
-        local-data: "audiomuse.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "audioserve.internal. A 192.168.3.1"
-        local-data: "audioserve.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "autobrr.internal. A 192.168.3.1"
-        local-data: "autobrr.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "argocd.internal. A 192.168.3.1"
-        local-data: "argocd.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "bazarr.internal. A 192.168.3.1"
-        local-data: "bazarr.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "booklore.internal. A 192.168.3.1"
-        local-data: "booklore.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "blocky.internal. A 192.168.3.1"
-        local-data: "blocky.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "bookshelf.internal. A 192.168.3.1"
-        local-data: "bookshelf.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "browserless.internal. A 192.168.3.1"
-        local-data: "browserless.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "calibre.internal. A 192.168.3.1"
-        local-data: "calibre.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "web.calibre.internal. A 192.168.3.1"
-        local-data: "web.calibre.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "cross-seed.internal. A 192.168.3.1"
-        local-data: "cross-seed.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "crosswatch.internal. A 192.168.3.1"
-        local-data: "crosswatch.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "dashboard.blocky.internal. A 192.168.3.1"
-        local-data: "dashboard.blocky.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "dify.internal. A 192.168.3.1"
-        local-data: "dify.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "firefox.internal. A 192.168.3.1"
-        local-data: "firefox.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "glance.internal. A 192.168.3.1"
-        local-data: "glance.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "hermes.internal. A 192.168.3.5"
-        local-data: "hermes.internal. AAAA fd30:e1bf:9b4f:100::5"
-        local-data: "homepage.internal. A 192.168.3.1"
-        local-data: "homepage.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "huginn.internal. A 192.168.3.1"
-        local-data: "huginn.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "jellyfin.internal. A 192.168.3.1"
-        local-data: "jellyfin.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "jellyseerr.internal. A 192.168.3.1"
-        local-data: "jellyseerr.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "jellystat.internal. A 192.168.3.1"
-        local-data: "jellystat.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "kuryana.internal. A 192.168.3.1"
-        local-data: "kuryana.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "irc.internal. A 192.168.3.1"
-        local-data: "irc.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "immich.internal. A 192.168.3.1"
-        local-data: "immich.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "lazylibrarian.internal. A 192.168.3.1"
-        local-data: "lazylibrarian.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "n8n.internal. A 192.168.3.1"
-        local-data: "n8n.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "navidrome.internal. A 192.168.3.1"
-        local-data: "navidrome.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "notifiarr.internal. A 192.168.3.1"
-        local-data: "notifiarr.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "nzbget.internal. A 192.168.3.1"
-        local-data: "nzbget.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "nzbhydra.internal. A 192.168.3.1"
-        local-data: "nzbhydra.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "ollama.internal. A 192.168.3.1"
-        local-data: "ollama.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "opengist.internal. A 192.168.3.1"
-        local-data: "opengist.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "overleaf.internal. A 192.168.3.1"
-        local-data: "overleaf.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "overseerr.internal. A 192.168.3.1"
-        local-data: "overseerr.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "paperless.internal. A 192.168.3.1"
-        local-data: "paperless.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "patchmon.internal. A 192.168.3.1"
-        local-data: "patchmon.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "plex.internal. A 192.168.3.1"
-        local-data: "plex.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "prowlarr.internal. A 192.168.3.1"
-        local-data: "prowlarr.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "qbittorrent.internal. A 192.168.3.1"
-        local-data: "qbittorrent.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "qbit-manage.internal. A 192.168.3.1"
-        local-data: "qbit-manage.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "radarr.internal. A 192.168.3.1"
-        local-data: "radarr.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "rpi4.internal. A 192.168.1.9"
-        local-data: "scrutiny.internal. A 192.168.3.1"
-        local-data: "scrutiny.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "smokeping.internal. A 192.168.3.1"
-        local-data: "smokeping.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "sonarr.internal. A 192.168.3.1"
-        local-data: "sonarr.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "speedtest.internal. A 192.168.3.1"
-        local-data: "speedtest.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "sportarr.internal. A 192.168.3.1"
-        local-data: "sportarr.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "syncthing.internal. A 192.168.3.1"
-        local-data: "syncthing.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "technitium.internal. A 192.168.3.1"
-        local-data: "technitium.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "teslaboard.internal. A 192.168.3.1"
-        local-data: "teslaboard.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "teslamate.internal. A 192.168.3.1"
-        local-data: "teslamate.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "trailarr.internal. A 192.168.3.1"
-        local-data: "trailarr.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "transmute.internal. A 192.168.3.1"
-        local-data: "transmute.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "truenas.internal. A 192.168.1.10"
-        local-data: "whoami.internal. A 192.168.3.1"
-        local-data: "whoami.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-        local-data: "yamtrack.internal. A 192.168.3.1"
-        local-data: "yamtrack.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6"
-
-    # PTR Record
-        # local-data-ptr: "192.168.1.1 somecomputer.local."
+  a-records.conf: "# A Record\n    local-data: \"abs.internal. A 192.168.3.1\"\n    local-data:
+    \"abs.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n    local-data: \"ai.internal.
+    A 192.168.3.1\"\n    local-data: \"ai.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n
+    \   local-data: \"anthropic.internal. A 192.168.3.1\"\n    local-data: \"anthropic.internal.
+    AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n    local-data: \"archestra.internal.
+    A 192.168.3.1\"\n    local-data: \"archestra.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n
+    \   local-data: \"audiobookshelf.internal. A 192.168.3.1\"\n    local-data: \"audiobookshelf.internal.
+    AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n    local-data: \"audiomuse.internal.
+    A 192.168.3.1\"\n    local-data: \"audiomuse.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n
+    \   local-data: \"audioserve.internal. A 192.168.3.1\"\n    local-data: \"audioserve.internal.
+    AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n    local-data: \"autobrr.internal.
+    A 192.168.3.1\"\n    local-data: \"autobrr.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n
+    \   local-data: \"argocd.internal. A 192.168.3.1\"\n    local-data: \"argocd.internal.
+    AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n    local-data: \"bazarr.internal.
+    A 192.168.3.1\"\n    local-data: \"bazarr.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n
+    \   local-data: \"booklore.internal. A 192.168.3.1\"\n    local-data: \"booklore.internal.
+    AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n    local-data: \"blocky.internal.
+    A 192.168.3.1\"\n    local-data: \"blocky.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n
+    \   local-data: \"bookshelf.internal. A 192.168.3.1\"\n    local-data: \"bookshelf.internal.
+    AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n    local-data: \"browserless.internal.
+    A 192.168.3.1\"\n    local-data: \"browserless.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n
+    \   local-data: \"calibre.internal. A 192.168.3.1\"\n    local-data: \"calibre.internal.
+    AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n    local-data: \"web.calibre.internal.
+    A 192.168.3.1\"\n    local-data: \"web.calibre.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n
+    \   local-data: \"cross-seed.internal. A 192.168.3.1\"\n    local-data: \"cross-seed.internal.
+    AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n    local-data: \"crosswatch.internal.
+    A 192.168.3.1\"\n    local-data: \"crosswatch.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n
+    \   local-data: \"dashboard.blocky.internal. A 192.168.3.1\"\n    local-data:
+    \"dashboard.blocky.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n    local-data:
+    \"dify.internal. A 192.168.3.1\"\n    local-data: \"dify.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n
+    \   local-data: \"firefox.internal. A 192.168.3.1\"\n    local-data: \"firefox.internal.
+    AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n    local-data: \"glance.internal.
+    A 192.168.3.1\"\n    local-data: \"glance.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n
+    \   local-data: \"hermes.internal. A 192.168.3.5\"\n    local-data: \"hermes.internal.
+    AAAA fd30:e1bf:9b4f:100::5\"\n    local-data: \"homepage.internal. A 192.168.3.1\"\n
+    \   local-data: \"homepage.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n
+    \   local-data: \"huginn.internal. A 192.168.3.1\"\n    local-data: \"huginn.internal.
+    AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n    local-data: \"jellyfin.internal.
+    A 192.168.3.1\"\n    local-data: \"jellyfin.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n
+    \   local-data: \"jellyseerr.internal. A 192.168.3.1\"\n    local-data: \"jellyseerr.internal.
+    AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n    local-data: \"jellystat.internal.
+    A 192.168.3.1\"\n    local-data: \"jellystat.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n
+    \   local-data: \"kuryana.internal. A 192.168.3.1\"\n    local-data: \"kuryana.internal.
+    AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n    local-data: \"irc.internal. A
+    192.168.3.1\"\n    local-data: \"irc.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n
+    \   local-data: \"immich.internal. A 192.168.3.1\"\n    local-data: \"immich.internal.
+    AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n    local-data: \"lazylibrarian.internal.
+    A 192.168.3.1\"\n    local-data: \"lazylibrarian.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n
+    \   local-data: \"n8n.internal. A 192.168.3.1\"\n    local-data: \"n8n.internal.
+    AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n    local-data: \"navidrome.internal.
+    A 192.168.3.1\"\n    local-data: \"navidrome.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n
+    \   local-data: \"notifiarr.internal. A 192.168.3.1\"\n    local-data: \"notifiarr.internal.
+    AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n    local-data: \"nzbget.internal.
+    A 192.168.3.1\"\n    local-data: \"nzbget.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n
+    \   local-data: \"nzbhydra.internal. A 192.168.3.1\"\n    local-data: \"nzbhydra.internal.
+    AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n    local-data: \"ollama.internal.
+    A 192.168.3.1\"\n    local-data: \"ollama.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n
+    \   local-data: \"opengist.internal. A 192.168.3.1\"\n    local-data: \"opengist.internal.
+    AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n    local-data: \"overleaf.internal.
+    A 192.168.3.1\"\n    local-data: \"overleaf.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n
+    \   local-data: \"overseerr.internal. A 192.168.3.1\"\n    local-data: \"overseerr.internal.
+    AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n    local-data: \"paperless.internal.
+    A 192.168.3.1\"\n    local-data: \"paperless.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n
+    \   local-data: \"patchmon.internal. A 192.168.3.1\"\n    local-data: \"patchmon.internal.
+    AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n    local-data: \"plex.internal. A
+    192.168.3.1\"\n    local-data: \"plex.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n
+    \   local-data: \"prowlarr.internal. A 192.168.3.1\"\n    local-data: \"prowlarr.internal.
+    AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n    local-data: \"qbittorrent.internal.
+    A 192.168.3.1\"\n    local-data: \"qbittorrent.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n
+    \   local-data: \"qbit-manage.internal. A 192.168.3.1\"\n    local-data: \"qbit-manage.internal.
+    AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n    local-data: \"radarr.internal.
+    A 192.168.3.1\"\n    local-data: \"radarr.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n
+    \   local-data: \"renovate-pr-triage.internal. A 192.168.3.1\"\n\tlocal-data:
+    \"renovate-pr-triage.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n    local-data:
+    \"rpi4.internal. A 192.168.1.9\"\n    local-data: \"scrutiny.internal. A 192.168.3.1\"\n
+    \   local-data: \"scrutiny.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n
+    \   local-data: \"smokeping.internal. A 192.168.3.1\"\n    local-data: \"smokeping.internal.
+    AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n    local-data: \"sonarr.internal.
+    A 192.168.3.1\"\n    local-data: \"sonarr.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n
+    \   local-data: \"speedtest.internal. A 192.168.3.1\"\n    local-data: \"speedtest.internal.
+    AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n    local-data: \"sportarr.internal.
+    A 192.168.3.1\"\n    local-data: \"sportarr.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n
+    \   local-data: \"syncthing.internal. A 192.168.3.1\"\n    local-data: \"syncthing.internal.
+    AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n    local-data: \"technitium.internal.
+    A 192.168.3.1\"\n    local-data: \"technitium.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n
+    \   local-data: \"teslaboard.internal. A 192.168.3.1\"\n    local-data: \"teslaboard.internal.
+    AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n    local-data: \"teslamate.internal.
+    A 192.168.3.1\"\n    local-data: \"teslamate.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n
+    \   local-data: \"trailarr.internal. A 192.168.3.1\"\n    local-data: \"trailarr.internal.
+    AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n    local-data: \"transmute.internal.
+    A 192.168.3.1\"\n    local-data: \"transmute.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n
+    \   local-data: \"truenas.internal. A 192.168.1.10\"\n    local-data: \"whoami.internal.
+    A 192.168.3.1\"\n    local-data: \"whoami.internal. AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n
+    \   local-data: \"yamtrack.internal. A 192.168.3.1\"\n    local-data: \"yamtrack.internal.
+    AAAA fd30:e1bf:9b4f:0:4e6:60ff:fe5d:e5b6\"\n\n# PTR Record\n    # local-data-ptr:
+    \"192.168.1.1 somecomputer.local.\"\n"
   unbound.conf: |
     # Create the config file with the following command:
     # kubectl create configmap -n blocky unbound-config --from-file=rpi5/blocky/unbound/unbound.conf --from-file=rpi5/blocky/unbound/a-records.conf --dry-run=client -o yaml > rpi5/blocky/unbound/config.yaml

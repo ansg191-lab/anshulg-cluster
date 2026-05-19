@@ -1,0 +1,41 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../kustomize/base
+  - ../../kustomize/workloads/deployment
+  - key.yaml
+  - secrets.yaml
+
+components:
+  - ../../kustomize/components/ingress
+#  - ../../kustomize/components/security-context
+
+namePrefix: renovate-pr-triage-
+labels:
+  - pairs:
+      app.kubernetes.io/name: renovate-pr-triage
+    includeSelectors: true
+
+images:
+  - name: busybox
+    newName: ghcr.io/ansg191-lab/renovate-pr-triage
+    newTag: main@sha256:0c6fe9144c3a3d063dd186cd097dc6e4d8607c5edbcab620ff417b8c965ecf45
+
+configMapGenerator:
+  - name: domain-config
+    literals:
+      - DOMAIN=renovate-pr-triage.internal
+
+patches:
+  - target:
+      group: apps
+      version: v1
+      kind: Deployment
+    path: patch-deployment.yaml
+  - target:
+      kind: Deployment
+    path: patch-deployment2.yaml
+  - target:
+      kind: Service
+    path: patch-service.yaml
