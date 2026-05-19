@@ -13,7 +13,7 @@ auth.anshulg.com {
 
 	reverse_proxy https://localhost:8443 {
 		transport http {
-			tls_trusted_ca_certs /etc/caddy/AnshulGuptaRootCA.crt
+			tls_trust_pool file /etc/caddy/AnshulGuptaRootCA.crt
 			tls_server_name auth.anshulg.com
 		}
 	}
