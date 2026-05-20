@@ -20,7 +20,7 @@ labels:
 images:
   - name: busybox
     newName: ghcr.io/ansg191-lab/renovate-pr-triage
-    newTag: main@sha256:0c6fe9144c3a3d063dd186cd097dc6e4d8607c5edbcab620ff417b8c965ecf45
+    newTag: main@sha256:9ba9c5d275960dfc27114e4e99ded5b03f957ff2628e6ff8c73ddcd853fa14ce
 
 configMapGenerator:
   - name: domain-config
