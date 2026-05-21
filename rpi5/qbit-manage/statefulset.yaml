@@ -24,7 +24,7 @@ spec:
             - configMapRef:
                 name: qbt-manage-env
           ports:
-            - containerPort: 8080
+            - containerPort: 8181
               protocol: TCP
               name: http
           volumeMounts:
