@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: miniflux-ai
-          image: ghcr.io/qetesh/miniflux-ai:latest@sha256:ba283bf7a77c261d2790ffadfd79fd6647758deb267a1a4012f8fbaf2557469e
+          image: ghcr.io/qetesh/miniflux-ai:latest@sha256:aca9daff4beb0f7cb635dc77de798c336f1c4d08f5ff83baa2f1c16f1ceaf053
           imagePullPolicy: Always
           env:
             - name: TZ
