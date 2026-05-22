@@ -9,5 +9,5 @@ spec:
   cacheSpec:
     - images:
         - rancher/mirrored-coredns-coredns:1.12.1
-        - mvance/unbound:1.22.0
+        - madnuttah/unbound:1.23.1-2
         - ghcr.io/0xerr0r/blocky:v0.26.2

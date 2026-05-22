@@ -1,0 +1,28 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - deployment.yaml
+  - service.yaml
+
+# Each ConfigMap is generated with a content-hash suffix so any change to a
+# .conf file produces a new ConfigMap name, propagates to the Deployment's
+# volume reference, and triggers a rolling restart automatically - no
+# Stakater Reloader needed.
+configMapGenerator:
+  # Wrapper unbound.conf that replaces the image's bundled file so our
+  # conf.d shards load AFTER the image's defaults (and can override them).
+  - name: unbound-main
+    files:
+      - unbound.conf
+  - name: unbound-confd
+    files:
+      - conf.d/access-control.conf
+      - conf.d/interfaces.conf
+      - conf.d/logging.conf
+      - conf.d/performance.conf
+      - conf.d/remote-control.conf
+      - conf.d/security.conf
+  - name: unbound-zonesd
+    files:
+      - zones.d/local-data.conf
