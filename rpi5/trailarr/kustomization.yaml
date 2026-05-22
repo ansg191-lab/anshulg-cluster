@@ -1,0 +1,43 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../kustomize/base
+  - ../../kustomize/workloads/statefulset
+  - oauth.yaml
+  - oauth-config.yaml
+
+components:
+  - ../../kustomize/components/ingress
+
+namePrefix: trailarr-
+labels:
+  - pairs:
+      app.kubernetes.io/name: trailarr
+    includeSelectors: true
+
+images:
+  - name: busybox
+    newName: nandyalu/trailarr
+    newTag: 0.9.5@sha256:198a4fde10a941d62113720ff959c48730f0464c310b2458b4ab7e0b26649feb
+
+configMapGenerator:
+  - name: domain-config
+    literals:
+      - DOMAIN=trailarr.internal
+
+patches:
+  - target:
+      kind: StatefulSet
+    path: patch-statefulset.yaml
+  - target:
+      kind: StatefulSet
+    path: patch-statefulset2.yaml
+  - target:
+      kind: Service
+      name: svc
+    path: patch-service.yaml
+  - target:
+      kind: IngressRoute
+      name: ingress
+    path: patch-ingress.yaml

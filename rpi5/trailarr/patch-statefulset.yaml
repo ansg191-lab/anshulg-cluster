@@ -1,10 +1,7 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: trailarr
-  namespace: trailarr
-  labels:
-    app: trailarr
+  name: empty
   annotations:
     ignore-check.kube-linter.io/run-as-non-root: "Container must run as root to access media files"
     ignore-check.kube-linter.io/no-read-only-root-fs: "Container hasn't been tested with read-only FS yet"
@@ -12,20 +9,14 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: trailarr
-  serviceName: trailarr
+      app.kubernetes.io/component: trailarr
   template:
     metadata:
-      name: trailarr
-      annotations:
-        linkerd.io/inject: enabled
       labels:
-        app: trailarr
+        app.kubernetes.io/component: trailarr
     spec:
       containers:
-        - name: trailarr
-          image: nandyalu/trailarr:0.2.3-beta@sha256:844a9d2e32a79c9bd199f435760f7b1166f20d47ff426b42dd61e0ceb7124cd6
-          imagePullPolicy: IfNotPresent
+        - name: app
           env:
             - name: PUID
               value: "2009"
@@ -35,9 +26,6 @@ spec:
               value: "America/Los_Angeles"
             - name: WEBUI_DISABLE_AUTH
               value: "True"
-          ports:
-            - containerPort: 7889
-              protocol: TCP
           volumeMounts:
             - mountPath: /config
               name: config
@@ -49,20 +37,12 @@ spec:
               memory: 512Mi
             limits:
               memory: 1Gi
-          livenessProbe:
-            httpGet:
-              port: 7889
-              path: /status
-            initialDelaySeconds: 30
-            periodSeconds: 30
-            timeoutSeconds: 5
-            failureThreshold: 3
           readinessProbe:
             httpGet:
               port: 7889
               path: /status
             periodSeconds: 10
-            timeoutSeconds: 5
+            timeoutSeconds: 1
             failureThreshold: 3
       restartPolicy: Always
       securityContext:
@@ -72,8 +52,6 @@ spec:
           hostPath:
             path: /data
             type: Directory
-      nodeSelector:
-        kubernetes.io/hostname: odroid-h4
   volumeClaimTemplates:
     - metadata:
         name: config

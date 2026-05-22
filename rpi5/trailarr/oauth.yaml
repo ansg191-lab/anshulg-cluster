@@ -4,29 +4,22 @@ metadata:
   name: oauth-proxy
   namespace: trailarr
   labels:
-    app: oauth-proxy
+    app.kubernetes.io/component: oauth-proxy
   annotations:
     reloader.stakater.com/auto: "true"
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: oauth-proxy
+      app.kubernetes.io/component: oauth-proxy
   template:
     metadata:
       name: oauth-proxy
       annotations:
         linkerd.io/inject: enabled
       labels:
-        app: oauth-proxy
+        app.kubernetes.io/component: oauth-proxy
     spec:
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - topologyKey: kubernetes.io/hostname
-              labelSelector:
-                matchLabels:
-                  app: oauth-proxy
       containers:
         - name: oauth-proxy
           image: quay.io/oauth2-proxy/oauth2-proxy:v7.15.2@sha256:aa0bd8dd5ab0c78e4c91c92755ad573a5f92241f88138b4141b8ec803463b4fd
@@ -36,7 +29,7 @@ spec:
               protocol: TCP
           envFrom:
             - secretRef:
-                name: oauth-config
+                name: trailarr-oauth-config
           livenessProbe:
             httpGet:
               port: 4180
@@ -68,11 +61,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: trailarr-auth
+  name: auth
   namespace: trailarr
+  labels:
+    app.kubernetes.io/component: oauth-proxy
 spec:
   selector:
-    app: oauth-proxy
+    app.kubernetes.io/component: oauth-proxy
   ports:
     - protocol: TCP
       port: 80
