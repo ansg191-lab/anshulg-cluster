@@ -20,9 +20,11 @@ spec:
       labels:
         app.kubernetes.io/component: oauth-proxy
     spec:
+      imagePullSecrets:
+        - name: docker-regcred
       containers:
         - name: oauth-proxy
-          image: quay.io/oauth2-proxy/oauth2-proxy:v7.15.2@sha256:aa0bd8dd5ab0c78e4c91c92755ad573a5f92241f88138b4141b8ec803463b4fd
+          image: dhi.io/oauth2-proxy:7.15.2-debian13@sha256:ee60b051448cbf4a2287811fc8b41bd6dae2dada7d817e6a74356b781647b34c
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 4180
