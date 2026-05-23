@@ -23,7 +23,7 @@ spec:
         - name: docker-regcred
       containers:
         - name: oauth-proxy
-          image: dhi.io/oauth2-proxy:7.15.2-debian13@sha256:73c1b6e4cadc0bc80353973ecaeee36c8c78d52d03a6009ef46ac258cbee0b79
+          image: dhi.io/oauth2-proxy:7.15.2-debian13@sha256:ee60b051448cbf4a2287811fc8b41bd6dae2dada7d817e6a74356b781647b34c
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 4180
