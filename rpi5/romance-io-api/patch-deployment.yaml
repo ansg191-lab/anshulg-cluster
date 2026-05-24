@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: api
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: api
+    spec:
+      containers:
+        - name: app
+          env:
+            - name: PROXY_URL
+              value: http://romance-io-api-cloudflare-bypass:8000
+            - name: UPSTREAM_HOST
+              value: www.romance.io
+            - name: LISTEN_ADDR
+              value: :8080
+            - name: CACHE
+              value: redis
+            - name: REDIS_URL
+              value: redis://romance-io-api-valkey:6379/0
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              memory: 256Mi

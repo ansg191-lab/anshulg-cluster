@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudflare-bypass
+  labels:
+    app.kubernetes.io/component: cloudflare-bypass
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: cloudflare-bypass
+  template:
+    metadata:
+      annotations:
+        linkerd.io/inject: enabled
+      labels:
+        app.kubernetes.io/component: cloudflare-bypass
+    spec:
+      containers:
+        - name: proxy
+          image: ghcr.io/sarperavci/cloudflarebypassforscraping:latest@sha256:d56b7e61ff0dc8565e015100482248f64092d5e5c805f92c51a0ed3f024290bf
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+              protocol: TCP
+              name: http
+          env:
+            - name: WORKERS
+              value: "3"
+          resources:
+            requests:
+              cpu: 200m
+              memory: 512Mi
+            limits:
+              cpu: "2"
+              memory: 2Gi
+          volumeMounts:
+            - name: dshm
+              mountPath: /dev/shm
+      volumes:
+        - name: dshm
+          emptyDir:
+            medium: Memory
+            sizeLimit: 2Gi
+      nodeSelector:
+        kubernetes.io/arch: amd64
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloudflare-bypass
+spec:
+  selector:
+    app.kubernetes.io/component: cloudflare-bypass
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: http
+      name: http
+  type: ClusterIP
