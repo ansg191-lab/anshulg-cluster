@@ -19,7 +19,7 @@ labels:
 images:
   - name: busybox
     newName: ghcr.io/ansg191/romance-io-api
-    newTag: 0.1.2@sha256:efd42e521626fd8e490784439df663bf4b9d40266012315a62ba9dc13ce9050c
+    newTag: 0.1.3@sha256:5ca91a8eb10ff5905593947bd8cb536f2c0bc8ab77fffccceb20a30d54918be5
 
 configMapGenerator:
   - name: domain-config
