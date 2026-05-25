@@ -95,6 +95,14 @@ model_list:
       input_cost_per_token: 0.0000002
       output_cost_per_token: 0.0000012
 
+  # OpenAI
+  - model_name: text-embedding-3-small
+    litellm_params:
+      model: openai/text-embedding-3-small
+      api_key: os.environ/OPENAI_API_KEY
+    model_info:
+      mode: embedding
+
 general_settings:
   use_redis_transaction_buffer: true
   enable_redis_auth_cache: true
