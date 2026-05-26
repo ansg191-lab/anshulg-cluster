@@ -24,7 +24,7 @@ labels:
 images:
   - name: busybox
     newName: ghcr.io/ansg191/claude-auth-proxy
-    newTag: main@sha256:7d993ff2ca8a31bcc838571ac01bfea069bfabdde964fff500d9c480247184f9
+    newTag: main@sha256:657cf8e36b190e4307f051b35c6e5bc45b6a3b6d882494fbfe40a7158aefa602
 
 configMapGenerator:
   - name: domain-config
