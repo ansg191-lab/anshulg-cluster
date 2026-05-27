@@ -103,6 +103,71 @@ model_list:
     model_info:
       mode: embedding
 
+  # Voyage AI
+  - model_name: voyage-4-large
+    litellm_params:
+      model: voyage/voyage-4-large
+      api_key: os.environ/VOYAGE_API_KEY
+    model_info:
+      mode: embedding
+      input_cost_per_token: 0.00000012
+  - model_name: voyage-4
+    litellm_params:
+      model: voyage/voyage-4
+      api_key: os.environ/VOYAGE_API_KEY
+    model_info:
+      mode: embedding
+      input_cost_per_token: 0.00000006
+  - model_name: voyage-4-lite
+    litellm_params:
+      model: voyage/voyage-4-lite
+      api_key: os.environ/VOYAGE_API_KEY
+    model_info:
+      mode: embedding
+      input_cost_per_token: 0.00000002
+  - model_name: voyage-context-3
+    litellm_params:
+      model: voyage/voyage-context-3
+      api_key: os.environ/VOYAGE_API_KEY
+    model_info:
+      mode: embedding
+      input_cost_per_token: 0.00000018
+  - model_name: voyage-code-3
+    litellm_params:
+      model: voyage/voyage-code-3
+      api_key: os.environ/VOYAGE_API_KEY
+    model_info:
+      mode: embedding
+      input_cost_per_token: 0.00000018
+  - model_name: voyage-finance-2
+    litellm_params:
+      model: voyage/voyage-finance-2
+      api_key: os.environ/VOYAGE_API_KEY
+    model_info:
+      mode: embedding
+      input_cost_per_token: 0.00000012
+  - model_name: voyage-law-2
+    litellm_params:
+      model: voyage/voyage-law-2
+      api_key: os.environ/VOYAGE_API_KEY
+    model_info:
+      mode: embedding
+      input_cost_per_token: 0.00000012
+  - model_name: rerank-2.5
+    litellm_params:
+      model: voyage/rerank-2.5
+      api_key: os.environ/VOYAGE_API_KEY
+    model_info:
+      mode: rerank
+      input_cost_per_token: 0.00000005
+  - model_name: rerank-2.5-lite
+    litellm_params:
+      model: voyage/rerank-2.5-lite
+      api_key: os.environ/VOYAGE_API_KEY
+    model_info:
+      mode: rerank
+      input_cost_per_token: 0.00000002
+
 general_settings:
   use_redis_transaction_buffer: true
   enable_redis_auth_cache: true
