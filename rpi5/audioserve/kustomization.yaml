@@ -20,7 +20,7 @@ labels:
 images:
   - name: busybox
     newName: izderadicka/audioserve
-    newTag: latest@sha256:c3609321701765671cae121fc0f61db122e8c124643c04770fbc9326c74b18e3
+    newTag: latest@sha256:aac13420d5ef2cf322fdffecd49108708b82096d6a04b1db88ec7e7e9fc39fb3
 
 configMapGenerator:
   - name: domain-config
