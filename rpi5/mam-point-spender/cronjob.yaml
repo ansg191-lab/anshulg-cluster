@@ -12,6 +12,7 @@ spec:
             - name: mam-point-spender
               image: ghcr.io/ansg191/mam-point-spender:0.1.2@sha256:ea43e9897134e615d4ebc0d91b574ae0540623a632c11cb3446eb1f1fafefbfd
               imagePullPolicy: IfNotPresent
+              workingDir: /tmp
               envFrom:
                 - configMapRef:
                     name: env
