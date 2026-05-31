@@ -10,7 +10,7 @@ spec:
         spec:
           containers:
             - name: mam-point-spender
-              image: ghcr.io/ansg191/mam-point-spender:0.1.5@sha256:119ee1871e0a682b7449014f2522c4cb187943da8162f98b4d70b54e53b94923
+              image: ghcr.io/ansg191/mam-point-spender:0.1.6@sha256:c4616abd28357ca6d6ef50e143d2f272465c48c108802d86d9e7ba0818118351
               imagePullPolicy: IfNotPresent
               workingDir: /tmp
               envFrom:
