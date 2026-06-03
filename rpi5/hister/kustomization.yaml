@@ -19,7 +19,7 @@ labels:
 images:
   - name: busybox
     newName: ghcr.io/asciimoo/hister
-    newTag: v0.14.0-debug@sha256:b2cd3bf21bc04922caab0bf869fd585f73ad24e442cfbf7334e9c5e6b806620a
+    newTag: v0.15.0-debug@sha256:6ce4b659680ee5ad1220053d553432c1377a79ddaa06a4f8a3595ec7372f19ef
 
 configMapGenerator:
   - name: domain-config
