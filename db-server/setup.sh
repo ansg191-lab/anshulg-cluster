@@ -15,7 +15,7 @@ END_MARKER='<< END ADDED BY setup.sh >>'
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # renovate: datasource=github-releases depName=restic/restic
-RESTIC_VERSION="0.18.1"
+RESTIC_VERSION="0.19.0"
 # renovate: datasource=github-releases depName=creativeprojects/resticprofile
 RESTICPROFILE_VERSION="0.33.1"
 
