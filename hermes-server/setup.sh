@@ -38,7 +38,7 @@ log_error() {
 HERMES_ROOT="/home/hermes"
 
 # renovate: datasource=github-releases depName=oauth2-proxy/oauth2-proxy
-OAUTH2_PROXY_VERSION="v7.15.2"
+OAUTH2_PROXY_VERSION="v7.15.3"
 
 OP_SERVICE_ACCOUNT_TOKEN=$(cat "/1password.txt" 2>/dev/null)
 [[ -z "$OP_SERVICE_ACCOUNT_TOKEN" ]] && {
