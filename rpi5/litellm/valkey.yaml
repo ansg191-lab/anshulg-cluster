@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: dhi.io
     chart: valkey-chart
-    targetRevision: 0.9.4
+    targetRevision: 0.10.0
     helm:
       values: |
         global:
