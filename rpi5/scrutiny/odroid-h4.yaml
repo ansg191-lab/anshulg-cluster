@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: odroid-h4
-          image: ghcr.io/starosdev/scrutiny:1.63.0-collector@sha256:5f16d0e91ecb950aa2be68ba32622b98a24ae608587876771353aa50f114b6b0
+          image: ghcr.io/starosdev/scrutiny:1.64.0-collector@sha256:0bff11c2f29758c76474867fe9270ec72c7e5bca8e8cfaa621d7b1dbb9fd5747
           imagePullPolicy: IfNotPresent
           securityContext:
             privileged: true
