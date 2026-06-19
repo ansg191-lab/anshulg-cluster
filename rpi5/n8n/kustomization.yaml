@@ -20,7 +20,7 @@ labels:
 images:
   - name: busybox
     newName: n8nio/n8n
-    newTag: 2.26.7@sha256:a6635a39629a579c86d5cb61a11be781a4c263bb12ec9ac25087361660a3f108
+    newTag: 2.27.3@sha256:a772d24e6b4f9b3848be5a57c5e45437eed1965bbbcefa2f9a93f4835b6639fa
 
 configMapGenerator:
   - name: domain-config
