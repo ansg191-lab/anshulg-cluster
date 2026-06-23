@@ -28,7 +28,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: unbound
-          image: madnuttah/unbound:1.24.2-2@sha256:9600512cc0d248d581fb5a20e0884756dce6e54466f69c467e6f1b7d817e71d9
+          image: madnuttah/unbound:1.25.1-2@sha256:05312ebc069e2533435bdc1a799353d51642026175b6c8a060347066ab98b164
           imagePullPolicy: IfNotPresent
           env:
             # Skip the entrypoint's chown / setperms pass - would fail under
