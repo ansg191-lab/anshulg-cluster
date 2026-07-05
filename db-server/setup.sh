@@ -18,6 +18,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 RESTIC_VERSION="0.18.1"
 # renovate: datasource=github-releases depName=creativeprojects/resticprofile
 RESTICPROFILE_VERSION="0.33.1"
+# renovate: datasource=github-releases depName=open-telemetry/opentelemetry-collector-releases
+OTELCOL_VERSION="0.155.0"
 
 OP_SERVICE_ACCOUNT_TOKEN=$(cat "1password.txt")
 export OP_SERVICE_ACCOUNT_TOKEN
@@ -75,6 +77,51 @@ install_ca() {
 	chmod 644 /home/anshulgupta/ca.crt
 	cp /home/anshulgupta/ca.crt /usr/local/share/ca-certificates/anshulg.crt
 	update-ca-certificates
+}
+
+setup_otel() {
+	log "Setting up otelcol-contrib..."
+
+	local need_install=0
+	if ! dpkg -s otelcol-contrib &> /dev/null; then
+		need_install=1
+	else
+		local installed_version
+		installed_version=$(dpkg -s otelcol-contrib | grep Version | awk '{print $2}')
+		if [ "$installed_version" = "$OTELCOL_VERSION" ]; then
+			need_install=0
+		else
+			need_install=1
+		fi
+	fi
+
+	if [ "$need_install" = "1" ]; then
+		log "Installing otelcol-contrib v${OTELCOL_VERSION}..."
+		ARCH=$(uname -m | sed 's/x86_64/amd64/g' | sed 's/aarch64/arm64/g')
+		curl -fsSL -O "https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download/v${OTELCOL_VERSION}/otelcol-contrib_${OTELCOL_VERSION}_linux_${ARCH}.deb"
+		sudo dpkg -i --force-confold "otelcol-contrib_${OTELCOL_VERSION}_linux_${ARCH}.deb"
+	fi
+
+	otelcol-contrib --version
+
+	log "Adding otelcol-contrib user to necessary groups..."
+	# Allow otelcol to access journal
+	usermod -a -G systemd-journal otelcol-contrib
+	# Allow otelcol to access /var/log
+	usermod -a -G adm otelcol-contrib
+
+	log "Installing SigNoz token..."
+	SIGNOZ_TOKEN=$(op read "op://RPI4/RPI4 SigNoz Ingestion Key/credential")
+	install -o root -g otelcol-contrib -m 640 <(printf "%s" "$SIGNOZ_TOKEN") /etc/otelcol-contrib/signoz-token
+
+	log "Installing monitoring postgresql password..."
+	POSTGRES_PASSWORD=$(op read "op://RPI4/RPI4 Postgres Monitoring/password")
+	install -o root -g otelcol-contrib -m 640 <(printf "%s" "$POSTGRES_PASSWORD") /etc/otelcol-contrib/postgres-password
+
+	log "Restarting otelcol-contrib..."
+	systemctl restart otelcol-contrib
+
+	log "Done."
 }
 
 setup_firewall() {
@@ -363,6 +410,7 @@ trap cleanup EXIT
 copy_root
 install_packages
 install_ca
+setup_otel
 setup_firewall
 setup_mta
 setup_zeyple

@@ -1,0 +1,156 @@
+# To limit exposure to denial of service attacks, change the host in endpoints below from 0.0.0.0 to a specific network interface.
+# See https://github.com/open-telemetry/opentelemetry-collector/blob/main/docs/security-best-practices.md#safeguards-against-denial-of-service-attacks
+
+receivers:
+  # otlp:
+  #   protocols:
+  #     grpc:
+  #       endpoint: 0.0.0.0:4317
+  #     http:
+  #       endpoint: 0.0.0.0:4318
+  # chrony: {}
+  hostmetrics:
+    collection_interval: 60s
+    scrapers:
+      cpu: {}
+      disk: {}
+      load: {}
+      filesystem: {}
+      memory: {}
+      network: {}
+      nfs: {}
+      paging: {}
+      process:
+        mute_process_name_error: true
+        mute_process_exe_error: true
+        mute_process_io_error: true
+      processes: {}
+      system: {}
+  journald:
+    start_at: end
+
+  postgresql:
+    endpoint: "localhost:5432"
+    collection_interval: 60s
+    username: "monitoring"
+    password: ${file:/etc/otelcol-contrib/postgres-password}
+    databases: []
+    tls:
+      insecure: true
+    metrics:
+      postgresql.database.locks:
+        enabled: true
+      postgresql.deadlocks:
+        enabled: true
+      postgresql.sequential_scans:
+        enabled: true
+
+  filelog/postgresql:
+    include: [ "/var/log/postgresql/postgresql-17-main.log" ]
+    operators:
+      # Parse default postgresql text log format.
+      # `log_line_prefix` postgres setting defaults to '%m [%p] ' which logs the timestamp and the process ID
+      # See https://www.postgresql.org/docs/current/runtime-config-logging.html#GUC-LOG-LINE-PREFIX for more details
+      - type: regex_parser
+        if: body matches '^(?P<ts>\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.?[0-9]*? [A-Z]*) \\[(?P<pid>[0-9]+)\\] (?P<log_level>[A-Z]*).\\s+(?P<message>.*)$'
+        parse_from: body
+        regex: '^(?P<ts>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.?[0-9]*? [A-Z]*) \[(?P<pid>[0-9]+)\] (?P<log_level>[A-Z]*). (?P<message>.*)$'
+        timestamp:
+          parse_from: attributes.ts
+          layout: '%Y-%m-%d %H:%M:%S %Z'
+          time_zone_locations:
+            PST: America/Los_Angeles
+            PDT: America/Los_Angeles
+        severity:
+          parse_from: attributes.log_level
+          mapping:
+            debug:
+              - DEBUG1
+              - DEBUG2
+              - DEBUG3
+              - DEBUG4
+              - DEBUG5
+            info:
+              - INFO
+              - LOG
+              - NOTICE
+              - DETAIL
+            warn: WARNING
+            error: ERROR
+            fatal:
+              - FATAL
+              - PANIC
+        on_error: send
+      - type: move
+        if: attributes.message != nil
+        from: attributes.message
+        to: body
+      - type: remove
+        if: attributes.log_level != nil
+        field: attributes.log_level
+      - type: remove
+        if: attributes.ts != nil
+        field: attributes.ts
+      - type: add
+        field: attributes.source
+        value: postgres
+
+processors:
+  batch:
+    send_batch_size: 1000
+    timeout: 10s
+  # Ref: https://signoz.io/docs/opentelemetry-collection-agents/opentelemetry-collector/configuration/#resource-processor
+  resourcedetection:
+    detectors: [env, system]
+    refresh_interval: 5m
+    system:
+      hostname_sources: ["os"]
+      resource_attributes:
+        host.arch:
+          enabled: true
+        host.cpu.family:
+          enabled: true
+        host.cpu.model.id:
+          enabled: true
+        host.cpu.model.name:
+          enabled: true
+        host.cpu.vendor.id:
+          enabled: true
+        host.ip:
+          enabled: false
+        host.mac:
+          enabled: false
+        host.name:
+          enabled: true
+        os.name:
+          enabled: true
+        os.type:
+          enabled: true
+        os.version:
+          enabled: true
+exporters:
+  otlphttp:
+    endpoint: https://ingest.us2.signoz.cloud:443
+    headers:
+      signoz-ingestion-key: ${file:/etc/otelcol-contrib/signoz-token}
+service:
+  pipelines:
+    metrics:
+      receivers:
+        # - otlp
+        # - chrony
+        - hostmetrics
+        - postgresql
+      processors: [batch, resourcedetection]
+      exporters: [otlphttp]
+    # traces:
+    #   receivers: [otlp]
+    #   processors: [batch, resourcedetection]
+    #   exporters: [otlphttp]
+    logs:
+      receivers:
+        # - otlp
+        - journald
+        - filelog/postgresql
+      processors: [batch, resourcedetection]
+      exporters: [otlphttp]
