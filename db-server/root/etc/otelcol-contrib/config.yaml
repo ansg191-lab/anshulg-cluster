@@ -29,21 +29,21 @@ receivers:
   journald:
     start_at: end
 
-  postgresql:
-    endpoint: "localhost:5432"
-    collection_interval: 60s
-    username: "monitoring"
-    password: ${file:/etc/otelcol-contrib/postgres-password}
-    databases: []
-    tls:
-      insecure: true
-    metrics:
-      postgresql.database.locks:
-        enabled: true
-      postgresql.deadlocks:
-        enabled: true
-      postgresql.sequential_scans:
-        enabled: true
+#  postgresql:
+#    endpoint: "localhost:5432"
+#    collection_interval: 60s
+#    username: "monitoring"
+#    password: ${file:/etc/otelcol-contrib/postgres-password}
+#    databases: []
+#    tls:
+#      insecure: true
+#    metrics:
+#      postgresql.database.locks:
+#        enabled: true
+#      postgresql.deadlocks:
+#        enabled: true
+#      postgresql.sequential_scans:
+#        enabled: true
 
   filelog/postgresql:
     include: [ "/var/log/postgresql/postgresql-17-main.log" ]
@@ -52,7 +52,7 @@ receivers:
       # `log_line_prefix` postgres setting defaults to '%m [%p] ' which logs the timestamp and the process ID
       # See https://www.postgresql.org/docs/current/runtime-config-logging.html#GUC-LOG-LINE-PREFIX for more details
       - type: regex_parser
-        if: body matches '^(?P<ts>\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.?[0-9]*? [A-Z]*) \\[(?P<pid>[0-9]+)\\] (?P<log_level>[A-Z]*).\\s+(?P<message>.*)$'
+        if: body matches '^(?P<ts>\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.?[0-9]*? [A-Z]*) \\[(?P<pid>[0-9]+)\\] (?P<log_level>[A-Z]*). (?P<message>.*)$'
         parse_from: body
         regex: '^(?P<ts>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.?[0-9]*? [A-Z]*) \[(?P<pid>[0-9]+)\] (?P<log_level>[A-Z]*). (?P<message>.*)$'
         timestamp:
@@ -140,7 +140,7 @@ service:
         # - otlp
         # - chrony
         - hostmetrics
-        - postgresql
+#        - postgresql
       processors: [batch, resourcedetection]
       exporters: [otlphttp]
     # traces:
