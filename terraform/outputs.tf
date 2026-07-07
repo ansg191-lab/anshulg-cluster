@@ -18,6 +18,19 @@ output "hermes_static_ip" {
   }
 }
 
+output "vault_hostname" {
+  description = "The hostname of vault"
+  value       = module.vault.fqdn
+}
+
+output "vault_static_ip" {
+  description = "The static IP address of vault"
+  value = {
+    ipv4 = module.vault.ipv4
+    ipv6 = module.vault.ipv6
+  }
+}
+
 output "service_accounts" {
   description = "Service account emails by purpose"
   value       = module.gcp.service_accounts
