@@ -11,7 +11,7 @@ module "vault" {
   region       = "us-west1"
   zone         = "us-west1-c"
 
-  boot_disk_os      = "debian-13"
+  boot_disk_os      = "debian-13-arm64"
   boot_disk_project = "debian-cloud"
   boot_disk_size_gb = 50
   boot_disk_type    = "hyperdisk-balanced"
