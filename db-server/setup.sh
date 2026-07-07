@@ -19,7 +19,7 @@ RESTIC_VERSION="0.18.1"
 # renovate: datasource=github-releases depName=creativeprojects/resticprofile
 RESTICPROFILE_VERSION="0.33.1"
 # renovate: datasource=github-releases depName=open-telemetry/opentelemetry-collector-releases
-OTELCOL_VERSION="0.155.0"
+OTELCOL_VERSION="0.156.0"
 
 OP_SERVICE_ACCOUNT_TOKEN=$(cat "1password.txt")
 export OP_SERVICE_ACCOUNT_TOKEN
