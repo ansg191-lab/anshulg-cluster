@@ -139,6 +139,10 @@ c012e955-9630-42f2-9ec0-138c037d020d.anshulg.com. 60 IN AAAA 2600:1900:4120:716d
 hermes.anshulg.com. 60 IN A 34.102.0.125
 hermes.anshulg.com. 60 IN AAAA 2600:1900:4120:716d:0:6::
 
+;; Vault server
+gvt01-avd.anshulg.com. 60 IN A 8.229.77.145
+gvt01-avd.anshulg.com. 60 IN AAAA 2600:1900:4040:5169::
+
 ;; VPN Server
 vpn.anshulg.com. 60 IN CNAME anshul-vpn.duckdns.org.
 backup.vpn.anshulg.com. 60 IN CNAME gq8ada5.glddns.com.
