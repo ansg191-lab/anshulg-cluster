@@ -22,7 +22,7 @@ resource "google_compute_instance" "this" {
     access_config {
       network_tier           = "PREMIUM"
       nat_ip                 = google_compute_address.ipv4.address
-      public_ptr_domain_name = local.fqdn
+      public_ptr_domain_name = "${local.fqdn}."
     }
 
     ipv6_access_config {
