@@ -32,7 +32,7 @@ resource "google_compute_instance" "this" {
     }
   }
 
-  tags = []
+  tags = [local.firewall_tag]
 
   dynamic "service_account" {
     for_each = google_service_account.this
