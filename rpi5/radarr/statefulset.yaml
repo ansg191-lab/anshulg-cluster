@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: radarr
-          image: lscr.io/linuxserver/radarr:6.2.1@sha256:1e95b5c13fe015361a9ae1c4d99fc2336816790aaea60fa74b2ffebe076a69e0
+          image: lscr.io/linuxserver/radarr:6.2.1@sha256:28852d0eacababc206762af48fe86d78594a4f434cc46b358f9764a857098662
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID
