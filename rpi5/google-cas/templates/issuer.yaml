@@ -37,6 +37,7 @@ spec:
   acme:
     email: ansg191@anshulg.com
     server: https://acme-v02.api.letsencrypt.org/directory
+    profile: shortlived
     privateKeySecretRef:
       name: letsencrypt-prod-account-key
     solvers:
