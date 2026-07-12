@@ -20,3 +20,7 @@ output "ipv4" {
 output "ipv6" {
   value = google_compute_address.ipv6.address
 }
+
+output "service_account" {
+  value = google_service_account.this
+}

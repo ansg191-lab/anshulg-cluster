@@ -22,3 +22,35 @@ module "vault" {
 
   create_service_account = true
 }
+
+# Create a KMS key ring
+resource "google_kms_key_ring" "key_ring" {
+  name     = "vault-ring"
+  location = "us-west1"
+}
+
+# Create a crypto key for the key ring
+resource "google_kms_crypto_key" "crypto_key" {
+  name            = "vault-key"
+  key_ring        = google_kms_key_ring.key_ring.id
+  rotation_period = "7776000s"
+  purpose         = "ENCRYPT_DECRYPT"
+
+  version_template {
+    algorithm        = "GOOGLE_SYMMETRIC_ENCRYPTION"
+    protection_level = "HSM"
+  }
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+
+resource "google_kms_key_ring_iam_binding" "vault_iam_kms_binding" {
+  key_ring_id = google_kms_key_ring.key_ring.id
+  role        = "roles/owner"
+
+  members = [
+    module.vault.service_account.member
+  ]
+}
