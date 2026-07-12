@@ -46,11 +46,14 @@ resource "google_kms_crypto_key" "crypto_key" {
   }
 }
 
-resource "google_kms_key_ring_iam_binding" "vault_iam_kms_binding" {
-  key_ring_id = google_kms_key_ring.key_ring.id
-  role        = "roles/owner"
+resource "google_kms_crypto_key_iam_member" "vault_encrypter_decrypter" {
+  crypto_key_id = google_kms_crypto_key.crypto_key.id
+  role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
+  member        = module.vault.service_account.member
+}
 
-  members = [
-    module.vault.service_account.member
-  ]
+resource "google_kms_crypto_key_iam_member" "vault_viewer" {
+  crypto_key_id = google_kms_crypto_key.crypto_key.id
+  role          = "roles/cloudkms.viewer"
+  member        = module.vault.service_account.member
 }
