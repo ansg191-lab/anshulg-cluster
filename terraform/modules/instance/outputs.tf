@@ -22,5 +22,5 @@ output "ipv6" {
 }
 
 output "service_account" {
-  value = google_service_account.this
+  value = one(google_service_account.this)
 }
