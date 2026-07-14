@@ -2,6 +2,10 @@ module "gcp" {
   source = "./modules/gcp"
 }
 
+module "vault_setup" {
+  source = "./modules/vault"
+}
+
 module "vault" {
   source = "./modules/instance"
 

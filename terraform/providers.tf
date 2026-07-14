@@ -11,6 +11,10 @@ terraform {
       source  = "hashicorp/google"
       version = "7.38.0"
     }
+    vault = {
+      source  = "hashicorp/vault"
+      version = "5.10.1"
+    }
   }
 }
 
@@ -19,3 +23,5 @@ provider "google" {
   region  = "us-west1"
   zone    = "us-west1-a"
 }
+
+provider "vault" {}
