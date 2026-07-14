@@ -58,19 +58,3 @@ resource "vault_policy" "tfc_policy" {
   name   = "tfc-policy"
   policy = data.vault_policy_document.tfc_policy.hcl
 }
-
-# Temporary import blocks
-# import {
-#   to = vault_jwt_auth_backend.tfc_jwt
-#   id = "tfc_jwt"
-# }
-#
-# import {
-#   to = vault_jwt_auth_backend_role.tfc_role
-#   id = "auth/tfc_jwt/role/tfc-role"
-# }
-#
-# import {
-#   to = vault_policy.tfc_policy
-#   id = "tfc-policy"
-# }
