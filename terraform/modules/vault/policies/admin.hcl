@@ -17,3 +17,23 @@ path "identity/*" {
 path "kv/*" {
   capabilities = ["create", "read", "update", "delete", "list"]
 }
+
+# Allow access to transit
+path "transit/*" {
+  capabilities = ["create", "read", "update", "delete", "list"]
+}
+
+# Allow access to database
+path "database/*" {
+  capabilities = ["create", "read", "update", "delete", "list"]
+}
+
+# Allow access to ssh-client-signer
+path "ssh-client-signer/*" {
+  capabilities = ["create", "read", "update", "delete", "list"]
+}
+
+# Allow access to ssh-host-signer
+path "ssh-host-signer/*" {
+  capabilities = ["create", "read", "update", "delete", "list"]
+}
