@@ -37,3 +37,50 @@ resource "vault_policy" "tfc_policy" {
   name   = "tfc-policy"
   policy = data.vault_policy_document.tfc_policy.hcl
 }
+
+# ------------------------------------------------------------------------------
+# KANIDM OIDC AUTH
+# ------------------------------------------------------------------------------
+
+data "vault_kv_secret_v2" "oidc_config" {
+  mount = vault_mount.kv_v2.path
+  name  = "vault-oidc"
+}
+
+locals {
+  client_id     = data.vault_kv_secret_v2.oidc_config.data["client_id"]
+  client_secret = data.vault_kv_secret_v2.oidc_config.data["client_secret"]
+  default_role  = "default"
+}
+
+resource "vault_jwt_auth_backend" "oidc" {
+  type               = "oidc"
+  path               = "oidc"
+  description        = "KanIDM OIDC auth backend"
+  oidc_discovery_url = "https://auth.anshulg.com/oauth2/openid/${local.client_id}"
+  oidc_client_id     = local.client_id
+  oidc_client_secret = local.client_secret
+  default_role       = local.default_role
+  jwt_supported_algs = ["ES256"]
+
+  tune {
+    listing_visibility = "unauth"
+  }
+}
+
+resource "vault_jwt_auth_backend_role" "oidc_default" {
+  backend   = vault_jwt_auth_backend.oidc.path
+  role_name = local.default_role
+  role_type = "oidc"
+
+  allowed_redirect_uris = [
+    "https://vault.anshulg.com/ui/vault/auth/oidc/oidc/callback",
+    "http://localhost:8250/oidc/callback"
+  ]
+
+  user_claim   = "preferred_username"
+  groups_claim = "groups"
+
+  oidc_scopes     = ["groups"]
+  bound_audiences = [local.client_id]
+}
