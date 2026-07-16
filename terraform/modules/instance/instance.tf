@@ -54,4 +54,8 @@ resource "google_compute_disk" "boot" {
   type  = var.boot_disk_type
   image = data.google_compute_image.boot_image.self_link
   size  = var.boot_disk_size_gb
+
+  lifecycle {
+    ignore_changes = [image]
+  }
 }
