@@ -1,3 +1,7 @@
+# ------------------------------------------------------------------------------
+# TERRAFORM CLOUD AUTH
+# ------------------------------------------------------------------------------
+
 resource "vault_jwt_auth_backend" "tfc_jwt" {
   path               = "tfc_jwt"
   type               = "jwt"
@@ -6,9 +10,10 @@ resource "vault_jwt_auth_backend" "tfc_jwt" {
 }
 
 resource "vault_jwt_auth_backend_role" "tfc_role" {
-  backend        = vault_jwt_auth_backend.tfc_jwt.path
-  role_name      = "tfc-role"
-  token_policies = [vault_policy.tfc_policy.name]
+  backend                 = vault_jwt_auth_backend.tfc_jwt.path
+  role_name               = "tfc-role"
+  token_policies          = [vault_policy.tfc_policy.name]
+  token_no_default_policy = true
 
   bound_audiences   = ["vault.workload.identity"]
   bound_claims_type = "glob"
@@ -22,35 +27,9 @@ resource "vault_jwt_auth_backend_role" "tfc_role" {
 
 data "vault_policy_document" "tfc_policy" {
   rule {
-    path         = "auth/token/lookup-self"
-    capabilities = ["read"]
-    description  = "Allow tokens to query themselves"
-  }
-  rule {
-    path         = "auth/token/renew-self"
-    capabilities = ["update"]
-    description  = "Allow tokens to renew themselves"
-  }
-  rule {
-    path         = "auth/token/revoke-self"
-    capabilities = ["update"]
-    description  = "Allow tokens to revoke themselves"
-  }
-
-  rule {
-    path         = "sys/*"
+    path         = "*"
     capabilities = ["create", "read", "update", "delete", "list", "sudo"]
-    description = "Allow token to manage vault"
-  }
-  rule {
-    path         = "auth/*"
-    capabilities = ["create", "read", "update", "delete", "list", "sudo"]
-    description = "Allow token to manage vault auth"
-  }
-  rule {
-    path         = "identity/*"
-    capabilities = ["create", "read", "update", "delete", "list"]
-    description = "Allow token to manage auth"
+    description  = "Allow token to manage everything"
   }
 }
 
