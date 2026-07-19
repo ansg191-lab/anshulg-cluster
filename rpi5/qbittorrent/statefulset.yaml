@@ -45,7 +45,7 @@ spec:
             initialDelaySeconds: 30
             periodSeconds: 5
         - name: qbittorrent
-          image: linuxserver/qbittorrent:5.2.1@sha256:689c81f580345135e48b5aa09b26a4d864d7af1b9a496a47db61eebe71fd480c
+          image: linuxserver/qbittorrent:5.2.3@sha256:b024436f8ca665d16d9a997d26fd27fdf867ee5566ba09f32764e7b2976d3e02
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID
