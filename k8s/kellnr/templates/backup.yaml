@@ -11,7 +11,7 @@ spec:
         spec:
           initContainers:
             - name: pgdump
-              image: postgres:17.10@sha256:b6e56e35dc2ffd4a697a259f68b4f2df36f0c4251bef2493fa9034f82583f881
+              image: postgres:17.10@sha256:7958605b474b3d264a969cb3a123d6aa00ad1e1fe9da8a69984dabb704d93317
               imagePullPolicy: IfNotPresent
               command:
                 - sh
