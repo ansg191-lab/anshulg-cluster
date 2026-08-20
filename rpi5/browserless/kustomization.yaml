@@ -18,7 +18,7 @@ labels:
 images:
   - name: busybox
     newName: ghcr.io/browserless/chromium
-    newTag: latest@sha256:184ecd9efa52a455b640b47e21e674b7f97ad7ba147e0ec31d122f1cbf513d12
+    newTag: latest@sha256:c0886239e4eaa102e214acbbde5345f5b2a55a7ccbb52456048afd374defbabb
 
 configMapGenerator:
   - name: domain-config
