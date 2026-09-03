@@ -18,7 +18,7 @@ labels:
 images:
   - name: busybox
     newName: blampe/rreading-glasses
-    newTag: hardcover@sha256:3489e722a73c9cbab5b9ba530cf8a60c2280367fb03db1fb649261dfb064b52f
+    newTag: hardcover@sha256:6db4551f77c038516b55dab689f3b473c2c5fdf8f13580b91a8ba39360c3d107
 
 patches:
   - target:
