@@ -19,7 +19,7 @@ labels:
 images:
   - name: busybox
     newName: ghcr.io/autobrr/autobrr
-    newTag: v1.80.0@sha256:944b1c438302ed10bef810a49f2eb7f334b5abf578db473bcb8d997db3978227
+    newTag: v1.85.0@sha256:f7594d15dfe9a59e7bbc4bce8aee437a1d440d60b350e2ee74331c0d4ec01928
 
 configMapGenerator:
   - name: domain-config
