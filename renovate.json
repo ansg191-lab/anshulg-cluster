@@ -55,6 +55,15 @@
     },
     {
       "matchPackageNames": [
+        "linuxserver/qbittorrent",
+        "ghcr.io/stuffanthings/qbit_manage"
+      ],
+      "groupName": "qbittorrent",
+      "separateMajorMinor": false,
+      "separateMinorPatch": false
+    },
+    {
+      "matchPackageNames": [
         "intel-device-plugins-gpu",
         "intel-device-plugins-operator"
       ],
