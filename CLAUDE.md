@@ -626,7 +626,9 @@ Automated updates for:
 
 Minor and major updates always need review. linuxserver.io minor bumps are grouped into one `linuxserver images` PR.
 
-**Never automerged** (`critical` label): kanidm, postgres (image and charts), linuxserver mariadb, cert-manager*, trust-manager, sealed-secrets, traefik, 1Password `connect`, kyverno, tailscale-operator, `rancher/*` (k3s upgrades), and anything under `auth-server/`, because a push there deploys to the live auth server.
+**Never automerged** (`critical` label): kanidm, cert-manager* (including the Google CAS issuer), trust-manager, sealed-secrets, traefik, 1Password `connect`, kyverno, node-feature-discovery, DNS (blocky, unbound), `rancher/*` (k3s upgrades), and anything under `auth-server/`, because a push there deploys to the live auth server.
+
+**Databases** (`database` label, never automerged): postgres (image and charts), linuxserver mariadb, meilisearch. Their upgrades may need manual migration steps, and the PR body says so.
 
 **Coupled groups** (`coupled` label, one PR, never automerged, digests included). These are packages that can't be upgraded independently:
 - `qbittorrent`: `linuxserver/qbittorrent` and `ghcr.io/stuffanthings/qbit_manage`. qbit_manage supports only specific qBittorrent versions. New qBittorrent releases wait 7 days so a matching qbit_manage release can land in the same PR.
@@ -634,7 +636,7 @@ Minor and major updates always need review. linuxserver.io minor bumps are group
 - `teslamate`: TeslaMate and its Grafana image
 - `linkerd`: all Linkerd charts
 
-To add a coupled set, append a rule at the end of `packageRules` with `groupName`, `separateMajorMinor: false`, `separateMinorPatch: false`, `automerge: false` and `addLabels: ["coupled"]`. Then add its package names as `!` exclusions to the digest and patch automerge rules.
+To add a coupled set, append a rule at the end of `packageRules` with `groupName`, `separateMajorMinor: false`, `separateMinorPatch: false`, `automerge: false` and `addLabels: ["coupled"]`. Then add its package names as `!` exclusions to the digest and patch automerge rules (the same applies to new critical or database packages).
 
 **Labels:** the top-level `labels` sets only `deps`. Every package rule uses `addLabels`, which stack across matching rules; `labels` would overwrite instead. Filter PRs with queries like `label:cluster:rpi5 label:needs-review`.
 
@@ -642,6 +644,6 @@ To add a coupled set, append a rule at the end of `packageRules` with `groupName
 |---|---|
 | Where it deploys (by file path) | `cluster:rpi5`, `cluster:k8s`, `host:auth-server`, `host:db-server`, `host:hermes-server`, `area:terraform`, `area:ci` |
 | Stack (by package name) | `stack:media`, `stack:auth`, `stack:network` |
-| Handling | `automerge`, `needs-review`, `critical`, `coupled` |
+| Handling | `automerge`, `needs-review`, `critical`, `database`, `coupled` |
 
 Check `renovate.json` for all rules. Each rule has a `description`.

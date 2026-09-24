@@ -126,7 +126,10 @@
         "deluan/navidrome",
         "izderadicka/audioserve",
         "crocodilestick/calibre-web-automated",
-        "blampe/rreading-glasses"
+        "blampe/rreading-glasses",
+        "ghcr.io/fuzzygrim/yamtrack",
+        "ghcr.io/ansg191/kuryana",
+        "ghcr.io/cenodude/crosswatch"
       ],
       "addLabels": [
         "stack:media"
@@ -158,7 +161,7 @@
       ]
     },
     {
-      "description": "Digests: one weekly group PR, automerged. Critical, coupled and auth-server deps are excluded.",
+      "description": "Digests: one weekly group PR, automerged. Critical, database, coupled and auth-server deps are excluded.",
       "matchUpdateTypes": [
         "digest",
         "pinDigest"
@@ -173,13 +176,16 @@
         "!traefik",
         "!connect",
         "!kyverno",
-        "!tailscale-operator",
         "!/^rancher\\//",
         "!/^linkerd/",
         "!/^intel-device-plugins/",
         "!/qbittorrent$/",
         "!/qbit_manage/",
-        "!/^teslamate\\//"
+        "!/^teslamate\\//",
+        "!meilisearch",
+        "!/node-feature-discovery/",
+        "!ghcr.io/0xerr0r/blocky",
+        "!madnuttah/unbound"
       ],
       "matchFileNames": [
         "!auth-server/**"
@@ -192,7 +198,7 @@
       ]
     },
     {
-      "description": "Patches: automerged after 3 days. Critical, coupled and auth-server deps are excluded.",
+      "description": "Patches: automerged after 3 days. Critical, database, coupled and auth-server deps are excluded.",
       "matchUpdateTypes": [
         "patch",
         "pin"
@@ -207,13 +213,16 @@
         "!traefik",
         "!connect",
         "!kyverno",
-        "!tailscale-operator",
         "!/^rancher\\//",
         "!/^linkerd/",
         "!/^intel-device-plugins/",
         "!/qbittorrent$/",
         "!/qbit_manage/",
-        "!/^teslamate\\//"
+        "!/^teslamate\\//",
+        "!meilisearch",
+        "!/node-feature-discovery/",
+        "!ghcr.io/0xerr0r/blocky",
+        "!madnuttah/unbound"
       ],
       "matchFileNames": [
         "!auth-server/**"
@@ -276,23 +285,39 @@
       ]
     },
     {
-      "description": "Critical infrastructure: never automerge (auth, databases, TLS, secrets, ingress, policy, k3s upgrades, auth-server host)",
+      "description": "Critical infrastructure: never automerge (auth, TLS, secrets, ingress, DNS, policy, node features, k3s upgrades)",
       "matchPackageNames": [
         "/kanidm/",
-        "/postgres/",
-        "lscr.io/linuxserver/mariadb",
         "/^cert-manager/",
+        "cert-manager-google-cas-issuer",
         "trust-manager",
         "sealed-secrets",
         "traefik",
         "connect",
         "kyverno",
-        "tailscale-operator",
+        "/node-feature-discovery/",
+        "ghcr.io/0xerr0r/blocky",
+        "madnuttah/unbound",
         "/^rancher\\//"
       ],
       "automerge": false,
       "addLabels": [
         "critical"
+      ]
+    },
+    {
+      "description": "Databases: never automerge; upgrades may need manual migration",
+      "matchPackageNames": [
+        "/postgres/",
+        "lscr.io/linuxserver/mariadb",
+        "meilisearch"
+      ],
+      "automerge": false,
+      "addLabels": [
+        "database"
+      ],
+      "prBodyNotes": [
+        "**Database update:** check the release notes for required migration or upgrade steps (dump/restore, extension updates) before merging."
       ]
     },
     {
