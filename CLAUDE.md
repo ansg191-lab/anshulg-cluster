@@ -617,7 +617,7 @@ Automated updates for:
 - Terraform modules
 - Perl dependencies
 
-**Schedule:** Renovate opens, updates and automerges PRs only on Saturdays before 6am (America/Los_Angeles). At most 10 PRs are open at once.
+**Schedule:** Renovate opens, updates and automerges PRs only on Saturdays before 6am (America/Los_Angeles).
 
 **Automerge** (only once CI is green):
 - Digest updates: all go into one weekly `renovate/all-digest` PR
@@ -636,11 +636,11 @@ Minor and major updates always need review. linuxserver.io minor bumps are group
 
 To add a coupled set, append a rule at the end of `packageRules` with `groupName`, `separateMajorMinor: false`, `separateMinorPatch: false`, `automerge: false` and `addLabels: ["coupled"]`. Then add its package names as `!` exclusions to the digest and patch automerge rules.
 
-**Labels:** the top-level `labels` sets only `dependencies`. Every package rule uses `addLabels`, which stack across matching rules; `labels` would overwrite instead. Filter PRs with queries like `label:cluster:rpi5 label:needs-review`.
+**Labels:** the top-level `labels` sets only `deps`. Every package rule uses `addLabels`, which stack across matching rules; `labels` would overwrite instead. Filter PRs with queries like `label:cluster:rpi5 label:needs-review`.
 
 | Dimension | Labels |
 |---|---|
-| Where it deploys (by file path) | `cluster:rpi5`, `cluster:k8s`, `host:auth-server`, `host:db-server`, `host:hermes-server`, `area:terraform`, `area:dns`, `area:ci` |
+| Where it deploys (by file path) | `cluster:rpi5`, `cluster:k8s`, `host:auth-server`, `host:db-server`, `host:hermes-server`, `area:terraform`, `area:ci` |
 | Stack (by package name) | `stack:media`, `stack:auth`, `stack:network` |
 | Handling | `automerge`, `needs-review`, `critical`, `coupled` |
 

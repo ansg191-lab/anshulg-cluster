@@ -10,7 +10,7 @@
   "automergeSchedule": [
     "* 0-5 * * 6"
   ],
-  "prConcurrentLimit": 10,
+  "prConcurrentLimit": 0,
   "prHourlyLimit": 0,
   "platformCommit": "enabled",
   "rebaseWhen": "conflicted",
@@ -19,7 +19,7 @@
   "automergeType": "pr",
   "minimumReleaseAgeBehaviour": "timestamp-optional",
   "labels": [
-    "dependencies"
+    "deps"
   ],
   "kubernetes": {
     "managerFilePatterns": [
@@ -92,15 +92,6 @@
       ],
       "addLabels": [
         "area:terraform"
-      ]
-    },
-    {
-      "description": "Label: DNS zones",
-      "matchFileNames": [
-        "zones/**"
-      ],
-      "addLabels": [
-        "area:dns"
       ]
     },
     {
