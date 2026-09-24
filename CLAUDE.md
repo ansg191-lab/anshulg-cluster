@@ -617,9 +617,31 @@ Automated updates for:
 - Terraform modules
 - Perl dependencies
 
-**Package Groupings** (to ensure coordinated updates):
-- `intel-device-plugins`: Groups `intel-device-plugins-gpu` and `intel-device-plugins-operator`
-- `teslamate`: Groups TeslaMate and Grafana images
-- `linkerd`: Groups all Linkerd chart components
+**Schedule:** Renovate opens, updates and automerges PRs only on Saturdays before 6am (America/Los_Angeles). At most 10 PRs are open at once.
 
-Auto-merge enabled for patch/digest updates. Check `renovate.json` for custom rules.
+**Automerge** (only once CI is green):
+- Digest updates: all go into one weekly `renovate/all-digest` PR
+- Patch and pin updates, after a 3-day minimum release age
+- Non-major GitHub Actions updates: grouped into one `github-actions` PR
+
+Minor and major updates always need review. linuxserver.io minor bumps are grouped into one `linuxserver images` PR.
+
+**Never automerged** (`critical` label): kanidm, postgres (image and charts), linuxserver mariadb, cert-manager*, trust-manager, sealed-secrets, traefik, 1Password `connect`, kyverno, tailscale-operator, `rancher/*` (k3s upgrades), and anything under `auth-server/`, because a push there deploys to the live auth server.
+
+**Coupled groups** (`coupled` label, one PR, never automerged, digests included). These are packages that can't be upgraded independently:
+- `qbittorrent`: `linuxserver/qbittorrent` and `ghcr.io/stuffanthings/qbit_manage`. qbit_manage supports only specific qBittorrent versions. New qBittorrent releases wait 7 days so a matching qbit_manage release can land in the same PR.
+- `intel-device-plugins`: operator and GPU plugin (see the webhook version-lock notes above)
+- `teslamate`: TeslaMate and its Grafana image
+- `linkerd`: all Linkerd charts
+
+To add a coupled set, append a rule at the end of `packageRules` with `groupName`, `separateMajorMinor: false`, `separateMinorPatch: false`, `automerge: false` and `addLabels: ["coupled"]`. Then add its package names as `!` exclusions to the digest and patch automerge rules.
+
+**Labels:** the top-level `labels` sets only `dependencies`. Every package rule uses `addLabels`, which stack across matching rules; `labels` would overwrite instead. Filter PRs with queries like `label:cluster:rpi5 label:needs-review`.
+
+| Dimension | Labels |
+|---|---|
+| Where it deploys (by file path) | `cluster:rpi5`, `cluster:k8s`, `host:auth-server`, `host:db-server`, `host:hermes-server`, `area:terraform`, `area:dns`, `area:ci` |
+| Stack (by package name) | `stack:media`, `stack:auth`, `stack:network` |
+| Handling | `automerge`, `needs-review`, `critical`, `coupled` |
+
+Check `renovate.json` for all rules. Each rule has a `description`.
