@@ -21,7 +21,7 @@ labels:
 images:
   - name: busybox
     newName: ghcr.io/autobrr/qui
-    newTag: v1.28.0@sha256:0bfe512eca0ec2ad639927f46a1a2a914feb75492d8032b7f866025162f562d5
+    newTag: v1.30.0@sha256:1172ca40283330445d61189263a65a31ba703770a230b9e2a913f6e57bc2dd23
 
 configMapGenerator:
   - name: domain-config
