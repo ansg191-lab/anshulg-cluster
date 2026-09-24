@@ -3,13 +3,24 @@
   "extends": [
     "config:best-practices"
   ],
-  "prHourlyLimit": 0,
+  "timezone": "America/Los_Angeles",
+  "schedule": [
+    "* 0-5 * * 6"
+  ],
+  "automergeSchedule": [
+    "* 0-5 * * 6"
+  ],
   "prConcurrentLimit": 0,
+  "prHourlyLimit": 0,
   "platformCommit": "enabled",
   "rebaseWhen": "conflicted",
   "separateMajorMinor": true,
   "separateMinorPatch": true,
-  "timezone": "America/Los_Angeles",
+  "automergeType": "pr",
+  "minimumReleaseAgeBehaviour": "timestamp-optional",
+  "labels": [
+    "deps"
+  ],
   "kubernetes": {
     "managerFilePatterns": [
       "/k8s/.+\\.yaml$/",
@@ -30,60 +41,387 @@
   },
   "packageRules": [
     {
-      "matchPackageNames": [
-        "lscr.io/linuxserver/jellyfin"
+      "description": "Label: rpi5 cluster",
+      "matchFileNames": [
+        "rpi5/**"
       ],
-      "allowedVersions": "!/^\\d{4}\\.\\d+\\.\\d+$/"
+      "addLabels": [
+        "cluster:rpi5"
+      ]
     },
     {
-      "matchPackageNames": [
-        "lscr.io/linuxserver/nzbget"
+      "description": "Label: GKE cluster",
+      "matchFileNames": [
+        "k8s/**"
       ],
-      "allowedVersions": "!/^\\d{4}\\.\\d+\\.\\d+$/"
+      "addLabels": [
+        "cluster:k8s"
+      ]
     },
     {
+      "description": "Label: auth server host",
+      "matchFileNames": [
+        "auth-server/**"
+      ],
+      "addLabels": [
+        "host:auth-server"
+      ]
+    },
+    {
+      "description": "Label: database server host",
+      "matchFileNames": [
+        "db-server/**"
+      ],
+      "addLabels": [
+        "host:db-server"
+      ]
+    },
+    {
+      "description": "Label: hermes server host",
+      "matchFileNames": [
+        "hermes-server/**"
+      ],
+      "addLabels": [
+        "host:hermes-server"
+      ]
+    },
+    {
+      "description": "Label: Terraform",
+      "matchFileNames": [
+        "terraform/**"
+      ],
+      "addLabels": [
+        "area:terraform"
+      ]
+    },
+    {
+      "description": "Label: CI and repo tooling",
+      "matchFileNames": [
+        ".github/**",
+        ".pre-commit-config.yaml"
+      ],
+      "addLabels": [
+        "area:ci"
+      ]
+    },
+    {
+      "description": "Label: media stack",
       "matchPackageNames": [
+        "/linuxserver\\//",
+        "/qbit_manage/",
+        "/qbittorrent-exporter/",
+        "ghcr.io/autobrr/**",
+        "ghcr.io/cross-seed/cross-seed",
+        "ghcr.io/advplyr/audiobookshelf",
+        "ghcr.io/sct/overseerr",
+        "ghcr.io/recyclarr/recyclarr",
+        "ghcr.io/grimmory-tools/grimmory",
+        "ghcr.io/pennydreadful/bookshelf",
+        "ghcr.io/neptunehub/audiomuse-ai",
+        "fallenbagel/jellyseerr",
+        "cyfershepard/jellystat",
+        "kometateam/kometa",
+        "golift/notifiarr",
+        "nandyalu/trailarr",
+        "deluan/navidrome",
+        "izderadicka/audioserve",
+        "crocodilestick/calibre-web-automated",
+        "blampe/rreading-glasses",
+        "ghcr.io/fuzzygrim/yamtrack",
+        "ghcr.io/ansg191/kuryana",
+        "ghcr.io/cenodude/crosswatch"
+      ],
+      "addLabels": [
+        "stack:media"
+      ]
+    },
+    {
+      "description": "Label: auth stack",
+      "matchPackageNames": [
+        "/kanidm/",
+        "/oauth2-proxy/"
+      ],
+      "addLabels": [
+        "stack:auth"
+      ]
+    },
+    {
+      "description": "Label: networking and TLS stack",
+      "matchPackageNames": [
+        "/traefik/",
+        "/^linkerd/",
+        "/^cert-manager/",
+        "trust-manager",
+        "tailscale-operator",
+        "ghcr.io/0xerr0r/blocky",
+        "madnuttah/unbound"
+      ],
+      "addLabels": [
+        "stack:network"
+      ]
+    },
+    {
+      "description": "Digests: one weekly group PR, automerged. Critical, database, coupled and auth-server deps are excluded.",
+      "matchUpdateTypes": [
+        "digest",
+        "pinDigest"
+      ],
+      "matchPackageNames": [
+        "!/kanidm/",
+        "!/postgres/",
+        "!lscr.io/linuxserver/mariadb",
+        "!/^cert-manager/",
+        "!trust-manager",
+        "!sealed-secrets",
+        "!traefik",
+        "!connect",
+        "!kyverno",
+        "!/^rancher\\//",
+        "!/^linkerd/",
+        "!/^intel-device-plugins/",
+        "!/qbittorrent$/",
+        "!/qbit_manage/",
+        "!/^teslamate\\//",
+        "!meilisearch",
+        "!/node-feature-discovery/",
+        "!ghcr.io/0xerr0r/blocky",
+        "!madnuttah/unbound"
+      ],
+      "matchFileNames": [
+        "!auth-server/**"
+      ],
+      "groupName": "all digest updates",
+      "groupSlug": "all-digest",
+      "automerge": true,
+      "addLabels": [
+        "automerge"
+      ]
+    },
+    {
+      "description": "Patches: automerged after 3 days. Critical, database, coupled and auth-server deps are excluded.",
+      "matchUpdateTypes": [
+        "patch",
+        "pin"
+      ],
+      "matchPackageNames": [
+        "!/kanidm/",
+        "!/postgres/",
+        "!lscr.io/linuxserver/mariadb",
+        "!/^cert-manager/",
+        "!trust-manager",
+        "!sealed-secrets",
+        "!traefik",
+        "!connect",
+        "!kyverno",
+        "!/^rancher\\//",
+        "!/^linkerd/",
+        "!/^intel-device-plugins/",
+        "!/qbittorrent$/",
+        "!/qbit_manage/",
+        "!/^teslamate\\//",
+        "!meilisearch",
+        "!/node-feature-discovery/",
+        "!ghcr.io/0xerr0r/blocky",
+        "!madnuttah/unbound"
+      ],
+      "matchFileNames": [
+        "!auth-server/**"
+      ],
+      "minimumReleaseAge": "3 days",
+      "automerge": true,
+      "addLabels": [
+        "automerge"
+      ]
+    },
+    {
+      "description": "GitHub Actions: non-major updates grouped and automerged (CI only)",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "digest",
+        "pinDigest"
+      ],
+      "groupName": "github-actions",
+      "groupSlug": "github-actions",
+      "automerge": true,
+      "addLabels": [
+        "automerge"
+      ]
+    },
+    {
+      "description": "linuxserver.io minor bumps: one weekly group PR",
+      "matchPackageNames": [
+        "lscr.io/linuxserver/**",
+        "linuxserver/**"
+      ],
+      "matchUpdateTypes": [
+        "minor"
+      ],
+      "groupName": "linuxserver images",
+      "groupSlug": "linuxserver-minor"
+    },
+    {
+      "description": "Major updates always need a human",
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "addLabels": [
+        "needs-review"
+      ]
+    },
+    {
+      "description": "Minor updates need a human (except Actions minors, automerged above)",
+      "matchUpdateTypes": [
+        "minor"
+      ],
+      "matchManagers": [
+        "!github-actions"
+      ],
+      "addLabels": [
+        "needs-review"
+      ]
+    },
+    {
+      "description": "Critical infrastructure: never automerge (auth, TLS, secrets, ingress, DNS, policy, node features, k3s upgrades)",
+      "matchPackageNames": [
+        "/kanidm/",
+        "/^cert-manager/",
+        "cert-manager-google-cas-issuer",
+        "trust-manager",
+        "sealed-secrets",
+        "traefik",
+        "connect",
+        "kyverno",
+        "/node-feature-discovery/",
+        "ghcr.io/0xerr0r/blocky",
+        "madnuttah/unbound",
+        "/^rancher\\//"
+      ],
+      "automerge": false,
+      "addLabels": [
+        "critical"
+      ]
+    },
+    {
+      "description": "Databases: never automerge; upgrades may need manual migration",
+      "matchPackageNames": [
+        "/postgres/",
+        "lscr.io/linuxserver/mariadb",
+        "meilisearch"
+      ],
+      "automerge": false,
+      "addLabels": [
+        "database"
+      ],
+      "prBodyNotes": [
+        "**Database update:** check the release notes for required migration or upgrade steps (dump/restore, extension updates) before merging."
+      ]
+    },
+    {
+      "description": "Anything deployed to the auth server is never automerged (pushes trigger a live deploy)",
+      "matchFileNames": [
+        "auth-server/**"
+      ],
+      "automerge": false,
+      "addLabels": [
+        "critical"
+      ]
+    },
+    {
+      "description": "Skip jellyfin/nzbget/firefox date-based (YYYY.x.y) tags",
+      "matchPackageNames": [
+        "lscr.io/linuxserver/jellyfin",
+        "lscr.io/linuxserver/nzbget",
         "lscr.io/linuxserver/firefox"
       ],
       "allowedVersions": "!/^\\d{4}\\.\\d+\\.\\d+$/"
     },
     {
+      "description": "Stay on qBittorrent 5.x",
       "matchPackageNames": [
         "linuxserver/qbittorrent"
       ],
       "allowedVersions": "/^5\\.\\d+\\.\\d+.*$/"
     },
     {
+      "description": "Wait a week on new qBittorrent releases so qbit_manage can ship a compatible version into the same PR",
+      "matchPackageNames": [
+        "linuxserver/qbittorrent"
+      ],
+      "minimumReleaseAge": "7 days"
+    },
+    {
+      "description": "Coupled: qbit_manage only supports specific qBittorrent versions",
       "matchPackageNames": [
         "linuxserver/qbittorrent",
         "ghcr.io/stuffanthings/qbit_manage"
       ],
       "groupName": "qbittorrent",
+      "groupSlug": "coupled-qbittorrent",
       "separateMajorMinor": false,
-      "separateMinorPatch": false
+      "separateMinorPatch": false,
+      "automerge": false,
+      "addLabels": [
+        "coupled"
+      ],
+      "prBodyNotes": [
+        "**Coupled update:** confirm the qbit_manage release notes support this qBittorrent version before merging."
+      ]
     },
     {
+      "description": "Coupled: the operator webhook rejects GPU plugin CRs older than the operator",
       "matchPackageNames": [
         "intel-device-plugins-gpu",
         "intel-device-plugins-operator"
       ],
-      "groupName": "intel-device-plugins"
+      "groupName": "intel-device-plugins",
+      "groupSlug": "coupled-intel-device-plugins",
+      "separateMajorMinor": false,
+      "separateMinorPatch": false,
+      "automerge": false,
+      "addLabels": [
+        "coupled",
+        "critical"
+      ],
+      "prBodyNotes": [
+        "**Coupled update:** if the validating webhook blocks sync, follow the Intel GPU upgrade procedure in CLAUDE.md."
+      ]
     },
     {
+      "description": "Coupled: TeslaMate ships matching app and Grafana images",
       "matchPackageNames": [
         "teslamate/teslamate",
         "teslamate/grafana"
       ],
-      "groupName": "teslamate"
+      "groupName": "teslamate",
+      "groupSlug": "coupled-teslamate",
+      "separateMajorMinor": false,
+      "separateMinorPatch": false,
+      "automerge": false,
+      "addLabels": [
+        "coupled"
+      ]
     },
     {
+      "description": "Coupled: Linkerd charts must move in lockstep",
       "matchPackageNames": [
         "linkerd2-cni",
         "linkerd-viz",
         "linkerd-crds",
         "linkerd-control-plane"
       ],
-      "groupName": "linkerd"
+      "groupName": "linkerd",
+      "groupSlug": "coupled-linkerd",
+      "separateMajorMinor": false,
+      "separateMinorPatch": false,
+      "automerge": false,
+      "addLabels": [
+        "coupled",
+        "critical"
+      ]
     }
   ],
   "ignorePaths": [
