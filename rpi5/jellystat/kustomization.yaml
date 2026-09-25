@@ -20,7 +20,7 @@ labels:
 images:
   - name: busybox
     newName: cyfershepard/jellystat
-    newTag: 1.1.10@sha256:bb7ebe42424dedeff52d8da4130232d67e3fdd6dc2dd4a66091e32ddd835ea42
+    newTag: 1.1.12@sha256:e61c759ec706da378bc8374e797da1dfd298ab30f804cefd82d192c301a888c7
 
 configMapGenerator:
   - name: domain-config
