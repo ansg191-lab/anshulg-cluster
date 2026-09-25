@@ -13,7 +13,7 @@ spec:
   source:
     chart: node-feature-discovery
     repoURL: registry.k8s.io/nfd/charts
-    targetRevision: 0.18.3
+    targetRevision: 0.19.0
     helm:
       values: |
         master:
