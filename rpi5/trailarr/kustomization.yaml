@@ -19,7 +19,7 @@ labels:
 images:
   - name: busybox
     newName: nandyalu/trailarr
-    newTag: 0.9.9@sha256:330957e169bd3a00e7abd9867ed1be44e5a595f69eb677eac7f9e5399d68e5a1
+    newTag: 0.13.0@sha256:39c4ce70fb6b00ab5fe0724c02b2a736e66649f0edd53141cbe976bf7fb4b792
 
 configMapGenerator:
   - name: domain-config
