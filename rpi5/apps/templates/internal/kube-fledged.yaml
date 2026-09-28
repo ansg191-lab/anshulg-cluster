@@ -13,7 +13,7 @@ spec:
   source:
     chart: kube-fledged
     repoURL: https://senthilrch.github.io/kubefledged-charts/
-    targetRevision: v0.10.0
+    targetRevision: v0.11.0
   destination:
     server: {{ .Values.spec.destination.server }}
     namespace: kube-fledged
