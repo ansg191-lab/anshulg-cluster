@@ -62,3 +62,6 @@ odroid-h4.anshulg.direct. 60 IN AAAA fd30:e1bf:9b4f:0:21e:6ff:fe45:5de0
 
 beelink.anshulg.direct. 60 IN A 192.168.1.48
 beelink.anshulg.direct. 60 IN AAAA fd30:e1bf:9b4f:0:eaff:1eff:fed1:9dfe
+
+hkv01-ap21.anshulg.direct. 60 IN A 192.168.1.28
+hkv01-ap21.anshulg.direct. 60 IN AAAA fd30:e1bf:9b4f:0:9683:c4ff:feeb:d7ea
