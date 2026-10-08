@@ -20,7 +20,7 @@ labels:
 images:
   - name: busybox
     newName: ollama/ollama
-    newTag: 0.30.11@sha256:c484b703176aa19dfc0a54cbfb60ab8094b38faa04283fb77eba1d33319e5eca
+    newTag: 0.40.2@sha256:b86366bb528bbf7f1424435d165028497a5b69bf6ddb4fa5a87102e2b79f44fb
 
 configMapGenerator:
   - name: domain-config
