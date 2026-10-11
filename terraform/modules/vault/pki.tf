@@ -54,6 +54,34 @@ resource "vault_mount" "pki_int" {
   description               = "Intermediate CA signed by Google Private CA root"
   default_lease_ttl_seconds = 30 * 24 * 60 * 60 # 30 days
   max_lease_ttl_seconds     = local.pki_leaf_max_ttl_seconds
+
+  # Log non-sensitive PKI fields in plaintext so audit logs show what was
+  # issued (keys suggested by `vault pki health-check`). private_key stays HMAC'd.
+  audit_non_hmac_request_keys = [
+    "csr", "certificate", "issuer_ref", "common_name", "alt_names", "other_sans",
+    "ip_sans", "uri_sans", "ttl", "not_after", "serial_number", "key_type",
+    "private_key_format", "managed_key_name", "managed_key_id", "ou",
+    "organization", "country", "locality", "province", "street_address",
+    "postal_code", "permitted_dns_domains", "policy_identifiers",
+    "ext_key_usage_oids",
+  ]
+  audit_non_hmac_response_keys = [
+    "certificate", "issuing_ca", "serial_number", "error", "ca_chain",
+  ]
+
+  # Lets clients fetch the CA/CRL only when they've changed
+  passthrough_request_headers = ["If-Modified-Since"]
+  allowed_response_headers    = ["Last-Modified"]
+}
+
+resource "vault_pki_secret_backend_config_auto_tidy" "pki_int" {
+  backend            = vault_mount.pki_int.path
+  enabled            = true
+  interval_duration  = "12h"
+  tidy_cert_store    = true
+  tidy_revoked_certs = true
+
+  tidy_revoked_cert_issuer_associations = true
 }
 
 resource "vault_pki_secret_backend_config_urls" "pki_int" {
