@@ -148,3 +148,38 @@ resource "vault_pki_secret_backend_config_issuers" "pki_int" {
   backend = vault_mount.pki_int.path
   default = vault_pki_secret_backend_intermediate_set_signed.pki_int[0].imported_issuers[0]
 }
+
+# ------------------------------------------------------------------------------
+# PKI ROLES
+# ------------------------------------------------------------------------------
+
+# Certs for embedded server devices (lacking auto-renewal)
+resource "vault_pki_secret_backend_role" "embedded_server" {
+  backend = vault_mount.pki_int.path
+  name    = "embedded-server"
+  ttl     = "8760h"
+  max_ttl = "8760h"
+
+  allow_localhost = false
+  allowed_domains = [
+    "anshulg.direct",
+    "internal",
+    "local",
+  ]
+  allow_bare_domains          = false
+  allow_subdomains            = true
+  allow_glob_domains          = false
+  allow_wildcard_certificates = false
+  allow_ip_sans               = true
+
+  server_flag = true
+  client_flag = false
+  key_type    = "ec"
+  key_bits    = 256
+
+  key_usage = ["DigitalSignature"]
+
+  country      = ["US"]
+  province     = ["California"]
+  organization = ["Anshul Gupta"]
+}
