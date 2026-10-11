@@ -3,6 +3,10 @@
 
 terraform {
 	required_providers {
+		google = {
+			source  = "hashicorp/google"
+			version = ">= 6.9.0"
+		}
 		vault = {
 			source  = "hashicorp/vault"
 			version = "5.10.1"

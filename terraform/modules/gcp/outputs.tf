@@ -9,6 +9,16 @@ output "ca_pool_name" {
   value       = google_privateca_ca_pool.default.name
 }
 
+output "ca_location" {
+  description = "The location of the Private CA pool"
+  value       = google_privateca_ca_pool.default.location
+}
+
+output "ca_name" {
+  description = "The ID of the root Private CA"
+  value       = google_privateca_certificate_authority.default.certificate_authority_id
+}
+
 # KanIDM Instance Outputs
 output "kanidm_instance_name" {
   description = "The name of the KanIDM instance"

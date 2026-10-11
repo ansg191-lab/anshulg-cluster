@@ -4,6 +4,10 @@ module "gcp" {
 
 module "vault_setup" {
   source = "./modules/vault"
+
+  ca_location  = module.gcp.ca_location
+  ca_pool_name = module.gcp.ca_pool_name
+  ca_name      = module.gcp.ca_name
 }
 
 module "vault" {

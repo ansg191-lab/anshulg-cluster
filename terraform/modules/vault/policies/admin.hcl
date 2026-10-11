@@ -37,3 +37,8 @@ path "ssh-client-signer/*" {
 path "ssh-host-signer/*" {
   capabilities = ["create", "read", "update", "delete", "list"]
 }
+
+# Allow access to pki_int
+path "pki_int/*" {
+  capabilities = ["create", "read", "update", "delete", "list", "sudo"]
+}
