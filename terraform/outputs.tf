@@ -45,3 +45,8 @@ output "bucket_urls" {
   description = "Storage bucket URLs"
   value       = module.gcp.bucket_urls
 }
+
+output "vault_pki_int_csr" {
+  description = "CSR for the Vault intermediate CA (see modules/vault/pki.tf)"
+  value       = module.vault_setup.pki_int_csr
+}
