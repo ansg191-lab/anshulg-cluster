@@ -31,7 +31,7 @@ spec:
                   name: src-config
           containers:
             - name: kometa
-              image: kometateam/kometa:v2.4.8@sha256:c58f6d4af511613f218b6dafbfc84078af4e5a6089790c1fdba58fd7c5dad70a
+              image: kometateam/kometa:v2.5.3@sha256:48c3cb318ec984213587f221e8e762c5ad2dbd0e6966efc7bba0a5868a6c5758
               imagePullPolicy: IfNotPresent
               args:
                 - --run
