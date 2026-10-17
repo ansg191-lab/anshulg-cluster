@@ -4,9 +4,8 @@ metadata:
   name: sonarr-cert
 spec:
   secretName: sonarr-cert-tls
-  commonName: sonarr.local
+  commonName: sonarr.internal
   dnsNames:
-    - sonarr.local
     - sonarr.internal
   duration: 2160h0m0s
   renewBefore: 720h0m0s
