@@ -23,4 +23,4 @@ spec:
     force: true
     disableEviction: true
   upgrade:
-    image: rancher/k3s-upgrade@sha256:86bd241a0ad0960fcc95190f8edf0de5e8e346d8c2e2df4c268cc7681ab9a22a
+    image: rancher/k3s-upgrade@sha256:7f2bb245bf1fcbadb2c35fe0206f383a0a71461944841ffebc6f368a4f8e46fb
