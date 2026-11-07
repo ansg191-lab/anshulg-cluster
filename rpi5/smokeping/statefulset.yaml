@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: smokeping
-          image: lscr.io/linuxserver/smokeping:2.9.0@sha256:41ad1006ee392f6045ec24a0a8127a880bb95dc7bde1a5b3a381c16c0b41a9d9
+          image: lscr.io/linuxserver/smokeping:2.9.0@sha256:0120aaf92cdc369e79fac21942fe02fca615aeb6e99541b926f53ec82b91ecfc
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID
@@ -59,7 +59,7 @@ spec:
             failureThreshold: 3
       initContainers:
         - name: copy-config
-          image: busybox:1.38.0@sha256:fd7dc98638c8e305f4dc34e979f1c0fdfdcaeb0fbf8fcff77ae834b6da3d7e6e
+          image: busybox:1.38.0@sha256:a46257e06c82ad85242d0d38077d0a52d9896389ca60a1a59d3463db586e5fa4
           command:
             - cp
             - /configmap/Targets
