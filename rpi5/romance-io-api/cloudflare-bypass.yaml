@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: proxy
-          image: ghcr.io/sarperavci/cloudflarebypassforscraping:latest@sha256:0e679c1c0f6ac3209d233c2b7e99737f39a137987171b5bf30b15ef53a01ce33
+          image: ghcr.io/sarperavci/cloudflarebypassforscraping:latest@sha256:e48f7c080088131808369ecd3ecfdea7cce73c77c2e4de2b06dad4c5767ea685
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
