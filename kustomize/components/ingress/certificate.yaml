@@ -7,8 +7,8 @@ spec:
   commonName: PLACEHOLDER_DOMAIN
   dnsNames:
     - PLACEHOLDER_DOMAIN
-  duration: 2160h0m0s
-  renewBefore: 720h0m0s
+  duration: 160h0m0s
+  renewBefore: 60h0m0s
   privateKey:
     algorithm: ECDSA
     size: 384
