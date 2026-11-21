@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: blocky
-          image: ghcr.io/0xerr0r/blocky:v0.32.1@sha256:19d856a00569f24b6e295d95feec87d2c07c92f4ee60c3bf2324f1e4b5348e97
+          image: ghcr.io/0xerr0r/blocky:v0.37.0@sha256:d9b6344d7c8f3fe577a47bc97b523faa116f7ea8a8901bfaf800a4dbdce64c96
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 53
