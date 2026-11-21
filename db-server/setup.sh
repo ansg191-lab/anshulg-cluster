@@ -17,7 +17,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # renovate: datasource=github-releases depName=restic/restic
 RESTIC_VERSION="0.18.1"
 # renovate: datasource=github-releases depName=creativeprojects/resticprofile
-RESTICPROFILE_VERSION="0.33.1"
+RESTICPROFILE_VERSION="0.35.0"
 # renovate: datasource=github-releases depName=open-telemetry/opentelemetry-collector-releases
 OTELCOL_VERSION="0.155.0"
 
