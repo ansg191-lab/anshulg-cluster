@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: qbit-manage
-          image: ghcr.io/stuffanthings/qbit_manage:v4.13.0@sha256:ea04167f627e506b3691304f4c639a52c05584cc9aea4af7ec87d4ed1299e7f5
+          image: ghcr.io/stuffanthings/qbit_manage:v4.15.0@sha256:f8db47d6533bac7c7f71d367545c5059d7228bcca188db1e059dbf4a693d8362
           imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
