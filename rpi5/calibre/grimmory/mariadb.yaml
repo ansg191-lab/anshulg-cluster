@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: mariadb
-          image: lscr.io/linuxserver/mariadb:11.8.8@sha256:ba1b875720113e3fd1dbc2c5a52b7efa0b32cbf722e99003643c91e2cb99ec53
+          image: lscr.io/linuxserver/mariadb:11.8.10@sha256:080593de5277bcd9264e0b4e374657a019fdf77e2688996d05269548e0cef3bd
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID
