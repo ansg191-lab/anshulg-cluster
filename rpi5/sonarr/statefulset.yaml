@@ -21,7 +21,7 @@ spec:
       containers:
         - name: sonarr
           # image: lscr.io/linuxserver/sonarr:4.0.20@sha256:dffc730adcb8b4f4342792fbb27fcad9c62fb8660523f2aeb082416980d7fe0c
-          image: lscr.io/linuxserver/sonarr:5.0.0-develop@sha256:2e0fb596a0c1291ac4a61e876536f02c539c17f95bfcd4c1ef67e3d0203dbba2
+          image: lscr.io/linuxserver/sonarr:5.0.0-develop@sha256:60469d6ce41dd30b6bbedaee7fc4b67309e5a399e163579d58bf2532c49a37f2
           imagePullPolicy: IfNotPresent
           env:
             - name: PUID
